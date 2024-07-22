@@ -1,7 +1,7 @@
 import { useTranslation } from '../i18n';
 import Link from 'next/link'
-import styles from './page.module.scss';
 import { Footer } from './components/Footer';
+import "./sass/index.scss";
 
 export default async function Index({ params: { lng }} : any) {
   const { t } = await useTranslation(lng, 'intro');  
