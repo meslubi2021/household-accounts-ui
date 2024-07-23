@@ -7,3 +7,5 @@
 @import "./mixins";
 @include export-to-css-vars($colors);
 @include export-to-css-vars-dark($colors-dark);
+
+@import "./components/footer";
