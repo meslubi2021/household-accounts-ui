@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./sass/index.scss";
 import { Header, Footer } from "./components";
 
 export const metadata: Metadata = {
   title: "Household Account",
-  description: "Mange household account.",
-  viewport:{ width:"device-width", initialScale: 1, interactiveWidget: "resizes-content" }
+  description: "Mange household account."
 };
+
+export const viewport: Viewport = {
+  width:"device-width", initialScale: 1, interactiveWidget: "resizes-content"
+}
 
 export default async function RootLayout({
   children,
