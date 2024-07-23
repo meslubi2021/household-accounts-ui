@@ -8,8 +8,12 @@
 @include export-to-css-vars($colors);
 @include export-to-css-vars-dark($colors-dark);
 
+@import "./components/header";
 @import "./components/footer";
 
-main{
-    height: 90vh;
+body{
+    height: 100dvh;
+    main{
+        height: 80%;
+    }
 }
