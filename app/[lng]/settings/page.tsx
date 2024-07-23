@@ -4,7 +4,7 @@ import { languages } from '../../i18n/settings'
 import { useTranslation } from '../../i18n';
 
 export default async function Index({ params: { lng }} : any) {
-    const { t } = await useTranslation(lng, 'footer')    
+    const { t } = await useTranslation(lng, 'main')    
 
     return (<>
        settings
@@ -15,7 +15,7 @@ export default async function Index({ params: { lng }} : any) {
             return (
             <span key={l}>
                 {index > 0 && (' or ')}
-                <Link href={`/${l}`}>
+                <Link href={`/${l}/settings`}>
                 {l}
                 </Link>
             </span>

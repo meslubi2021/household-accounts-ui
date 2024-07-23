@@ -1,0 +1,32 @@
+{
+    "calendar": {
+        "title": "Calendar",
+        "header": {
+            "title": "Calendar"
+        }
+    },
+    "analysis": {
+        "title": "Analysis",
+        "header": {
+            "title": "Analysis"
+        }
+    },
+    "new_input": {
+        "title": "New Input",
+        "header": {
+            "title": "New Input"
+        }
+    },
+    "asset": {
+        "title": "Asset",
+        "header": {
+            "title": "Asset"
+        }
+    },
+    "settings": {
+        "title": "Header",
+        "header": {
+            "title": "Settings"
+        }
+    }
+}

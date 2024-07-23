@@ -1,0 +1,32 @@
+{
+    "calendar": {
+        "title": "달력",
+        "header": {
+            "title": "달력"
+        }
+    },
+    "analysis": {
+        "title": "분석차트",
+        "header": {
+            "title": "분석차트"
+        }
+    },
+    "new_input": {
+        "title": "새 아이템",
+        "header": {
+            "title": "새 아이템"
+        }
+    },
+    "asset": {
+        "title": "자산",
+        "header": {
+            "title": "자산"
+        }
+    },
+    "settings": {
+        "title": "세팅",
+        "header": {
+            "title": "세팅"
+        }
+    }
+}

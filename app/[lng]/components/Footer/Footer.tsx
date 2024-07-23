@@ -3,29 +3,29 @@ import Link from 'next/link'
 import { CalendarDaysIcon, ChartPieIcon, PlusCircleIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 
 export const Footer = async ({ lng }: { lng: string }) => {
-    const { t } = await useTranslation(lng, 'footer');
+    const { t } = await useTranslation(lng, 'main');
     return (
       <footer className="flex justify-around items-center">
-        <Link href="/calendar" className="flex flex-col items-center">
+        <Link href={`/${lng}/calendar`} className="flex flex-col items-center">
           <CalendarDaysIcon />
-          <span className="text-gray-500">{t(`calendar`)}</span>
+          <span className="text-gray-500">{t(`calendar.title`)}</span>
         </Link>
-        <Link href="/analysis" className="flex flex-col items-center">
+        <Link href={`/${lng}/analysis`} className="flex flex-col items-center">
           <ChartPieIcon />
-          <span className="text-gray-500">{t(`analysis`)}</span>
+          <span className="text-gray-500">{t(`analysis.title`)}</span>
         </Link>
         {/* Need to open slide menu to add new item */}
         <Link href="" className="flex flex-col items-center">
           <PlusCircleIcon />
-          <span className="text-gray-500">{t(`new_input`)}</span>
+          <span className="text-gray-500">{t(`new_input.title`)}</span>
         </Link>
-        <Link href="/asset" className="flex flex-col items-center">
+        <Link href={`/${lng}/asset`} className="flex flex-col items-center">
           <CurrencyDollarIcon />
-          <span className="text-gray-500">{t(`asset`)}</span>
+          <span className="text-gray-500">{t(`asset.title`)}</span>
         </Link>
-        <Link href="/settings" className="flex flex-col items-center">
+        <Link href={`/${lng}/settings`} className="flex flex-col items-center">
           <Cog6ToothIcon />
-          <span className="text-gray-500">{t(`settings`)}</span>
+          <span className="text-gray-500">{t(`settings.title`)}</span>
         </Link>
     </footer>)
 }
