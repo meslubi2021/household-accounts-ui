@@ -1,3 +1,4 @@
-import { CalendarPage } from './CalendarPage/CalendarPage';
+import { Header } from './Header/Header';
 import { Footer } from './Footer/Footer';
-export { CalendarPage, Footer }
+import { CalendarPage } from './CalendarPage/CalendarPage';
+export { Header, Footer, CalendarPage }
