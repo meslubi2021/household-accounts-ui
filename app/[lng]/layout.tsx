@@ -19,7 +19,7 @@ export default async function RootLayout({
   return (
     <html lang={lng}>
       <body data-bs-theme="light" className="h-screen">   
-        <main className="h-5/6">    
+        <main>    
           {children}        
         </main>
         <Footer lng={lng} /> 

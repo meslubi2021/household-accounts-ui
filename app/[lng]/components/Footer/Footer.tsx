@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { CalendarDaysIcon, ChartPieIcon, PlusCircleIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 
 export const Footer = async ({ lng }: { lng: string }) => {
-    const { t } = await useTranslation(lng, 'footer')
+    const { t } = await useTranslation(lng, 'footer');
     return (
-      <footer className="h-1/6 flex justify-around items-center">
+      <footer className="flex justify-around items-center">
         <Link href="/calendar" className="flex flex-col items-center">
           <CalendarDaysIcon />
           <span className="text-gray-500">{t(`calendar`)}</span>

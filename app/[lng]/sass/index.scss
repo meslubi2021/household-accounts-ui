@@ -9,3 +9,7 @@
 @include export-to-css-vars-dark($colors-dark);
 
 @import "./components/footer";
+
+main{
+    height: 90vh;
+}
