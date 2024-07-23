@@ -6,11 +6,11 @@ export const Footer = async ({ lng }: { lng: string }) => {
     const { t } = await useTranslation(lng, 'footer');
     return (
       <footer className="flex justify-around items-center">
-        <Link href="/calendar" className="flex flex-col items-center">
+        <Link href={`/${lng}/calendar`} className="flex flex-col items-center">
           <CalendarDaysIcon />
           <span className="text-gray-500">{t(`calendar`)}</span>
         </Link>
-        <Link href="/analysis" className="flex flex-col items-center">
+        <Link href={`/${lng}/analysis`} className="flex flex-col items-center">
           <ChartPieIcon />
           <span className="text-gray-500">{t(`analysis`)}</span>
         </Link>
@@ -19,11 +19,11 @@ export const Footer = async ({ lng }: { lng: string }) => {
           <PlusCircleIcon />
           <span className="text-gray-500">{t(`new_input`)}</span>
         </Link>
-        <Link href="/asset" className="flex flex-col items-center">
+        <Link href={`/${lng}/asset`} className="flex flex-col items-center">
           <CurrencyDollarIcon />
           <span className="text-gray-500">{t(`asset`)}</span>
         </Link>
-        <Link href="/settings" className="flex flex-col items-center">
+        <Link href={`/${lng}/settings`} className="flex flex-col items-center">
           <Cog6ToothIcon />
           <span className="text-gray-500">{t(`settings`)}</span>
         </Link>
