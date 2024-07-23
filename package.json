@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.2",
+    "@heroicons/react": "^2.1.5",
     "accept-language": "^3.0.18",
     "i18next": "^23.12.2",
     "i18next-browser-languagedetector": "^8.0.0",
