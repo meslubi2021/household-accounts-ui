@@ -1,0 +1,15 @@
+@mixin export-to-css-vars($map) {    
+    body[data-bs-theme="light"], body[data-bs-theme="light"]::before, body[data-bs-theme="light"]::after {
+        @each $key, $value in $map {
+            --#{$key}: #{$value};
+        }
+    }
+}
+
+@mixin export-to-css-vars-dark($map) {
+    body[data-bs-theme="dark"], body[data-bs-theme="dark"]::before, body[data-bs-theme="dark"]::after {
+        @each $key, $value in $map {
+            --#{$key}: #{$value};
+        }
+    }
+}

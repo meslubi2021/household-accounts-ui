@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./normalize";
+@import "./variables";
+@import "./mixins";
+@include export-to-css-vars($colors);
+@include export-to-css-vars-dark($colors-dark);
