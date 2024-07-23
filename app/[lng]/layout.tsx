@@ -8,18 +8,21 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({
-  children
+  children,
+  params: {
+    lng
+  }
 }: Readonly<{
   children: React.ReactNode;
-  lng: string
+  params: {lng: string}
 }>) {
   return (
-    <html lang="en">
+    <html lang={lng}>
       <body data-bs-theme="light" className="h-screen">   
         <main className="h-5/6">    
           {children}        
         </main>
-        <Footer lng={"en"} /> 
+        <Footer lng={lng} /> 
       </body>
     </html>
   );
