@@ -9,6 +9,7 @@
 @include export-to-css-vars-dark($colors-dark);
 
 @import "./components/header";
+@import "./components/calendar-page";
 @import "./components/footer";
 
 body{
