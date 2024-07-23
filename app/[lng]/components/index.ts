@@ -1,4 +1,4 @@
-import { Header } from './Header/Header';
-import { Footer } from './Footer/Footer';
-import { CalendarPage } from './CalendarPage/CalendarPage';
+import { Header } from './header/header';
+import { Footer } from './footer/footer';
+import { CalendarPage } from './calendar-page/calendar-page';
 export { Header, Footer, CalendarPage }
