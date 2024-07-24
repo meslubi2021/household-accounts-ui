@@ -1,0 +1,40 @@
+.calendar-page-wrapper{
+    .fc-header-toolbar {
+        position: absolute;
+        top: 0;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 10%;
+        background: var(--red-3);
+        color: white;
+        .fc-today-button{
+            position: absolute;
+            right: 40px;
+            bottom: 0px;
+        }
+        button {
+            background: var(--red-3);
+            outline: var(--red-3);
+            box-shadow: none;
+            border: none;
+            &:hover{
+                background: var(--red-3);
+                outline: var(--red-3);
+                border: none;
+            }
+            &:not(:disabled):active{
+                background: var(--red-3);
+                outline: var(--red-3);
+                border: none;
+            }
+            &:focus, &:not(:disabled):active:focus {
+                box-shadow: none;
+                background: var(--red-3);
+            }
+            &.fc-button-primary:disabled{
+                display: none;
+            }
+        }
+    }
+}
