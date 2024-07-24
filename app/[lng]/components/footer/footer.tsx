@@ -1,12 +1,16 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'; 
 import { CalendarDaysIcon, ChartPieIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
+import { SlideMenu } from '../slide-menu/slide-menu';
 
 export const Footer = ({ lng }: { lng: string }) => {
+  const [ isOpen, setIsOpen ] = useState(false);
+
   const pathname = usePathname();
     const { t } = useTranslation(lng, 'main');
     return (
@@ -20,7 +24,7 @@ export const Footer = ({ lng }: { lng: string }) => {
           <span>{t(`analysis.title`)}</span>
         </Link>
         {/* Need to open slide menu to add new item */}
-        <Link href="" onClick={() => {console.log("open add new item panel")}} className={`flex flex-col items-center text-red-300`}>
+        <Link href="" onClick={() => setIsOpen(true)} className={`flex flex-col items-center text-red-300`}>
           <PlusCircleIcon />
           <span>{t(`new_input.title`)}</span>
         </Link>
@@ -32,5 +36,6 @@ export const Footer = ({ lng }: { lng: string }) => {
           <Cog6ToothIcon />
           <span>{t(`settings.title`)}</span>
         </Link>
+        <SlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} />
     </footer>)
 }
