@@ -18,17 +18,17 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
     function renderEventContent(eventInfo: any) {
         return (
           <>
-            <i>{eventInfo.event.title}</i>
+            <span>{eventInfo.event.title}</span>
           </>
         )
     }
 
     // Add into calendar
     const events = [
-        { title: '-25.00', start: new Date('2024-7-10'), dateStr: '2024-07-10' },
-        { title: '-145.00', start: new Date('2024-7-21'), dateStr: '2024-07-21'  },
-        { title: '-25.00', start: new Date('2024-7-22'), dateStr: '2024-07-22'  },
-        { title: '-755.00', start: new Date('2024-7-23'), dateStr: '2024-07-23' },
+        { title: '-25.00', date: '2024-07-10', dateStr: '2024-07-10' },
+        { title: '-145.00', date: '2024-07-21', dateStr: '2024-07-21'  },
+        { title: '-25.00', date: '2024-07-22', dateStr: '2024-07-22'  },
+        { title: '-755.00', date: '2024-07-23', dateStr: '2024-07-23' },
     ]
 
     // Add on expense list
