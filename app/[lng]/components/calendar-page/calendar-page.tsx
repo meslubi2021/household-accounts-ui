@@ -2,14 +2,15 @@
 
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import { useTranslation } from '../../../i18n/client'
 
 const events = [
-    { title: '500', start: new Date() }
+    { title: '-500.00', start: new Date() }
   ]
 
 export const CalendarPage = ({ lng }: { lng: string }) => {
-    const { t } = useTranslation(lng, 'calendar')    
+    const { t } = useTranslation(lng, 'main');
 
     // a custom render function
     function renderEventContent(eventInfo: any) {
@@ -51,11 +52,23 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
             { description: 'Food', amount: 55.0, type: 'expense', paymentMethod: 'Credit Card' },
           ],
         },
+        {
+          date: 'Jul 22, 2024',
+          items: [
+            { description: 'Salary', amount: 5000.0, type: 'income', paymentMethod: 'Cash' },
+            { description: 'Food', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card', note: 'Daebak' },
+          ],
+        },
       ];
+
+    function handleDateClick(arg:any){
+        console.log(arg)
+    }
 
     return (<div className="calendar-page-wrapper">
         <FullCalendar
-            plugins={[dayGridPlugin]}
+            plugins={[dayGridPlugin, interactionPlugin]}
+            dateClick={handleDateClick}
             initialView='dayGridMonth'
             weekends={false}
             events={events}
@@ -65,31 +78,31 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                 center: 'title today',
                 right: 'next'
             }}
-            editable={true}
-            selectable={true}
-            selectMirror={true}
+            // editable={true}
+            // selectable={true}
+            // selectMirror={true}
             dayMaxEvents={true}
-            dayMaxEventRows={false} // Ensure this is set to false
-            moreLinkClick="popover" // Option to manage event overflow behavior
+            // dayMaxEventRows={false} // Ensure this is set to false
+            // moreLinkClick="popover" // Option to manage event overflow behavior
             fixedWeekCount={false} // Ensure this is set to false
         />
-         <div className="list-of-expenses p-4">
+         <div className="flex flex-col list-of-expenses p-4">
             <div className="flex justify-between mb-4">
                 <div className="text-center">
-                <p>Income</p>
+                <p>{t('calendar.list-of-expenses.budget')}</p>
                 <p className="text-green-500 font-bold">$5,000.00</p>
                 </div>
                 <div className="text-center">
-                <p>Expense</p>
+                <p>{t('calendar.list-of-expenses.expense')}</p>
                 <p className="text-red-500 font-bold">$925.00</p>
                 </div>
                 <div className="text-center">
-                <p>Balance</p>
+                <p>{t('calendar.list-of-expenses.balance')}</p>
                 <p className="text-blue-500 font-bold">$4,075.00</p>
                 </div>
             </div>
-            {transactions.map((transaction) => (
-                <div key={transaction.date} className="mb-6">
+            {transactions.map((transaction, index) => (
+                <div key={`${transaction.date}-${index}`} className="mb-6">
                 <div className="bg-gray-200 p-2 rounded-t-md">
                     <p>{transaction.date}</p>
                 </div>

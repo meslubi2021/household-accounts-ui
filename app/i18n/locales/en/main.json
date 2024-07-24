@@ -3,6 +3,11 @@
         "title": "Calendar",
         "header": {
             "title": "Calendar"
+        },
+        "list-of-expenses": {
+            "budget": "Budget",
+            "expense": "Expense",
+            "balance": "Balance"
         }
     },
     "analysis": {
@@ -28,5 +33,19 @@
         "header": {
             "title": "Settings"
         }
+    },
+    "months": {
+        "jan": "Jan",
+        "feb": "Feb",
+        "mar": "Mar",
+        "apr": "Apr",
+        "may": "May",
+        "jun": "Jun",
+        "jul": "Jul",
+        "aug": "Aug",
+        "sep": "Sep",
+        "oct": "Oct",
+        "nov": "Nov",
+        "dec": "Dec"
     }
 }

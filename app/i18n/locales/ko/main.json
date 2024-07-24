@@ -3,6 +3,11 @@
         "title": "달력",
         "header": {
             "title": "달력"
+        },
+        "list-of-expenses": {
+            "budget": "예산",
+            "expense": "지출",
+            "balance": "잔액"
         }
     },
     "analysis": {
@@ -28,5 +33,19 @@
         "header": {
             "title": "세팅"
         }
+    },
+    "months": {
+        "jan": "1월",
+        "feb": "2월",
+        "mar": "3월",
+        "apr": "4월",
+        "may": "5월",
+        "jun": "6월",
+        "jul": "7월",
+        "aug": "8월",
+        "sep": "9월",
+        "oct": "10월",
+        "nov": "11월",
+        "dec": "12월"
     }
 }
