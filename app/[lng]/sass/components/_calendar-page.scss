@@ -40,11 +40,19 @@
                 }
             }
         }
+        .fc-daygrid-event-harness::before{
+            display: none;
+        }
         .fc-event{
             color: red;
             justify-content: flex-end;
-            i {
-                font-style: normal;
+            &.fc-h-event{
+                background-color: var(--color-background-container);
+                border: none;
+                .fc-event-main{
+                    color: red;
+                    text-align: right;
+                }
             }
         }
     }
