@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./sass/index.scss";
 import { Header, Footer } from "./components";
+import { dongle } from "./utils";
 
 export const metadata: Metadata = {
   title: "Household Account",
@@ -22,7 +23,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang={lng}>      
-      <body data-bs-theme="light">
+      <body data-bs-theme="light" className={dongle.className}>
         <Header lng={lng} />
         <main>    
           {children}        
