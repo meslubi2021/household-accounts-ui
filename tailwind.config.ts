@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import colors from 'tailwindcss/colors';
 
 const config: Config = {
   content: [
@@ -8,10 +9,12 @@ const config: Config = {
   ],
   theme: {
     colors: {
-      'red-1': '#fee2e2',
-      'red-2': '#fecaca',
-      'red-3': '#fca5a5',
       'white': '#ffffff'
+    },
+    extend: {
+      colors: {
+        ...colors
+      }
     }
   },
   plugins: [],
