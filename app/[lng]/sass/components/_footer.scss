@@ -1,11 +1,14 @@
 footer{
     border-top: 1px solid;
     width: 100vw;
-    height: 10%;
+    height: 8%;
     a{
         max-height: 50px;
+        svg{
+            width: 1.118rem;
+        }
     }
     span {
-        font-size: 1rem;
+        font-size: 1.118rem;
     }
 }

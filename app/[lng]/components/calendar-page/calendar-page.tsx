@@ -102,7 +102,8 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                 center: 'title today',
                 right: 'next'
             }}
-            editable={true}
+            height={"42vh"}
+            // editable={true}
             // selectable={true}
             // selectMirror={true}
             dayMaxEvents={true}
@@ -110,7 +111,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
             // moreLinkClick="popover" // Option to manage event overflow behavior
             fixedWeekCount={false} // Ensure this is set to false
         />
-         <div className="flex flex-col list-of-expenses p-4">
+         <div className="flex flex-col list-of-expenses p-4 h-[42vh]">
             <div className="flex justify-between mb-4">
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.budget')}</p>

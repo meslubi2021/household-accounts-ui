@@ -1,13 +1,14 @@
 .calendar-page-wrapper{
+    display: flex;
+    flex-direction: column;
     .fc-media-screen{
-        height: 290px; 
         .fc-header-toolbar {
             position: absolute;
             top: 0;
             display: flex;
             justify-content: space-between;
             width: 100%;
-            height: 10%;
+            height: 8%;
             background: var(--red-3);
             color: white;
             .fc-today-button{
@@ -49,7 +50,6 @@
     }
 
     .list-of-expenses{
-        overflow-y: auto;
-        height: 370px;
+        overflow-y: auto;     
     }
 }
