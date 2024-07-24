@@ -25,10 +25,10 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
 
     // Add into calendar
     const events = [
-        { title: '-25.00', start: new Date('2024-7-10'), dateStr: '2024-7-10' },
-        { title: '-145.00', start: new Date('2024-7-21'), dateStr: '2024-7-21'  },
-        { title: '-25.00', start: new Date('2024-7-22'), dateStr: '2024-7-22'  },
-        { title: '-755.00', start: new Date('2024-7-23'), dateStr: '2024-7-23' },
+        { title: '-25.00', start: new Date('2024-7-10'), dateStr: '2024-07-10' },
+        { title: '-145.00', start: new Date('2024-7-21'), dateStr: '2024-07-21'  },
+        { title: '-25.00', start: new Date('2024-7-22'), dateStr: '2024-07-22'  },
+        { title: '-755.00', start: new Date('2024-7-23'), dateStr: '2024-07-23' },
     ]
 
     // Add on expense list
@@ -47,14 +47,14 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
     const transactions: Transaction[] = [
         {
           date: 'Jul 10, 2024',
-          dateStr: '2024-7-10',
+          dateStr: '2024-07-10',
           items: [
             { description: 'Food', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card', note: 'Daebak' },
           ],
         },
         {
           date: 'Jul 21, 2024',
-          dateStr: '2024-7-21',
+          dateStr: '2024-07-21',
           items: [
             { description: 'Food', amount: 90.0, type: 'expense', paymentMethod: 'Cash' },
             { description: 'Food', amount: 55.0, type: 'expense', paymentMethod: 'Credit Card' },
@@ -62,14 +62,14 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         },
         {
           date: 'Jul 22, 2024',
-          dateStr: '2024-7-22',
+          dateStr: '2024-07-22',
           items: [
             { description: 'Food', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card', note: 'Daebak' },
           ],
         },
         {
           date: 'Jul 23, 2024',
-          dateStr: '2024-7-23',
+          dateStr: '2024-07-23',
           items: [
             { description: 'Phone & Net', amount: 555.0, type: 'expense', paymentMethod: 'Credit Card' },
             { description: '밥', amount: 200.0, type: 'expense', paymentMethod: 'Credit Card' },
