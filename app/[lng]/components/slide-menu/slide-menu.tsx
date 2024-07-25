@@ -43,12 +43,6 @@ const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, lng}) => {
                     >
                     Expense
                 </button>
-                <button
-                    className={`px-4 py-2 rounded ${activeTab === 'income' ? 'bg-white text-red-300' : 'text-gray-500'}`}
-                    onClick={() => setActiveTab('income')}
-                    >
-                    Income
-                </button>
             </div>
             <div onClick={() => close()} className="text-white p-2 px-3">
                 {t('slide-menu.save')}

@@ -15,6 +15,8 @@
                 position: absolute;
                 right: 40px;
                 bottom: 0px;
+                padding-bottom: 0px;
+                font-size: 1.5rem;
             }
             button {
                 background: var(--red-3);
@@ -48,6 +50,7 @@
             justify-content: flex-end;
             &.fc-h-event{
                 background-color: var(--color-background-container);
+                // background-color: var(--fc-highlight-color);
                 border: none;
                 .fc-event-main{
                     color: red;
