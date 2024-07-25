@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import { format, isToday,  parseISO } from "date-fns"
-import { SlideMenu } from '../slide-menu/slide-menu';
+import { SlideMenu, Dropdown } from '../shared';
+import { AddExpensePayload } from '../../models';
 
 interface AddNewItemSlideMenuType {
     isOpen: boolean,
@@ -14,77 +15,84 @@ interface AddNewItemSlideMenuType {
 export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, close, lng }) => {
     const { t } = useTranslation(lng, 'main');
     const [date, setDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-    const [amount, setAmount] = useState<string>('');
-    const [category, setCategory] = useState<string>('food');
+    const [amount, setAmount] = useState<string>("");
+    const [category, setCategory] = useState<string>('dine-in');
     const [note, setNote] = useState<string>('');
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        // const formattedValue = parseFloat(value).toFixed(2);
         setAmount(isNaN(parseFloat(value)) ? '' : value);
     };
+
+    function saveNewExpense() {
+        const amountNum = parseFloat(amount);
+        const addExpensePayload:AddExpensePayload = {
+            dateStr: date,
+            item: {
+              category,
+              note,
+              amount: amountNum,
+              paymentMethod: "Credit Card"  // Hardcode for now.
+            }
+        }
+        console.log(addExpensePayload);
+    }
     return (
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
                 <div className={`px-4 py-2 text-white flex-1 text-center`}>
                     Expense
                 </div>
-                <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
+                <div onClick={saveNewExpense} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
                     {t('slide-menu.save')}
                 </div>
             </>}
         >
-            <div className="max-w-md mx-auto bg-white overflow-hidden">
-                <div className="p-4 space-y-4">
-                    <div className="flex justify-between items-center border-b">
-                        <span className="flex items-center">
-                            <span className="mr-2">Date</span>
-                            {isToday(parseISO(date)) && (
-                                <span className="ml-2 border text-blue text-sm px-2 rounded">Today</span>
-                            )}
+            <div className="p-4 bg-white">
+                <div className="flex justify-between items-center border-b py-3">
+                    <span className="flex items-center">
+                        <span className="mr-2">Date</span>
+                        {isToday(parseISO(date)) && (
+                            <span className="ml-2 border text-blue text-sm px-2 rounded">Today</span>
+                        )}
 
-                        </span>
+                    </span>
+                    <input
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        className="text-left w-2/3 px-2 py-1"
+                    />
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>Amount</span>
+                    <span className="text-left w-2/3 px-2 py-1">
+                        <span className="mr-2">$</span>
                         <input
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            className="text-left w-2/3 px-2 py-1"
+                            type="number"
+                            value={amount}
+                            onChange={handleAmountChange}                                
+                            placeholder="0.00"
+                            min="0"
                         />
-                    </div>
-                    <div className="flex justify-between items-center border-b">
-                        <span>Amount</span>
-                        <span className="text-left w-2/3 px-2 py-1">
-                            <span className="mr-2">$</span>
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={handleAmountChange}                                
-                                placeholder="0.00"
-                                min="0"
-                            />
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center border-b">
-                        <span>Category</span>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="text-left w-2/3 px-2 py-1"
-                        >
-                            <option value="food">🍴 Food</option>
-                            <option value="transport">🚗 Transport</option>
-                            <option value="shopping">🛍️ Shopping</option>
-                            <option value="entertainment">🎉 Entertainment</option>
-                        </select>
-                    </div>
-                    <div className="border-b w-100">
-                        <textarea
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                            className="w-[100%] px-2 py-1"
-                            placeholder="Add a note"
-                        />
-                    </div>
+                    </span>
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>Category</span>
+                    <Dropdown 
+                        className="new-item-category-dropdown" 
+                        defaultValue='Dine-out' 
+                        items={["Dine-out", "Grocery", "Utilities"]}
+                        onChange={(value:string) => setCategory(value)}
+                    />
+                </div>
+                <div className="border-b w-100 py-3">
+                    <textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        className="w-[100%] px-2 py-1"
+                        placeholder="Add a note"
+                    />
                 </div>
             </div>
         </SlideMenu>
