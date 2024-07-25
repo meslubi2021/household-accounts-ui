@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import { format, isToday,  parseISO } from "date-fns"
-import { SlideMenu, Dropdown } from '../shared';
+import { SlideMenu, Dropdown, LoadingSpinner } from '../shared';
 import { AddExpensePayload } from '../../models';
 import { categoryService } from '../../api-services/category.service';
 
@@ -20,6 +20,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
     const [categories, setCategories] = useState<string[]>();
     const [category, setCategory] = useState<string>('dine-in');
     const [note, setNote] = useState<string>('');
+    const [isSaving, setIsSaving] = useState(false);
 
     useEffect(() => {
         if(!isOpen) return;
@@ -41,6 +42,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
     };
 
     function saveNewExpense() {
+        setIsSaving(true);
         const amountNum = parseFloat(amount);
         const addExpensePayload:AddExpensePayload = {
             dateStr: date,
@@ -52,6 +54,10 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
             }
         }
         console.log(addExpensePayload);
+        // TODO: Need to delete timeout later
+        setTimeout(() => {        
+            setIsSaving(false);
+        }, 1000);
     }
     return (
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
@@ -59,9 +65,17 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                 <div className={`px-4 py-2 text-white flex-1 text-center`}>
                     Expense
                 </div>
-                <div onClick={saveNewExpense} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
-                    {t('slide-menu.save')}
-                </div>
+                {   
+                    isSaving
+                    ?                    
+                    <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                        <LoadingSpinner />
+                    </div>
+                    :
+                    <div onClick={saveNewExpense} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
+                        {t('slide-menu.save')}
+                    </div>
+                }
             </>}
         >
             <div className="p-4 bg-white">
