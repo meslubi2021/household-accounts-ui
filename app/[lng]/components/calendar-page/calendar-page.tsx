@@ -8,6 +8,7 @@ import { useTranslation } from '../../../i18n/client'
 import { budgetService, transactionService } from '../../api-services';
 import { Budget, Transaction, CalendarEvent } from '../../models';
 import { formatCurrency } from '../../utils';
+import { format } from 'date-fns'
 
 type RefType = {
     [key: string]: HTMLElement | null;
@@ -76,10 +77,19 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         }
     }
 
+    const handleDatesSet = (arg: any) => {      
+      const calendarApi = arg.view.calendar;
+      const currentDate = calendarApi.getDate();
+
+      // Selected Month, need to store it globally.
+      // format(currentDate, 'yyyy-MM-dd')
+    };
+
     return (<div className="calendar-page-wrapper">
         <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             dateClick={handleDateClick}
+            datesSet={handleDatesSet} // to handle pre / next on headerTool bar event.
             initialView='dayGridMonth'
             weekends={true}
             events={calendarEvent} 
