@@ -33,18 +33,13 @@ const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, lng}) => {
           style={{ transition: 'transform 0.3s ease-in-out' }}
       >
         <div className='header bg-red-300 flex justify-between items-center h-100'>
-            <div onClick={() => close()} className="text-white p-2 px-3">
+            <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-left">
                 X
             </div>
-            <div>
-                <button
-                    className={`px-4 py-2 rounded ${activeTab === 'expense' ? 'bg-white text-red-300' : 'text-gray-500'}`}
-                    onClick={() => setActiveTab('expense')}
-                    >
-                    Expense
-                </button>
+            <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                Expense
             </div>
-            <div onClick={() => close()} className="text-white p-2 px-3">
+            <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
                 {t('slide-menu.save')}
             </div>
         </div>
@@ -55,7 +50,7 @@ const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, lng}) => {
                         <span className="flex items-center">
                             <span className="mr-2">Date</span>
                             {isToday(parseISO(date)) && (
-                                <span className="ml-2 border text-blue text-xs px-2 rounded">Today</span>
+                                <span className="ml-2 border text-blue text-sm px-2 rounded">Today</span>
                             )}
 
                         </span>
