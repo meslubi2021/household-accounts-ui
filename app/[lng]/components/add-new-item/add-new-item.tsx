@@ -69,7 +69,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
                 <div className={`px-4 py-2 text-white flex-1 text-center`}>
-                    Expense
+                    {t('new_input.header.expense')}
                 </div>
                 {   
                     isSaving
@@ -87,9 +87,9 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
             <div className="p-4 bg-white">
                 <div className="flex justify-between items-center border-b py-3">
                     <span className="flex items-center">
-                        <span className="mr-2">Date</span>
+                        <span className="mr-2">{t('new_input.body.date')}</span>
                         {isToday(parseISO(date)) && (
-                            <span className="ml-2 border text-blue text-sm px-2 rounded">Today</span>
+                            <span className="ml-2 border text-blue text-sm px-2 rounded">{t('new_input.body.today')}</span>
                         )}
 
                     </span>
@@ -101,7 +101,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                     />
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
-                    <span>Amount</span>
+                    <span>{t('new_input.body.amount')}</span>
                     <span className="text-left w-2/3 px-2 py-1">
                         <span className="mr-2">$</span>
                         <input
@@ -114,7 +114,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                     </span>
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
-                    <span>Category</span>
+                    <span>{t('new_input.body.category')}</span>
                     {
                         categories &&
                         <Dropdown 
@@ -130,7 +130,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         className="w-[100%] px-2 py-1"
-                        placeholder="Add a note"
+                        placeholder={t('new_input.body.add_a_note')}
                     />
                 </div>
             </div>
