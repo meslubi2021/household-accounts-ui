@@ -1,18 +1,57 @@
 "use client"
 
-import React, { useRef, MutableRefObject } from 'react';
+import React, { useState, useRef, MutableRefObject, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useTranslation } from '../../../i18n/client'
+import { budgetService, transactionService } from '../../api-services';
+import { Budget, Transaction, CalendarEvent } from '../../models';
+import { formatCurrency } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { calendarActions } from '../../utils/redux';
+import { format } from 'date-fns'
 
 type RefType = {
     [key: string]: HTMLElement | null;
 };
 
 export const CalendarPage = ({ lng }: { lng: string }) => {
+    const dispatch = useDispatch();
+    const { selectedDateStr } = useSelector((state:any) => state.calendar);
     const expenseListsRef = useRef<RefType>({}) as MutableRefObject<RefType>;
     const { t } = useTranslation(lng, 'main');
+    const [ budget, setBudget ] = useState<Budget>();
+    const [ totalAmountOfExpense, setTotalAmountOfExpense ] = useState<number>(0);
+    const [ expenses, setExpenses ] = useState<Transaction[]>();
+    const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
+
+    useEffect(() => {
+      if(selectedDateStr === "") return;
+      init(selectedDateStr);
+    }, [selectedDateStr]);
+
+    useEffect(() => {
+      if(expenses == null) return;
+      buildEvents(expenses);
+    }, [expenses])
+
+    async function init(selectedDateStr:string) {
+      try{
+        const dateArr = selectedDateStr.split('-');
+        const selectedMonth = `${dateArr[0]}-${dateArr[1]}` //ex) 2024-07
+        const budgetRes = await budgetService.getByUserIdMonth('user-id', selectedMonth);
+        const transactionRes = await transactionService.getExpenseByUserIdMonth('user-id', selectedMonth);
+        if(transactionRes == null) return;
+
+        setBudget(budgetRes);
+        setExpenses(transactionRes);
+
+        buildEvents(transactionRes);
+      }catch(err){
+        console.log(err);
+      }
+    }
 
     // a custom render function
     function renderEventContent(eventInfo: any) {
@@ -23,66 +62,20 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         )
     }
 
-    // Add into calendar
-    const events = [
-        { title: '-25.00', date: '2024-07-10', dateStr: '2024-07-10' },
-        { title: '-145.00', date: '2024-07-21', dateStr: '2024-07-21'  },
-        { title: '-25.00', date: '2024-07-22', dateStr: '2024-07-22'  },
-        { title: '-755.00', date: '2024-07-23', dateStr: '2024-07-23' },
-    ]
+    function buildEvents(expenses: Transaction[]) {
+      if(expenses == null) return;
 
-    // Add on expense list
-    interface Transaction {
-        date: string;
-        dateStr: string;
-        items: {
-          category: string;
-          amount: number;
-          type: 'income' | 'expense';
-          paymentMethod: string;
-          note?: string;
-        }[];
-      }
+      const result: { [key: string]: string }[] = [];
+      let totalExpenseTemp = 0
+      expenses.forEach((expense) => {
+        const totalAmount = expense.items.reduce((sum, item) => sum + item.amount, 0);
+        totalExpenseTemp += totalAmount;
+        result.push({title: `-${formatCurrency(totalAmount)}`, date: expense.dateStr, dataStr: expense.dateStr});
+      });
 
-    const transactions: Transaction[] = [
-        {
-          date: 'Jul 10, 2024',
-          dateStr: '2024-07-10',
-          items: [
-            { category: 'Dine out', note: '대박 왕 만두' , amount: 25.0, type: 'expense', paymentMethod: 'Credit Card'},
-          ],
-        },
-        {
-          date: 'Jul 15, 2024',
-          dateStr: '2024-07-15',
-          items: [
-            { category: 'Grocery', note: 'H-mart', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card' },
-          ],
-        },
-        {
-          date: 'Jul 21, 2024',
-          dateStr: '2024-07-21',
-          items: [
-            { category: 'Dine out', note: '해남', amount: 90.0, type: 'expense', paymentMethod: 'Credit Card' },
-            { category: 'Dine out', note: '이산', amount: 55.0, type: 'expense', paymentMethod: 'Credit Card' },
-          ],
-        },
-        {
-          date: 'Jul 22, 2024',
-          dateStr: '2024-07-22',
-          items: [
-            { category: 'Dine out', note: 'Daebak', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card' },
-          ],
-        },
-        {
-          date: 'Jul 23, 2024',
-          dateStr: '2024-07-23',
-          items: [
-            { category: 'Utilities', note: "Phone", amount: 555.0, type: 'expense', paymentMethod: 'Credit Card' },
-            { category: 'Dine out', note: "Burgerking", amount: 200.0, type: 'expense', paymentMethod: 'Credit Card' },
-          ],
-        },
-      ];
+      setTotalAmountOfExpense(totalExpenseTemp);
+      setCalendarEvent(result as CalendarEvent[]);
+    } 
 
     function handleDateClick(arg:any){
         if(expenseListsRef.current && expenseListsRef.current[arg.dateStr]){
@@ -95,13 +88,22 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         }
     }
 
+    const handleDatesSet = (arg: any) => {      
+      const calendarApi = arg.view.calendar;
+      const currentDate = calendarApi.getDate();
+
+      // Selected Month, need to store it globally.
+      dispatch(calendarActions.setSelectedDateStr(format(currentDate, 'yyyy-MM-dd')));
+    };
+
     return (<div className="calendar-page-wrapper">
         <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             dateClick={handleDateClick}
+            datesSet={handleDatesSet} // to handle pre / next on headerTool bar event.
             initialView='dayGridMonth'
             weekends={true}
-            events={events} 
+            events={calendarEvent} 
             eventClick={handleEventClick}
             eventContent={renderEventContent}
             headerToolbar={{
@@ -109,40 +111,36 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                 center: 'title today',
                 right: 'next'
             }}
-            height={"41vh"}
-            // editable={true}
-            // selectable={true}
-            // selectMirror={true}
+            height={"43vh"}
+            selectable={true}
             dayMaxEvents={true}
-            // dayMaxEventRows={false} // Ensure this is set to false
-            // moreLinkClick="popover" // Option to manage event overflow behavior
-            fixedWeekCount={false} // Ensure this is set to false
+            fixedWeekCount={false}
         />
-         <div className="flex flex-col list-of-expenses p-4 h-[41vh]">
+         <div className="flex flex-col list-of-expenses p-4 h-[39vh]">
             <div className="flex justify-between mb-4">
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.budget')}</p>
-                <p className="text-green-500 font-bold">$5,000.00</p>
+                <p className="text-green-500 font-bold">${budget && formatCurrency(budget.totalAmount)}</p>
                 </div>
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.expense')}</p>
-                <p className="text-red-500 font-bold">$925.00</p>
+                <p className="text-red-500 font-bold">${formatCurrency(totalAmountOfExpense)}</p>
                 </div>
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.balance')}</p>
-                <p className="text-blue-500 font-bold">$4,075.00</p>
+                <p className="text-blue-500 font-bold">${budget && formatCurrency(budget.totalAmount - totalAmountOfExpense)}</p>
                 </div>
             </div>
-            {transactions.map((transaction, index) => (
-                <div key={`${transaction.date}-${index}`} className="mb-6" data-date-str={transaction.dateStr} ref={(element) => { 
+            {expenses && expenses.map((expense, index) => (
+                <div key={`${expense.date}-${index}`} className="mb-6" data-date-str={expense.dateStr} ref={(element) => { 
                         if(element == null ) return;
-                        expenseListsRef.current[transaction.dateStr] = element;
+                        expenseListsRef.current[expense.dateStr] = element;
                     }}>
                     <div className="bg-gray-200 p-2 rounded-t-md">
-                        <p>{transaction.date}</p>
+                        <p>{expense.date}</p>
                     </div>
                     <div className="bg-white shadow-md rounded-b-md">
-                        {transaction.items.map((item, index) => (
+                        {expense.items.map((item, index) => (
                         <div key={index} className="flex justify-between p-2 border-b last:border-none">
                             <div className="flex">
                               <p className="font-medium">{item.category}</p>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./sass/index.scss";
+import App from './app'
 import { Header, Footer } from "./components";
 import { dongle } from "./utils";
 
@@ -40,11 +41,13 @@ export default async function RootLayout({
   return (
     <html lang={lng}>      
       <body data-bs-theme="light" className={dongle.className}>
-        <Header lng={lng} />
-        <main>    
-          {children}        
-        </main>
-        <Footer lng={lng} /> 
+        <App>
+          <Header lng={lng} />
+            <main>    
+              {children}        
+            </main>
+            <Footer lng={lng} />
+        </App>
       </body>
     </html>
   );
