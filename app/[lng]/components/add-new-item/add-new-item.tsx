@@ -5,7 +5,7 @@ import { useTranslation } from '../../../i18n/client'
 import { format, isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner } from '../shared';
 import { AddExpensePayload } from '../../models';
-import { categoryService } from '../../api-services/category.service';
+import { categoryService, transactionService } from '../../api-services';
 
 interface AddNewItemSlideMenuType {
     isOpen: boolean,
@@ -41,23 +41,29 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
         setAmount(isNaN(parseFloat(value)) ? '' : value);
     };
 
-    function saveNewExpense() {
-        setIsSaving(true);
-        const amountNum = parseFloat(amount);
-        const addExpensePayload:AddExpensePayload = {
-            dateStr: date,
-            item: {
-              category,
-              note,
-              amount: amountNum,
-              paymentMethod: "Credit Card"  // Hardcode for now.
+    async function saveNewExpense() {
+        try{
+            setIsSaving(true);
+            const amountNum = parseFloat(amount);
+            const addExpensePayload:AddExpensePayload = {
+                dateStr: date,
+                item: {
+                  category,
+                  note,
+                  amount: amountNum,
+                  paymentMethod: "Credit Card"  // Hardcode for now.
+                }
             }
+            console.log(addExpensePayload);
+            const res = await transactionService.createExpense("user-id", addExpensePayload);
+        }catch(err){
+
+        }finally{
+            // TODO: Need to delete timeout later
+            setTimeout(() => {        
+                setIsSaving(false);
+            }, 1000);
         }
-        console.log(addExpensePayload);
-        // TODO: Need to delete timeout later
-        setTimeout(() => {        
-            setIsSaving(false);
-        }, 1000);
     }
     return (
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}

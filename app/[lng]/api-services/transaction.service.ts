@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Transaction, TransactionType } from '../models';
+import { Transaction, TransactionType, AddExpensePayload } from '../models';
 
 export const transactionService = {
   /**
@@ -15,8 +15,32 @@ export const transactionService = {
             
             return mockData[expenseMonth];
         }catch(err){
-
+          throw err;
         }
+    },
+    createExpense: async (userId: string, payload: AddExpensePayload) => {
+      try{
+        // const { data } = await axios.post(`localhost.../${userId}`, payload);
+        // return data;
+      }catch(err){
+        throw err;
+      }
+    },
+    updateExpense: async (expenseId: string, payload: AddExpensePayload) => {
+      try{
+        // const { data } = await axios.patch(`localhost.../${expenseId}`, payload);
+        // return data;
+      }catch(err){
+        throw err;
+      }
+    },
+    deleteExpense: async (expenseId: string) => {
+      try{
+        // const { data } = await axios.delete(`localhost.../${expenseId}`);
+        // return data;
+      }catch(err){
+        throw err;
+      }
     }
 }
 

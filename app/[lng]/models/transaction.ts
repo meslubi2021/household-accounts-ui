@@ -21,3 +21,11 @@ export type AddExpensePayload = {
     paymentMethod: string;
   }
 }
+
+export type PatchExpensePayload = {
+  category?: string;
+  note?: string;
+  amount?: number;
+  type?: TransactionType;
+  paymentMethod?: string;
+}

@@ -1,11 +1,11 @@
 import { Budget } from './budget';
 import { Transaction, TransactionType, AddExpensePayload } from './transaction';
 import { CalendarEvent } from './calendar-event';
-import { Category } from './category';
+import { Category, UpdateCategory } from './category';
 
 export type { 
     Budget, 
     Transaction, TransactionType, AddExpensePayload,
     CalendarEvent,
-    Category 
+    Category, UpdateCategory 
 }

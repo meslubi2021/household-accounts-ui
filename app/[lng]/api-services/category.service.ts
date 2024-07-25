@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Category } from '../models';
+import { Category, UpdateCategory } from '../models';
 
 export const categoryService = {
     getByUserId: async (userId: string):Promise<string[] | undefined> => {
@@ -20,5 +20,21 @@ export const categoryService = {
         }catch(err){
 
         }
+    },
+    updateExpense: async (categoryId: string, payload: UpdateCategory) => {
+      try{
+        // const { data } = await axios.patch(`localhost.../${expenseId}`, payload);
+        // return data;
+      }catch(err){
+        throw err;
+      }
+    },
+    deleteCategory: async (categoryId: string) => {
+      try{
+        // const { data } = await axios.delete(`localhost.../${categoryId}`);
+        // return data;
+      }catch(err){
+        throw err;
+      }
     }
 }
