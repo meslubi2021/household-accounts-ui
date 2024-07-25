@@ -1,102 +1,67 @@
 'use client'
 
-import React, { useState } from 'react';
-import { useTranslation } from '../../../i18n/client'
-import { format, isToday,  parseISO } from "date-fns"
+import React from 'react';
+import classNames from 'classnames';
+
+
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+  ? Acc[number]
+  : Enumerate<N, [...Acc, Acc['length']]>
+
+type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>
+
+type T = IntRange<0, 101> // 0 ~ 100
 
 interface SlideMenuType {
     isOpen: boolean,
     close: () => void,
-    lng: string
+    position?: 'top' | 'bottom' | 'left' | 'right',
+    width: T // percentage
+    height: T // percentage
+    children: React.ReactNode,
+    header?: React.ReactNode | string
 }
 
-const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, lng}) => {
-    const { t } = useTranslation(lng, 'main');
-    const [activeTab, setActiveTab] = useState('expense');
-    const [date, setDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-    const [amount, setAmount] = useState<string>('');
-    const [category, setCategory] = useState<string>('food');
-    const [note, setNote] = useState<string>('');
+const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', width=100, height=100, header = 'Header', children}) => {
 
-    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        // const formattedValue = parseFloat(value).toFixed(2);
-        setAmount(isNaN(parseFloat(value)) ? '' : value);
-    };
-
+  const getTransformClass = () => {
+    switch (position) {
+      case 'left':
+        return isOpen ? 'translate-x-0' : '-translate-x-full';
+      case 'right':
+        return isOpen ? 'translate-x-0' : 'translate-x-full';
+      case 'top':
+        return isOpen ? 'translate-y-0' : '-translate-y-full';
+      case 'bottom':
+      default:
+        return isOpen ? 'translate-y-0' : 'translate-y-full';
+    }
+  };
+  const sizeStyle = position === 'left' || position === 'right' ? {width: `${width}%`}  : {height: `${height}%`};
     return (
     <>
       <div
-         className={`slide-menu-wrapper fixed inset-0 transition-transform transform z-10 ${
-            isOpen ? 'translate-y-0' : 'translate-y-full'
-          } bg-white shadow-lg`}
-          style={{ transition: 'transform 0.3s ease-in-out' }}
+           className={classNames(
+            'slide-menu-wrapper fixed transition-transform transform z-10',
+            {
+              'inset-y-0 left-0': position === 'left',
+              'inset-y-0 right-0': position === 'right',
+              'inset-x-0 top-0': position === 'top',
+              'inset-x-0 bottom-0': position === 'bottom',
+            },
+            getTransformClass(),
+            'bg-white'
+          )}
+          style={{ transition: 'transform 0.3s ease-in-out', ...sizeStyle }}
       >
         <div className='header bg-red-300 flex justify-between items-center h-100'>
             <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-left">
                 X
             </div>
-            <div className={`px-4 py-2 text-white flex-1 text-center`}>
-                Expense
-            </div>
-            <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
-                {t('slide-menu.save')}
-            </div>
+            {header}
         </div>
         <div className='main'>
-            <div className="max-w-md mx-auto bg-white overflow-hidden">
-                <div className="p-4 space-y-4">
-                    <div className="flex justify-between items-center border-b">
-                        <span className="flex items-center">
-                            <span className="mr-2">Date</span>
-                            {isToday(parseISO(date)) && (
-                                <span className="ml-2 border text-blue text-sm px-2 rounded">Today</span>
-                            )}
-
-                        </span>
-                        <input
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            className="text-left w-2/3 px-2 py-1"
-                        />
-                    </div>
-                    <div className="flex justify-between items-center border-b">
-                        <span>Amount</span>
-                        <span className="text-left w-2/3 px-2 py-1">
-                            <span className="mr-2">$</span>
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={handleAmountChange}                                
-                                placeholder="0.00"
-                                min="0"
-                            />
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center border-b">
-                        <span>Category</span>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="text-left w-2/3 px-2 py-1"
-                        >
-                            <option value="food">🍴 Food</option>
-                            <option value="transport">🚗 Transport</option>
-                            <option value="shopping">🛍️ Shopping</option>
-                            <option value="entertainment">🎉 Entertainment</option>
-                        </select>
-                    </div>
-                    <div className="border-b w-100">
-                        <textarea
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                            className="w-[100%] px-2 py-1"
-                            placeholder="Add a note"
-                        />
-                    </div>
-                </div>
-            </div>
+            {children}
         </div>
         <div className='footer bg-red-300'></div>
       </div>
