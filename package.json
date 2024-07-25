@@ -16,6 +16,7 @@
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
     "accept-language": "^3.0.18",
+    "axios": "^1.7.2",
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "i18next": "^23.12.2",

@@ -1,10 +1,13 @@
 "use client"
 
-import React, { useRef, MutableRefObject } from 'react';
+import React, { useState, useRef, MutableRefObject, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useTranslation } from '../../../i18n/client'
+import { budgetService } from '../../api-services';
+import { Budget } from '../../models';
+import { formatCurrency } from '../../utils';
 
 type RefType = {
     [key: string]: HTMLElement | null;
@@ -13,6 +16,14 @@ type RefType = {
 export const CalendarPage = ({ lng }: { lng: string }) => {
     const expenseListsRef = useRef<RefType>({}) as MutableRefObject<RefType>;
     const { t } = useTranslation(lng, 'main');
+    const [ budget, setBudget ] = useState<Budget>();
+
+    useEffect(() => {
+      budgetService.getByUserId('user-id', 'selectedDate')
+      .then((data) => {
+        setBudget(data);
+      })
+    }, [])
 
     // a custom render function
     function renderEventContent(eventInfo: any) {
@@ -118,7 +129,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
             <div className="flex justify-between mb-4">
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.budget')}</p>
-                <p className="text-green-500 font-bold">$5,000.00</p>
+                <p className="text-green-500 font-bold">${formatCurrency(budget?.totalAmount || 0)}</p>
                 </div>
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.expense')}</p>
