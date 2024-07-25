@@ -36,7 +36,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         date: string;
         dateStr: string;
         items: {
-          description: string;
+          category: string;
           amount: number;
           type: 'income' | 'expense';
           paymentMethod: string;
@@ -49,30 +49,37 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
           date: 'Jul 10, 2024',
           dateStr: '2024-07-10',
           items: [
-            { description: 'Food', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card', note: 'Daebak' },
+            { category: 'Dine out', note: '대박 왕 만두' , amount: 25.0, type: 'expense', paymentMethod: 'Credit Card'},
+          ],
+        },
+        {
+          date: 'Jul 15, 2024',
+          dateStr: '2024-07-15',
+          items: [
+            { category: 'Grocery', note: 'H-mart', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card' },
           ],
         },
         {
           date: 'Jul 21, 2024',
           dateStr: '2024-07-21',
           items: [
-            { description: 'Food', amount: 90.0, type: 'expense', paymentMethod: 'Cash' },
-            { description: 'Food', amount: 55.0, type: 'expense', paymentMethod: 'Credit Card' },
+            { category: 'Dine out', note: '해남', amount: 90.0, type: 'expense', paymentMethod: 'Credit Card' },
+            { category: 'Dine out', note: '이산', amount: 55.0, type: 'expense', paymentMethod: 'Credit Card' },
           ],
         },
         {
           date: 'Jul 22, 2024',
           dateStr: '2024-07-22',
           items: [
-            { description: 'Food', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card', note: 'Daebak' },
+            { category: 'Dine out', note: 'Daebak', amount: 25.0, type: 'expense', paymentMethod: 'Credit Card' },
           ],
         },
         {
           date: 'Jul 23, 2024',
           dateStr: '2024-07-23',
           items: [
-            { description: 'Phone & Net', amount: 555.0, type: 'expense', paymentMethod: 'Credit Card' },
-            { description: '밥', amount: 200.0, type: 'expense', paymentMethod: 'Credit Card' },
+            { category: 'Utilities', note: "Phone", amount: 555.0, type: 'expense', paymentMethod: 'Credit Card' },
+            { category: 'Dine out', note: "Burgerking", amount: 200.0, type: 'expense', paymentMethod: 'Credit Card' },
           ],
         },
       ];
@@ -137,9 +144,9 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                     <div className="bg-white shadow-md rounded-b-md">
                         {transaction.items.map((item, index) => (
                         <div key={index} className="flex justify-between p-2 border-b last:border-none">
-                            <div>
-                            <p className="font-medium">{item.description}, {item.paymentMethod}</p>
-                            {item.note && <p className="text-sm text-gray-500">{item.note}</p>}
+                            <div className="flex">
+                              <p className="font-medium">{item.category}</p>
+                              {item.note && <p className="ml-2 font-medium text-gray-500">{item.note}</p>}
                             </div>
                             <p className={item.type === 'income' ? 'text-blue-500 font-bold' : 'text-red-500 font-bold'}>
                             {item.type === 'income' ? `+${item.amount.toFixed(2)}` : `-${item.amount.toFixed(2)}`}
