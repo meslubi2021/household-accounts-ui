@@ -8,6 +8,8 @@ import { useTranslation } from '../../../i18n/client'
 import { budgetService, transactionService } from '../../api-services';
 import { Budget, Transaction, CalendarEvent } from '../../models';
 import { formatCurrency } from '../../utils';
+import { useDispatch, useSelector } from 'react-redux';
+import { calendarActions } from '../../utils/redux';
 import { format } from 'date-fns'
 
 type RefType = {
@@ -15,6 +17,8 @@ type RefType = {
 };
 
 export const CalendarPage = ({ lng }: { lng: string }) => {
+    const dispatch = useDispatch();
+    const { selectedDateStr } = useSelector((state:any) => state.calendar);
     const expenseListsRef = useRef<RefType>({}) as MutableRefObject<RefType>;
     const { t } = useTranslation(lng, 'main');
     const [ budget, setBudget ] = useState<Budget>();
@@ -23,20 +27,27 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
     const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
 
     useEffect(() => {
-      init();
-      buildEvents();
-    }, []);
+      if(selectedDateStr === "") return;
+      init(selectedDateStr);
+    }, [selectedDateStr]);
 
     useEffect(() => {
-      buildEvents();
+      if(expenses == null) return;
+      buildEvents(expenses);
     }, [expenses])
 
-    async function init() {
+    async function init(selectedDateStr:string) {
       try{
-        const bugbetRes = await budgetService.getByUserIdMonth('user-id', 'selectedMonth');
-        const transactionRes = await transactionService.getExpenseByUserIdMonth('user-id', 'selectedMonth');
-        setBudget(bugbetRes);
+        const dateArr = selectedDateStr.split('-');
+        const selectedMonth = `${dateArr[0]}-${dateArr[1]}` //ex) 2024-07
+        const budgetRes = await budgetService.getByUserIdMonth('user-id', selectedMonth);
+        const transactionRes = await transactionService.getExpenseByUserIdMonth('user-id', selectedMonth);
+        if(transactionRes == null) return;
+
+        setBudget(budgetRes);
         setExpenses(transactionRes);
+
+        buildEvents(transactionRes);
       }catch(err){
         console.log(err);
       }
@@ -51,7 +62,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
         )
     }
 
-    function buildEvents() {
+    function buildEvents(expenses: Transaction[]) {
       if(expenses == null) return;
 
       const result: { [key: string]: string }[] = [];
@@ -82,7 +93,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       const currentDate = calendarApi.getDate();
 
       // Selected Month, need to store it globally.
-      // format(currentDate, 'yyyy-MM-dd')
+      dispatch(calendarActions.setSelectedDateStr(format(currentDate, 'yyyy-MM-dd')));
     };
 
     return (<div className="calendar-page-wrapper">
@@ -100,12 +111,12 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                 center: 'title today',
                 right: 'next'
             }}
-            height={"41vh"}
+            height={"43vh"}
             selectable={true}
             dayMaxEvents={true}
             fixedWeekCount={false}
         />
-         <div className="flex flex-col list-of-expenses p-4 h-[41vh]">
+         <div className="flex flex-col list-of-expenses p-4 h-[39vh]">
             <div className="flex justify-between mb-4">
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.budget')}</p>
