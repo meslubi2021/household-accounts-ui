@@ -1,12 +1,13 @@
 import axios from 'axios';
+import { Budget } from '../models';
 
 export const budgetService = {
-    getByUserId: async (userId: string, budgetDate: string) => {
+    getByUserIdMonth: async (userId: string, budgetMonth: string):Promise<Budget | undefined> => {
         try{
-            // const { data } = await axios.get(`localhost.../${userId}/${budgetDate}`);
+            // const { data } = await axios.get(`localhost.../${userId}/${budgetMonth}`);
             const data = {
                     userId: 'user-id',
-                    budgetDate: '2024-07',
+                    budgetMonth: '2024-07',
                     totalAmount: 6723.67,
                     items: [
                         {

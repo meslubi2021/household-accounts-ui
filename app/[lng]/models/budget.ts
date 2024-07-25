@@ -1,6 +1,6 @@
 export type Budget = {
     userId: string;
-    budgetDate: string;
+    budgetMonth: string;
     totalAmount: number;
     items: {
         source: string;
