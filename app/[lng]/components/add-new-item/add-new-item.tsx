@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import { format, isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown } from '../shared';
 import { AddExpensePayload } from '../../models';
+import { categoryService } from '../../api-services/category.service';
 
 interface AddNewItemSlideMenuType {
     isOpen: boolean,
@@ -16,8 +17,23 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
     const { t } = useTranslation(lng, 'main');
     const [date, setDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
     const [amount, setAmount] = useState<string>("");
+    const [categories, setCategories] = useState<string[]>();
     const [category, setCategory] = useState<string>('dine-in');
     const [note, setNote] = useState<string>('');
+
+    useEffect(() => {
+        if(!isOpen) return;
+        init();
+    }, [isOpen])
+
+    async function init() {
+        try{
+            const categoriesRes = await categoryService.getByUserId('user-id');
+            categoriesRes && setCategories(categoriesRes)
+        }catch(err){
+            console.log(err);
+        }
+    }
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -79,12 +95,15 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
                     <span>Category</span>
-                    <Dropdown 
-                        className="new-item-category-dropdown" 
-                        defaultValue='Dine-out' 
-                        items={["Dine-out", "Grocery", "Utilities"]}
-                        onChange={(value:string) => setCategory(value)}
-                    />
+                    {
+                        categories &&
+                        <Dropdown 
+                            className="new-item-category-dropdown" 
+                            defaultValue='Dine-out' 
+                            items={categories}
+                            onChange={(value:string) => setCategory(value)}
+                        />
+                    }
                 </div>
                 <div className="border-b w-100 py-3">
                     <textarea

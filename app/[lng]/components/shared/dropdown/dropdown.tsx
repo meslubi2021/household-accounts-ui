@@ -28,8 +28,8 @@ export const Dropdown:React.FC<Dropdown> = ( {className, defaultValue, items, on
         <div className="py-1">
           {
             items.map((item:string, index:number) => 
-              <MenuItem>
-                <div key={`${item}-${index}`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+              <MenuItem key={`${item}-${index}`} >
+                <div className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                   onClick={(e) => {
                     if(e.currentTarget.textContent != null){
                       setSelectedValue(e.currentTarget.textContent)
