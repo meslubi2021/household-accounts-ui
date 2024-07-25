@@ -9,9 +9,10 @@
 @include export-to-css-vars-dark($colors-dark);
 
 @import "./components/header";
-@import "./components/calendar-page";
 @import "./components/footer";
 @import "./components/slide-menu";
+@import "./components/calendar-page";
+@import "./components/add-new-item";
 
 body{
     height: 100dvh;

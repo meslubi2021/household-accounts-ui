@@ -70,7 +70,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       expenses.forEach((expense) => {
         const totalAmount = expense.items.reduce((sum, item) => sum + item.amount, 0);
         totalExpenseTemp += totalAmount;
-        result.push({title: `-${formatCurrency(totalAmount)}`, date: expense.dateStr, dataStr: expense.dateStr});
+        result.push({title: `-${formatCurrency(totalAmount)}`, date: expense.dateStr, dateStr: expense.dateStr});
       });
 
       setTotalAmountOfExpense(totalExpenseTemp);

@@ -19,7 +19,15 @@
     "new_input": {
         "title": "New Input",
         "header": {
-            "title": "New Input"
+            "title": "New Input",
+            "expense": "Expense"
+        },
+        "body": {
+            "date": "Date",
+            "today": "today",
+            "amount": "Amount",
+            "category": "Category",
+            "add_a_note": "Add a note"
         }
     },
     "asset": {

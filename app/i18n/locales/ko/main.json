@@ -19,7 +19,15 @@
     "new_input": {
         "title": "새 아이템",
         "header": {
-            "title": "새 아이템"
+            "title": "새 아이템",
+            "expense": "지출"
+        },
+        "body": {
+            "date": "날짜",
+            "today": "오늘",
+            "amount": "금액",
+            "category": "카테고리",
+            "add_a_note": "노트 기입해주세요"
         }
     },
     "asset": {
