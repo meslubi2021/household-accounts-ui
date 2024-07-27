@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from '../../../i18n/client'
-import { format, isToday,  parseISO } from "date-fns"
+import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner } from '../shared';
 import { AddExpensePayload } from '../../models';
 import { categoryService, transactionService } from '../../api-services';
+import { useHandleItem } from './utils/reducer';
 
 interface AddNewItemSlideMenuType {
     isOpen: boolean,
@@ -15,12 +16,10 @@ interface AddNewItemSlideMenuType {
 
 export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, close, lng }) => {
     const { t } = useTranslation(lng, 'main');
-    const [date, setDate] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
-    const [amount, setAmount] = useState<string>("");
-    const [categories, setCategories] = useState<string[]>();
-    const [category, setCategory] = useState<string>('dine-in');
-    const [note, setNote] = useState<string>('');
-    const [isSaving, setIsSaving] = useState(false);
+    const { 
+        date, amount, categories, category, note, isSaving, isAbleToSave,
+        setDate, setAmount, setCategories, setCategory, setNote, setIsSaving, setIsAbleToSave
+     } = useHandleItem();
 
     useEffect(() => {
         if(!isOpen) return;
@@ -30,7 +29,10 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
     async function init() {
         try{
             const categoriesRes = await categoryService.getByUserId('user-id');
-            categoriesRes && setCategories(categoriesRes)
+            if(categoriesRes) {
+                setCategories(categoriesRes)
+                setCategory(categoriesRes[0])
+            }
         }catch(err){
             console.log(err);
         }
@@ -38,19 +40,20 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setAmount(isNaN(parseFloat(value)) ? '' : value);
+        const amountTemp = parseFloat(value);
+        setAmount(isNaN(amountTemp) ? 0.00 : amountTemp);
+        checkIsAbleToCreate({date, amount: amountTemp, category});
     };
 
     async function saveNewExpense() {
         try{
             setIsSaving(true);
-            const amountNum = parseFloat(amount);
             const addExpensePayload:AddExpensePayload = {
                 dateStr: date,
                 item: {
                   category,
                   note,
-                  amount: amountNum,
+                  amount,
                   paymentMethod: "Credit Card"  // Hardcode for now.
                 }
             }
@@ -63,6 +66,13 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
             setTimeout(() => {        
                 setIsSaving(false);
             }, 1000);
+        }
+    }
+    function checkIsAbleToCreate({date, amount, category}: {date:string, amount:number, category:string}) {
+        if(date === "" || amount === 0 || category === ""){
+            setIsAbleToSave(false);
+        }else{
+            setIsAbleToSave(true);
         }
     }
     return (
@@ -78,33 +88,36 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                         <LoadingSpinner />
                     </div>
                     :
-                    <div onClick={saveNewExpense} className="text-white p-2 px-3 cursor-pointer flex-1 text-right">
+                    <div onClick={() => isAbleToSave && saveNewExpense()} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right ${!isAbleToSave && 'opacity-50 cursor-not-allowed'}`}>
                         {t('slide-menu.save')}
                     </div>
                 }
             </>}
-        >
-            <div className="p-4 bg-white">
+        >   
+            <div className="p-4 bg-white">  
                 <div className="flex justify-between items-center border-b py-3">
                     <span className="flex items-center">
                         <span className="mr-2">{t('new_input.body.date')}</span>
                         {isToday(parseISO(date)) && (
                             <span className="ml-2 border text-blue text-sm px-2 rounded">{t('new_input.body.today')}</span>
                         )}
-
                     </span>
                     <input
                         type="date"
                         value={date}
-                        onChange={(e) => setDate(e.target.value)}
+                        onChange={(e) => {
+                            setDate(e.target.value);
+                            checkIsAbleToCreate({date:e.target.value, amount, category});
+                        }}
                         className="text-left w-2/3 px-2 py-1"
                     />
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.amount')}</span>
-                    <span className="text-left w-2/3 px-2 py-1">
+                    <span className="text-left w-2/3 px-2 py-1 flex">
                         <span className="mr-2">$</span>
                         <input
+                            className="w-full"
                             type="number"
                             value={amount}
                             onChange={handleAmountChange}                                
@@ -121,7 +134,10 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                             className="new-item-category-dropdown" 
                             defaultValue='Dine-out' 
                             items={categories}
-                            onChange={(value:string) => setCategory(value)}
+                            onChange={(value:string) => {
+                                setCategory(value)
+                                checkIsAbleToCreate({date, amount, category: value});
+                            }}
                         />
                     }
                 </div>
