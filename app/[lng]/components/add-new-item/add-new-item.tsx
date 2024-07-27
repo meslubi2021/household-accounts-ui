@@ -102,9 +102,10 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.amount')}</span>
-                    <span className="text-left w-2/3 px-2 py-1">
+                    <span className="text-left w-2/3 px-2 py-1 flex">
                         <span className="mr-2">$</span>
                         <input
+                            className="w-full"
                             type="number"
                             value={amount}
                             onChange={handleAmountChange}                                
