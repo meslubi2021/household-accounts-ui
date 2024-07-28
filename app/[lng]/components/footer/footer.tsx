@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'; 
 import { CalendarDaysIcon, ChartPieIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
-import { AddNewItemSlideMenu } from '../add-new-item/add-new-item';
+import { HandleItemSlideMenu } from '../shared'
 
 export const Footer = ({ lng }: { lng: string }) => {
   const [ isOpen, setIsOpen ] = useState(false);
@@ -36,6 +36,6 @@ export const Footer = ({ lng }: { lng: string }) => {
           <Cog6ToothIcon />
           <span>{t(`settings.title`)}</span>
         </Link>
-        <AddNewItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} />
+        <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} />
     </footer>)
 }
