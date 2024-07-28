@@ -5,11 +5,12 @@ import { SlideMenu } from '..'
 import { formatCurrency, formatNumber } from '../../../utils';
 
 interface AmountInputProps {
-  setAmount:  (amount: number) => void
+  setAmount:  (amount: number) => void,
+  input: string 
+  setInput: React.Dispatch<React.SetStateAction<string>>
 }
 
-export const AmountInput: React.FC<AmountInputProps> = ({ setAmount }) => {
-  const [ input, setInput ] = useState<string>('');
+export const AmountInput: React.FC<AmountInputProps> = ({ setAmount, input, setInput }) => {
   const [ formattedInput, setFormattedInput ] = useState<string | undefined>(undefined);
   const [ isOpen, setIsOpen ] = useState(false);
 

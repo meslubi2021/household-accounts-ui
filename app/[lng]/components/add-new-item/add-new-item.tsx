@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '../shared';
@@ -18,8 +18,9 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
     const { t } = useTranslation(lng, 'main');
     const { 
         date, amount, categories, category, note, isSaving, isAbleToSave,
-        setDate, setAmount, setCategories, setCategory, setNote, setIsSaving, setIsAbleToSave
+        setDate, setAmount, setCategories, setCategory, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
+     const [ input, setInput ] = useState<string>('');
 
     useEffect(() => {
         if(!isOpen) return;
@@ -56,10 +57,16 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
             }
             console.log(addExpensePayload);
             const res = await transactionService.createExpense("user-id", addExpensePayload);
+            close();
+            setTimeout(() => {                
+                reset();
+                setInput(''); // reset Amount intput -> '0'
+                init();
+            }, 500);
         }catch(err){
 
         }finally{
-            // TODO: Need to delete timeout later
+            // TODO: Need to delete timeout later            
             setTimeout(() => {        
                 setIsSaving(false);
             }, 1000);
@@ -112,7 +119,7 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.amount')}</span>
                     <span className="text-left w-2/3 px-2 py-1 flex items-center">
-                        <AmountInput setAmount={setAmount} />
+                        {isOpen && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
                     </span>
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
