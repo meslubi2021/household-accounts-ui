@@ -2,24 +2,32 @@
 
 import React, { useState, useEffect } from 'react';
 import { SlideMenu } from '..'
-import { formatNumber } from '../../../utils';
+import { formatCurrency, formatNumber } from '../../../utils';
 
 interface AmountInputProps {
   setAmount:  (amount: number) => void
 }
 
 export const AmountInput: React.FC<AmountInputProps> = ({ setAmount }) => {
-  const [input, setInput] = useState<string>('');
+  const [ input, setInput ] = useState<string>('');
+  const [ formattedInput, setFormattedInput ] = useState<string | undefined>(undefined);
   const [ isOpen, setIsOpen ] = useState(false);
+
   useEffect(() => {
     setAmount(parseFloat(input));
   }, [input])
+
+  useEffect(() => {
+    if(!isOpen) setFormattedInput(formatCurrency(input));
+    else setFormattedInput(undefined);
+  }, [isOpen])
+
   return (<>
     <div className="flex items-center mb-4 w-full" onClick={() => setIsOpen((pre) => !pre)}>
       <span className="me-2">$</span>
       <input
         type="text"
-        value={formatNumber(input)}
+        value={formattedInput ? formattedInput : formatNumber(input)}
         readOnly
         className="w-full p-2 border border-gray-300 rounded"        
       />
