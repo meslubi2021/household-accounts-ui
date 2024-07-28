@@ -4,7 +4,7 @@ export default async function Index({ params: { lng }} : any) {
     const { t } = await useTranslation(lng, 'main');
 
     return (<>
-       Analysis view
+       Coming soon
     </>
     );
 }
