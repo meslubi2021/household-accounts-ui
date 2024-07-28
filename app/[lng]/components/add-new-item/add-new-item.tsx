@@ -26,6 +26,10 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
         init();
     }, [isOpen])
 
+    useEffect(() => {
+        checkIsAbleToCreate({date, amount, category});
+    }, [amount])
+
     async function init() {
         try{
             const categoriesRes = await categoryService.getByUserId('user-id');
@@ -37,13 +41,6 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
             console.log(err);
         }
     }
-
-    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        const amountTemp = parseFloat(value);
-        setAmount(isNaN(amountTemp) ? 0.00 : amountTemp);
-        checkIsAbleToCreate({date, amount: amountTemp, category});
-    };
 
     async function saveNewExpense() {
         try{

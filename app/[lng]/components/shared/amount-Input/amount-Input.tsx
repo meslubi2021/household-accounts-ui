@@ -14,7 +14,11 @@ export const AmountInput: React.FC<AmountInputProps> = ({ setAmount }) => {
   const [ isOpen, setIsOpen ] = useState(false);
 
   useEffect(() => {
-    setAmount(parseFloat(input));
+    if(input === ''){
+      setAmount(0);
+    }else{
+      setAmount(parseFloat(input));
+    }
   }, [input])
 
   useEffect(() => {
