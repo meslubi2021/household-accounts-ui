@@ -16,13 +16,13 @@ interface SlideMenuType {
     isOpen: boolean,
     close: () => void,
     position?: 'top' | 'bottom' | 'left' | 'right',
-    width: T // percentage
-    height: T // percentage
+    width?: T // percentage
+    height?: T // percentage
     children: React.ReactNode,
-    header?: React.ReactNode | string
+    header?: React.ReactNode | string    
 }
 
-const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', width=100, height=100, header = 'Header', children}) => {
+const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', width=100, height=100, header, children}) => {
 
   const getTransformClass = () => {
     switch (position) {
@@ -55,10 +55,14 @@ const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', w
           style={{ transition: 'transform 0.3s ease-in-out', ...sizeStyle }}
       >
         <div className='header bg-red-300 flex justify-between items-center h-100'>
+        {
+          header && <>
             <div onClick={() => close()} className="text-white p-2 px-3 cursor-pointer flex-1 text-left">
                 X
             </div>
             {header}
+            </>
+        }
         </div>
         <div className='main'>
             {children}
