@@ -105,7 +105,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     }
     async function handleDelete(){
         try{
-            if(selectedItem){            
+            if(selectedItem){
                 await transactionService.deleteExpense(selectedItem.id);
             }
         }catch(err){
