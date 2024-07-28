@@ -11,6 +11,7 @@ import { formatCurrency } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions } from '../../utils/redux';
 import { format } from 'date-fns'
+import { HandleItemSlideMenu } from '../shared';
 
 type RefType = {
     [key: string]: HTMLElement | null;
@@ -25,6 +26,8 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
     const [ totalAmountOfExpense, setTotalAmountOfExpense ] = useState<number>(0);
     const [ expenses, setExpenses ] = useState<Transaction[]>();
     const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
+    const [ isOpen, setIsOpen ] = useState(false);
+    const [ selectedItem, setSelectedItem ] = useState();
 
     useEffect(() => {
       if(selectedDateStr === "") return;
@@ -96,6 +99,13 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       dispatch(calendarActions.setSelectedDateStr(format(currentDate, 'yyyy-MM-dd')));
     };
 
+    function updateItem(e:any) {
+      const dataset = e.currentTarget.dataset;
+      setSelectedItem({...dataset});
+
+      // Open HandleItem Slidemenu
+      setIsOpen(true);
+    }
     return (<div className="calendar-page-wrapper">
         <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
@@ -141,7 +151,14 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                     </div>
                     <div className="bg-white shadow-md rounded-b-md">
                         {expense.items.map((item, index) => (
-                        <div key={index} className="flex justify-between p-2 border-b last:border-none">
+                        <div key={index} className="flex justify-between p-2 border-b last:border-none cursor-pointer" 
+                          data-id={item._id}
+                          data-date-str={item.dateStr}
+                          data-amount={item.amount}
+                          data-category={item.category}
+                          data-note={item.note}
+                          onClick={updateItem}
+                          >
                             <div className="flex">
                               <p className="font-medium">{item.category}</p>
                               {item.note && <p className="ml-2 font-medium text-gray-500">{item.note}</p>}
@@ -154,6 +171,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                     </div>
                 </div>
             ))}
+            <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem}/>
             </div>      
     </div>)
 }

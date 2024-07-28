@@ -14,7 +14,7 @@ export const formatCurrency = (value: number | string): string => {
 
 export const formatNumber = (value: number | string): string => {
   // Convert the value to a string to handle both integer and decimal parts
-  const stringValue = value.toString();
+  const stringValue = typeof value === 'number' ? value.toString() : value;
 
   // Split the value into integer and decimal parts
   const [integerPart, decimalPart] = stringValue.split('.');

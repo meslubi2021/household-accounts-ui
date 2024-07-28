@@ -12,10 +12,16 @@ interface HandleItemSlideMenuType {
     isOpen: boolean,
     close: () => void,
     lng: string,
-    initValues?: any
+    selectedItem?: {
+        id: string,
+        amount: string,
+        dateStr: string,
+        category: string,
+        note: string
+    }
 }
 
-export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, initValues }) => {
+export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, selectedItem }) => {
     const { t } = useTranslation(lng, 'main');
     const { 
         date, amount, categories, category, note, isSaving, isAbleToSave,
@@ -25,8 +31,13 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
 
     useEffect(() => {
         if(!isOpen) return;
-        if(initValues){
-
+        if(selectedItem){
+            init();
+            setDate(selectedItem.dateStr);
+            setAmount(parseFloat(selectedItem.amount));
+            setInput(selectedItem.amount);
+            setCategory(selectedItem.category);
+            setNote(selectedItem.note);
         }else{
             init();
         }
@@ -60,8 +71,16 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                   paymentMethod: "Credit Card"  // Hardcode for now.
                 }
             }
-            console.log(addExpensePayload);
-            const res = await transactionService.createExpense("user-id", addExpensePayload);
+            if(selectedItem){
+                // Update Existing Item
+                console.log(selectedItem.id);
+                console.log(addExpensePayload);
+                const res = await transactionService.updateExpense(selectedItem.id, addExpensePayload.item);
+            }else{
+                // Create new Item
+                console.log(addExpensePayload);
+                const res = await transactionService.createExpense("user-id", addExpensePayload);
+            }
             close();
             setTimeout(() => {                
                 reset();
