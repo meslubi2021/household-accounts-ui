@@ -103,6 +103,16 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setIsAbleToSave(true);
         }
     }
+    async function handleDelete(){
+        try{
+            if(selectedItem){            
+                await transactionService.deleteExpense(selectedItem.id);
+            }
+        }catch(err){
+            console.log(err);
+        }
+
+    }
     return (
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
@@ -170,6 +180,17 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     />
                 </div>
             </div>
+            {
+                selectedItem &&
+                <div className="p-4 flex justify-end">
+                    <button
+                        onClick={handleDelete}
+                        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
+                        >
+                        Delete
+                    </button>
+                </div>
+            }
         </SlideMenu>
     )
 }
