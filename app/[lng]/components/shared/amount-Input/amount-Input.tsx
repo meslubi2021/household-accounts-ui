@@ -72,7 +72,7 @@ const CalculatorPad: React.FC<CalculatorPadType> = ({input, setInput, isOpen, cl
     setInput(input.substring(0, input.length - 1));
   };
   return(<>
-    <SlideMenu isOpen={isOpen} close={close} height={48} position={"bottom"}>
+    <SlideMenu isOpen={isOpen} close={close} heightPx={"407px"} position={"bottom"}>
       <div className="bg-white p-2 rounded w-full">
         <div className="grid grid-cols-4 gap-2">
           <button onClick={() => close()} className="bg-red-300 p-4 rounded text-white text-2xl">CLOSE</button>

@@ -18,11 +18,12 @@ interface SlideMenuType {
     position?: 'top' | 'bottom' | 'left' | 'right',
     width?: T // percentage
     height?: T // percentage
+    heightPx?: string
     children: React.ReactNode,
     header?: React.ReactNode | string    
 }
 
-const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', width=100, height=100, header, children}) => {
+const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', width=100, height=100, heightPx, header, children}) => {
 
   const getTransformClass = () => {
     switch (position) {
@@ -37,7 +38,7 @@ const SlideMenu: React.FC<SlideMenuType> = ({isOpen, close, position = 'left', w
         return isOpen ? 'translate-y-0' : 'translate-y-full';
     }
   };
-  const sizeStyle = position === 'left' || position === 'right' ? {width: `${width}%`}  : {height: `${height}%`};
+  const sizeStyle = position === 'left' || position === 'right' ? {width: `${width}%`}  : {height: heightPx ? heightPx : `${height}%`};
     return (
     <>
       <div
