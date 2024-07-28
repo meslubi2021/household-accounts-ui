@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
-import { SlideMenu, Dropdown, LoadingSpinner } from '../shared';
+import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '../shared';
 import { AddExpensePayload } from '../../models';
 import { categoryService, transactionService } from '../../api-services';
 import { useHandleItem } from './utils/reducer';
@@ -114,16 +114,8 @@ export const AddNewItemSlideMenu:React.FC<AddNewItemSlideMenuType> = ({ isOpen, 
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.amount')}</span>
-                    <span className="text-left w-2/3 px-2 py-1 flex">
-                        <span className="mr-2">$</span>
-                        <input
-                            className="w-full"
-                            type="number"
-                            value={amount}
-                            onChange={handleAmountChange}                                
-                            placeholder="0.00"
-                            min="0"
-                        />
+                    <span className="text-left w-2/3 px-2 py-1 flex items-center">
+                        <AmountInput setAmount={setAmount} />
                     </span>
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
