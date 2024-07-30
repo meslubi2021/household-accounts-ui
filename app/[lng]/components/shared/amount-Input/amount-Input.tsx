@@ -15,17 +15,15 @@ export const AmountInput: React.FC<AmountInputProps> = ({ setAmount, input, setI
   const [ isOpen, setIsOpen ] = useState(false);
 
   useEffect(() => {
-    if(input === ''){
-      setAmount(0);
-    }else{
-      setAmount(parseFloat(input));
-    }
-  }, [input])
-
-  useEffect(() => {
-    if(!isOpen) setFormattedInput(formatCurrency(input));
-    else setFormattedInput(undefined);
-  }, [isOpen])
+    if(!isOpen) {
+        if(input === ''){
+          setAmount(0);
+        }else{
+          setAmount(parseFloat(input));
+        }
+      setFormattedInput(formatCurrency(input))
+    }else setFormattedInput(undefined);
+  }, [isOpen, input])
 
   return (<>
     <div className="flex items-center mb-4 w-full" onClick={() => setIsOpen((pre) => !pre)}>
@@ -51,7 +49,7 @@ interface CalculatorPadType {
 
 const CalculatorPad: React.FC<CalculatorPadType> = ({input, setInput, isOpen, close}) => {
   const [ operator, setOperator ] = useState('');
-  const [ isOperatoring, setIsOperatoring ] = useState(true);
+  const [ isOperatoring, setIsOperatoring ] = useState(false);
   const [ previousValue, setPreviousValue ] = useState('');
 
   const handleButtonClick = (value: string) => {
@@ -60,7 +58,7 @@ const CalculatorPad: React.FC<CalculatorPadType> = ({input, setInput, isOpen, cl
       setPreviousValue(input);
       setInput(value);
     }else{
-      setInput((prev) => {        
+      setInput((prev) => {
         if(prev.includes(".") && value === '.') {
           return prev;
         }

@@ -11,7 +11,7 @@ import { formatCurrency } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions } from '../../utils/redux';
 import { format } from 'date-fns'
-import { HandleItemSlideMenu } from '../shared';
+import { HandleItemSlideMenu, SwipeableCard } from '../shared';
 
 type RefType = {
     [key: string]: HTMLElement | null;
@@ -151,22 +151,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                     </div>
                     <div className="bg-white shadow-md rounded-b-md">
                         {expense.items.map((item, index) => (
-                        <div key={index} className="flex justify-between p-2 border-b last:border-none cursor-pointer" 
-                          data-id={item._id}
-                          data-date-str={item.dateStr}
-                          data-amount={item.amount}
-                          data-category={item.category}
-                          data-note={item.note}
-                          onClick={updateItem}
-                          >
-                            <div className="flex">
-                              <p className="font-medium">{item.category}</p>
-                              {item.note && <p className="ml-2 font-medium text-gray-500">{item.note}</p>}
-                            </div>
-                            <p className={item.type === 'income' ? 'text-blue-500 font-bold' : 'text-red-500 font-bold'}>
-                            {item.type === 'income' ? `+${item.amount.toFixed(2)}` : `-${item.amount.toFixed(2)}`}
-                            </p>
-                        </div>
+                        <SwipeableCard key={`${item._id}-${index}`} item={item} editOnClick={updateItem} />
                         ))}
                     </div>
                 </div>
