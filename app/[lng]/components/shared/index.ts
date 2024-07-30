@@ -3,5 +3,6 @@ import { LoadingSpinner } from "./loading-spinner/loading-spinner";
 import { SlideMenu } from "./slide-menu/slide-menu";
 import { AmountInput } from './amount-Input/amount-Input';
 import { HandleItemSlideMenu } from './handle-item-slide-menu/handle-item-slide-menu';
+import { SwipeableCard } from './swipeable-card/swepeable-card';
 
-export { Dropdown, LoadingSpinner, AmountInput, SlideMenu, HandleItemSlideMenu }
+export { Dropdown, LoadingSpinner, AmountInput, SlideMenu, HandleItemSlideMenu, SwipeableCard }
