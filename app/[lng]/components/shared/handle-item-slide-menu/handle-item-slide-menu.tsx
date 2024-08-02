@@ -172,10 +172,10 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.category')}</span>
                     {
-                        categories &&
+                        (categories && category) &&
                         <Dropdown 
                             className="new-item-category-dropdown" 
-                            defaultValue='Dine-out' 
+                            defaultValue={category.name}
                             items={dropdownList}
                             onChange={(value:string) => {
                                 const selectedCategory = categories.find((category) => category.name === value);
