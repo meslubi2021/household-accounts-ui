@@ -24,7 +24,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
     const { t } = useTranslation(lng, 'main');
     const [ budget, setBudget ] = useState<Budget>();
     const [ totalAmountOfExpense, setTotalAmountOfExpense ] = useState<number>(0);
-    const [ expenses, setExpenses ] = useState<Transaction[]>();
+    const [ expenses, setExpenses ] = useState<Transaction[]>([]);
     const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
     const [ isOpen, setIsOpen ] = useState(false);
     const [ selectedItem, setSelectedItem ] = useState();
@@ -41,6 +41,8 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
 
     async function init(selectedDateStr:string) {
       try{
+        setExpenses([]);
+        setBudget(undefined);
         const dateArr = selectedDateStr.split('-');
         const selectedMonth = `${dateArr[0]}-${dateArr[1]}` //ex) 2024-07
         const budgetRes = await budgetService.getByUserIdMonth('user-id', selectedMonth);
@@ -130,7 +132,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
             <div className="flex justify-between mb-4">
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.budget')}</p>
-                <p className="text-green-500 font-bold">${budget && formatCurrency(budget.totalAmount)}</p>
+                <p className="text-green-500 font-bold">${formatCurrency(budget?.totalAmount || 0)}</p>
                 </div>
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.expense')}</p>
@@ -138,7 +140,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                 </div>
                 <div className="text-center">
                 <p>{t('calendar.list-of-expenses.balance')}</p>
-                <p className="text-blue-500 font-bold">${budget && formatCurrency(budget.totalAmount - totalAmountOfExpense)}</p>
+                <p className="text-blue-500 font-bold">${formatCurrency((budget?.totalAmount || 0) - totalAmountOfExpense)}</p>
                 </div>
             </div>
             {expenses && expenses.map((expense, index) => (
