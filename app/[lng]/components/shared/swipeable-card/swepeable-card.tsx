@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { TransactionType } from '../../../models';
+import { FixedExpenseType, TransactionType } from '../../../models';
 import { formatCurrency } from '@/app/[lng]/utils';
 import { transactionService } from '../../../api-services';
 import { LoadingSpinner } from '..';
@@ -16,6 +16,7 @@ interface SwipeableCardType{
         note?: string;
         amount: number;
         type: TransactionType;
+        fixedExpense: FixedExpenseType;
         paymentMethod: string;
     }
     editOnClick: (e:any) => void
@@ -69,6 +70,8 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
         data-date-str={transaction.date.split("T")[0]}
         data-amount={transaction.amount}
         data-category={transaction.category}
+        data-fixed-expense={transaction.fixedExpense}
+        data-type={transaction.type}
         data-note={transaction.note}
         onClick={(e) => handleOnClick(e, editOnClick)}
     >

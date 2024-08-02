@@ -1,19 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 interface Dropdown{
   className?: string,
   defaultValue: string,
-  items: string[],
+  items: {value: string, label: string}[],
   eventItems?: string[],
   onChange: (e: any) => void
 }
 export const Dropdown:React.FC<Dropdown> = ( {className, defaultValue, items, onChange, eventItems} ) => {
-  const [ selectedValue, setSelectedValue ] = useState(defaultValue)
-
+  const [ selectedValue, setSelectedValue ] = useState(() => defaultValue)
+  useEffect(() => {
+    setSelectedValue(defaultValue);
+  }, [defaultValue])
   return (
     <Menu as="div" className={`relative inline-block text-left${className ? ` ${className}` : ""}`}>
       <MenuButton className="trigger-btn inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
@@ -27,17 +29,18 @@ export const Dropdown:React.FC<Dropdown> = ( {className, defaultValue, items, on
       >
         <div className="py-1">
           {
-            items.map((item:string, index:number) => 
-              <MenuItem key={`${item}-${index}`} >
+            items.map((item:{value:string, label:string}, index:number) => 
+              <MenuItem key={`${item.value}-${index}`} >
                 <div className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                   onClick={(e) => {
                     if(e.currentTarget.textContent != null){
+                      const selectedItem = items.find((item) => item.label === e.currentTarget.textContent);
                       setSelectedValue(e.currentTarget.textContent)
-                      onChange(e.currentTarget.textContent)
+                      onChange(selectedItem)
                     }
                   }}
                 >
-                  {item}
+                  {item.label}
                 </div>
               </MenuItem>)
           }

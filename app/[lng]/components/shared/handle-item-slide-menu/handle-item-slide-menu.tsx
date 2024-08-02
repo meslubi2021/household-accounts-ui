@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '..';
-import { AddTransactionPayload, Category } from '../../../models';
+import { AddTransactionPayload, Category, TransactionType, FixedExpenseType } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
 
@@ -17,6 +17,8 @@ interface HandleItemSlideMenuType {
         amount: string,
         dateStr: string,
         category: Category,
+        type: TransactionType,
+        fixedExpense: FixedExpenseType,
         note: string
     }
 }
@@ -24,11 +26,11 @@ interface HandleItemSlideMenuType {
 export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, selectedItem }) => {
     const { t } = useTranslation(lng, 'main');
     const { 
-        date, amount, categories, category, note, isSaving, isAbleToSave,
-        setDate, setAmount, setCategories, setCategory, setNote, setIsSaving, setIsAbleToSave, reset
+        date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpense, 
+        setDate, setAmount, setCategories, setCategory, setType, setFixedExpense, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
-     const [dropdownList, setDropdownList] = useState<string[]>([]);
+     const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
 
     useEffect(() => {
         if(!isOpen) return;
@@ -38,6 +40,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setAmount(parseFloat(selectedItem.amount));
             setInput(selectedItem.amount);
             setCategory(selectedItem.category);
+            setType(selectedItem.type)
+            setFixedExpense(selectedItem.fixedExpense)
             setNote(selectedItem.note);
         }else{
             init();
@@ -57,8 +61,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             if(categoriesRes) {
                 setCategories(categoriesRes)
                 setCategory(categoriesRes[0])
-                const tempCategories:string[] = [];
-                categoriesRes.forEach(category => tempCategories.push(category.name));
+                const tempCategories:{value:string, label:string}[] = [];
+                categoriesRes.forEach(category => tempCategories.push({value: category.name, label: category.name}));
                 setDropdownList(tempCategories)
             }
         }catch(err){
@@ -76,8 +80,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 date,
                 amount,
                 category: category?.name || "",
+                fixedExpense,
                 note,
-                type: "expense",
+                type,
                 paymentMethod: "Credit Card"  // Hardcode for now.                
             }
             if(selectedItem){
@@ -130,7 +135,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
                 <div className={`px-4 py-2 text-white flex-1 text-center`}>
-                    {t('new_input.header.expense')}
+                    {
+                        type === "expense"
+                        ? t('new_input.header.expense')
+                        : t('new_input.header.income')
+                    }
                 </div>
                 {   
                     isSaving
@@ -174,10 +183,10 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     {
                         (categories && category) &&
                         <Dropdown 
-                            className="new-item-category-dropdown" 
+                            className="new-item-dropdown" 
                             defaultValue={category.name}
                             items={dropdownList}
-                            onChange={(value:string) => {
+                            onChange={({value, label}:{value:string, label: string}) => {
                                 const selectedCategory = categories.find((category) => category.name === value);
                                 selectedCategory && setCategory(selectedCategory);
                                 checkIsAbleToCreate({date, amount, category: selectedCategory});
@@ -185,6 +194,25 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                         />
                     }
                 </div>
+                {
+                    <div className="flex justify-between items-center border-b py-3">
+                        <span>{t('new_input.body.fixedExpense.name')}</span> 
+                        <Dropdown 
+                            className="new-item-dropdown" 
+                            defaultValue={t(`new_input.body.fixedExpense.options.${fixedExpense}`)}
+                            items={[
+                                {value:"does_not_repeat" ,label: t('new_input.body.fixedExpense.options.does_not_repeat')}, 
+                                {value:"every_day" ,label: t('new_input.body.fixedExpense.options.every_day')}, 
+                                {value:"every_week" ,label: t('new_input.body.fixedExpense.options.every_week')}, 
+                                {value:"every_month" ,label: t('new_input.body.fixedExpense.options.every_month')}, 
+                                {value:"every_year" ,label: t('new_input.body.fixedExpense.options.every_year')}, 
+                            ]}
+                            onChange={({value, label}:{value:FixedExpenseType, label: string}) => {
+                                setFixedExpense(value);
+                            }}
+                        />
+                    </div>
+                }
                 <div className="border-b w-100 py-3">
                     <textarea
                         value={note}
