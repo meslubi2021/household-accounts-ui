@@ -2,11 +2,18 @@ import { useReducer } from "react";
 import { HandleItemAction } from "./action";
 import { format } from "date-fns";
 
+interface Category{
+    _id: string
+    name: string
+    icon: string
+    color: string
+}
+
 interface HandleItemType {
     date: string,
     amount: number,
-    categories: string[],
-    category: string,
+    categories: Category[] | [],
+    category: Category | undefined,
     note: string,
     isSaving: boolean,
     isAbleToSave: boolean
@@ -17,8 +24,8 @@ interface HandleItemActionType {
     payload?: {
         date?: string,
         amount?: number,
-        categories?: string[],
-        category?: string,
+        categories?: Category[],
+        category?: Category,
         note?: string,
         isSaving?: boolean,
         isAbleToSave?: boolean
@@ -29,7 +36,7 @@ const handleitemInit = {
     date: format(new Date(), "yyyy-MM-dd"),
     amount: 0.00,
     categories: [],
-    category: "",
+    category: undefined,
     note: "",
     isSaving: false,
     isAbleToSave: false
@@ -103,13 +110,13 @@ export function useHandleItem() {
             payload: { amount }
         })
     }
-    function setCategories(categories: string[]) {
+    function setCategories(categories: Category[]) {
         dispatch({
             type: HandleItemAction.CATEGORIES,
             payload: { categories }
         })
     }
-    function setCategory(category: string) {
+    function setCategory(category: Category) {
         dispatch({
             type: HandleItemAction.CATEGORY,
             payload: { category }

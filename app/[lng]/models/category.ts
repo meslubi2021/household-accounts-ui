@@ -1,11 +1,11 @@
-export type Category = {    
+export type Category = {  
+    _id: string,
     name: string,
-    icon?: string,
-    markColor?: string
+    icon: string,
+    color: string
 }
-
 export type UpdateCategory = {    
     name?: string,
     icon?: string,
-    markColor?: string
+    color?: string
 }

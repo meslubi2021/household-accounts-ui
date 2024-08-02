@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '..';
-import { AddExpensePayload } from '../../../models';
+import { AddTransactionPayload, Category } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
 
@@ -16,7 +16,7 @@ interface HandleItemSlideMenuType {
         id: string,
         amount: string,
         dateStr: string,
-        category: string,
+        category: Category,
         note: string
     }
 }
@@ -28,6 +28,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setDate, setAmount, setCategories, setCategory, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
+     const [dropdownList, setDropdownList] = useState<string[]>([]);
 
     useEffect(() => {
         if(!isOpen) return;
@@ -49,10 +50,16 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
 
     async function init() {
         try{
-            const categoriesRes = await categoryService.getByUserId('user-id');
+            // TODO: need to grab userId
+            // const userId ='66a96a212be2b2f74ec10f5e'// local
+            const userId = "66a96cac7eda1dc2f62a09c3" // dev
+            const categoriesRes = await categoryService.getByUserId(userId); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
                 setCategory(categoriesRes[0])
+                const tempCategories:string[] = [];
+                categoriesRes.forEach(category => tempCategories.push(category.name));
+                setDropdownList(tempCategories)
             }
         }catch(err){
             console.log(err);
@@ -62,24 +69,24 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     async function saveNewExpense() {
         try{
             setIsSaving(true);
-            const addExpensePayload:AddExpensePayload = {
-                dateStr: date,
-                item: {
-                  category,
-                  note,
-                  amount,
-                  paymentMethod: "Credit Card"  // Hardcode for now.
-                }
+            const addTransactionPayload:AddTransactionPayload = {
+                // TODO: need to grab userId
+                // userId: "66a96a212be2b2f74ec10f5e", // local
+                userId: "66a96cac7eda1dc2f62a09c3", // dev
+                date,
+                amount,
+                category: category?.name || "",
+                note,
+                type: "expense",
+                paymentMethod: "Credit Card"  // Hardcode for now.                
             }
             if(selectedItem){
                 // Update Existing Item
-                console.log(selectedItem.id);
-                console.log(addExpensePayload);
-                const res = await transactionService.updateExpense(selectedItem.id, addExpensePayload.item);
+                const {userId, ...updateTransactionPayload } = addTransactionPayload;
+                const res = await transactionService.updateTransaction(selectedItem.id, updateTransactionPayload);
             }else{
                 // Create new Item
-                console.log(addExpensePayload);
-                const res = await transactionService.createExpense("user-id", addExpensePayload);
+                const res = await transactionService.createTransaction(addTransactionPayload);
             }
             close();
             setTimeout(() => {                
@@ -90,14 +97,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         }catch(err){
 
         }finally{
-            // TODO: Need to delete timeout later            
-            setTimeout(() => {        
-                setIsSaving(false);
-            }, 1000);
+            setIsSaving(false);
         }
     }
-    function checkIsAbleToCreate({date, amount, category}: {date:string, amount:number, category:string}) {
-        if(date === "" || amount === 0 || category === ""){
+    function checkIsAbleToCreate({date, amount, category}: {date:string, amount:number, category?:Category}) {
+        if(date === "" || amount === 0 || category == null){
             setIsAbleToSave(false);
         }else{
             setIsAbleToSave(true);
@@ -106,10 +110,19 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     async function handleDelete(){
         try{
             if(selectedItem){
-                await transactionService.deleteExpense(selectedItem.id);
+                setIsSaving(true);
+                const res = await transactionService.deleteTransaction(selectedItem.id);
             }
+            close();
+            setTimeout(() => {                
+                reset();
+                setInput(''); // reset Amount intput -> '0'
+                init();
+            }, 500);
         }catch(err){
             console.log(err);
+        }finally{
+            setIsSaving(false);
         }
 
     }
@@ -163,10 +176,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                         <Dropdown 
                             className="new-item-category-dropdown" 
                             defaultValue='Dine-out' 
-                            items={categories}
+                            items={dropdownList}
                             onChange={(value:string) => {
-                                setCategory(value)
-                                checkIsAbleToCreate({date, amount, category: value});
+                                const selectedCategory = categories.find((category) => category.name === value);
+                                selectedCategory && setCategory(selectedCategory);
+                                checkIsAbleToCreate({date, amount, category: selectedCategory});
                             }}
                         />
                     }
