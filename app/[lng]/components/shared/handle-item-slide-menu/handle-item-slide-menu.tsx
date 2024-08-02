@@ -61,7 +61,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             const categoriesRes = await categoryService.getByUserId(userId); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
-                setCategory(categoriesRes[0])
+                // If there is selectedItem, then we don't need to set category again.
+                !selectedItem && setCategory(categoriesRes[0])
                 const tempCategories:{value:string, label:string}[] = [];
                 categoriesRes.forEach(category => tempCategories.push({value: category.name, label: category.name}));
                 setDropdownList(tempCategories)

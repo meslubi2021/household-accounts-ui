@@ -112,7 +112,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
 
   function updateItem(e:any) {
     const dataset = e.currentTarget.dataset;
-    setSelectedItem({...dataset});
+    setSelectedItem({...dataset, category: {name: dataset.category}});
     // Open HandleItem Slidemenu
     setIsOpen(true);
   }
