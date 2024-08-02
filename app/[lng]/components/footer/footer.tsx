@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import Link from 'next/link'
+import { useSelector, useDispatch } from 'react-redux';
+import { refreshActions } from '../../utils/redux';
 import { usePathname } from 'next/navigation'; 
 import { CalendarDaysIcon, ChartPieIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
@@ -10,6 +12,7 @@ import { HandleItemSlideMenu } from '../shared'
 
 export const Footer = ({ lng }: { lng: string }) => {
   const [ isOpen, setIsOpen ] = useState(false);
+  const reduxDispatch = useDispatch();
 
   const pathname = usePathname();
     const { t } = useTranslation(lng, 'main');
@@ -36,6 +39,6 @@ export const Footer = ({ lng }: { lng: string }) => {
           <Cog6ToothIcon />
           <span>{t(`settings.title`)}</span>
         </Link>
-        <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} />
+        <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} triggerRefresh={() => reduxDispatch(refreshActions.setIsCalenderPageRefresh(true))} />
     </footer>)
 }

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import calendarReducer from './reducers/calendarSlice';
+import refreshReducer from './reducers/refreshSlice';
 
 export const store = configureStore({
   reducer: {
     calendar: calendarReducer,
+    refresh: refreshReducer,
   },
   devTools: process.env.NODE_ENV !== 'production'
 });

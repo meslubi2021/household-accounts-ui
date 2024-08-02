@@ -21,10 +21,10 @@ interface HandleItemSlideMenuType {
         fixedExpense: FixedExpenseType,
         note: string
     },
-    setIsRefresh: React.Dispatch<React.SetStateAction<boolean>>
+    triggerRefresh: () => void
 }
 
-export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, selectedItem, setIsRefresh }) => {
+export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, selectedItem, triggerRefresh }) => {
     const { t } = useTranslation(lng, 'main');
     const { 
         date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpense, 
@@ -94,9 +94,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 // Create new Item
                 const res = await transactionService.createTransaction(addTransactionPayload);
             }
-            setIsRefresh(true);
+            triggerRefresh(); 
             close();
-            setTimeout(() => {                
+            setTimeout(() => {  
                 reset();
                 setInput(''); // reset Amount intput -> '0'
                 init();
@@ -120,7 +120,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 setIsSaving(true);
                 const res = await transactionService.deleteTransaction(selectedItem.id);
             }
-            setIsRefresh(true);
+            triggerRefresh();
             close();
             setTimeout(() => {                
                 reset();

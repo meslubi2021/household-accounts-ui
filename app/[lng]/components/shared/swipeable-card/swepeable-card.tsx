@@ -20,10 +20,10 @@ interface SwipeableCardType{
         paymentMethod: string;
     }
     editOnClick: (e:any) => void
-    setIsRefresh: React.Dispatch<React.SetStateAction<boolean>>
+    triggerRefresh: () => void
 }
 
-export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnClick, setIsRefresh}) => {
+export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnClick, triggerRefresh}) => {
     const [isDragging, setIsDragging] = useState(false);
     const [ isSaving, setIsSaving ] = useState(false);
     const x = useMotionValue(0);
@@ -60,9 +60,8 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
         }catch(err){
             console.log(err);
         }finally{
-            setIsRefresh(true);
+            triggerRefresh();
             setIsSaving(false);
-
         }
     }
 
