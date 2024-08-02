@@ -51,8 +51,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     async function init() {
         try{
             // TODO: need to grab userId
-            // const userId ='66a96a212be2b2f74ec10f5e'// local
-            const userId = "66a96cac7eda1dc2f62a09c3" // dev
+            const userId ='66a96a212be2b2f74ec10f5e'// local
+            // const userId = "66a96cac7eda1dc2f62a09c3" // dev
             const categoriesRes = await categoryService.getByUserId(userId); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
@@ -71,8 +71,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setIsSaving(true);
             const addTransactionPayload:AddTransactionPayload = {
                 // TODO: need to grab userId
-                // userId: "66a96a212be2b2f74ec10f5e", // local
-                userId: "66a96cac7eda1dc2f62a09c3", // dev
+                userId: "66a96a212be2b2f74ec10f5e", // local
+                // userId: "66a96cac7eda1dc2f62a09c3", // dev
                 date,
                 amount,
                 category: category?.name || "",

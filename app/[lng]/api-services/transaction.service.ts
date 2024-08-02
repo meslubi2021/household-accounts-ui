@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Transaction, TransactionType, AddTransactionPayload, PatchTransactionPayload } from '../models';
-
+const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 export const transactionService = {
   /**
    * 
@@ -10,7 +10,7 @@ export const transactionService = {
    */
     getExpenseByUserId: async (userId: string, year: string, month: string):Promise<Transaction[] | undefined> => {
         try{
-            const { data } = await axios.get(`http://localhost:3001/transaction/${userId}?type=expense&year=${year}&month=${month}`);
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=expense&year=${year}&month=${month}`);
             return data;
         }catch(err){
           throw err;
@@ -18,7 +18,7 @@ export const transactionService = {
     },
     createTransaction: async (payload: AddTransactionPayload) => {
       try{
-        const { data } = await axios.post(`http://localhost:3001/transaction`, payload);
+        const { data } = await axios.post(`${coreServiceUrl}/transaction`, payload);
         return data;
       }catch(err){
         throw err;
@@ -26,7 +26,7 @@ export const transactionService = {
     },
     updateTransaction: async (transactionId: string, payload: PatchTransactionPayload) => {
       try{
-        const { data } = await axios.patch(`http://localhost:3001/transaction/${transactionId}`, payload);
+        const { data } = await axios.patch(`${coreServiceUrl}/transaction/${transactionId}`, payload);
         return data;
       }catch(err){
         throw err;
@@ -34,7 +34,7 @@ export const transactionService = {
     },
     deleteTransaction: async (transactionId: string) => {
       try{
-        const { data } = await axios.delete(`http://localhost:3001/transaction/${transactionId}`);
+        const { data } = await axios.delete(`${coreServiceUrl}/transaction/${transactionId}`);
         return data;
       }catch(err){
         throw err;
