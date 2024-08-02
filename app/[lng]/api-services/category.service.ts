@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Category, UpdateCategory } from '../models';
+import { Category, CategoryPayload } from '../models';
 const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 
 export const categoryService = {
@@ -11,10 +11,10 @@ export const categoryService = {
 
         }
     },
-    updateExpense: async (categoryId: string, payload: UpdateCategory) => {
+    create: async (userId: string, payload: CategoryPayload) => {
       try{
-        // const { data } = await axios.patch(`${coreServiceUrl}/${expenseId}`, payload);
-        // return data;
+        const { data } = await axios.post(`${coreServiceUrl}/category`, {...payload, userId});
+        return data;
       }catch(err){
         throw err;
       }

@@ -39,6 +39,9 @@
                 }
             },
             "add_a_note": "노트 기입해주세요"
+        },
+        "category": {
+            "placeholder": "카테고리 이름을 기입해주세요"
         }
     },
     "asset": {
@@ -55,6 +58,16 @@
     },
     "slide-menu": {
         "save": "저장"
+    },
+    "general": {
+        "name": "이름",
+        "new": "새",
+        "add": "추가",
+        "save": "저장",
+        "item": "아이템",
+        "type": "타입",
+        "expense": "지출",
+        "income": "수입"
     },
     "months": {
         "jan": "1월",

@@ -7,6 +7,9 @@ import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '..';
 import { AddTransactionPayload, Category, TransactionType, FixedExpenseType } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
+import { FormNewCategory } from './form-new-category';
+import { useSelector, useDispatch } from 'react-redux';
+import { refreshActions } from '@/app/[lng]/utils/redux';
 
 interface HandleItemSlideMenuType {
     isOpen: boolean,
@@ -26,12 +29,37 @@ interface HandleItemSlideMenuType {
 
 export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, close, lng, selectedItem, triggerRefresh }) => {
     const { t } = useTranslation(lng, 'main');
+    const { isHandleItemSlideRefresh } = useSelector((state:any) => state.refresh);
+    const reduxDispatch = useDispatch();
     const { 
         date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpense, 
         setDate, setAmount, setCategories, setCategory, setType, setFixedExpense, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
+     const [newCategory, setNewCategory] = useState<{name: string, type: string}>({name: "", type: "expense"});
+     const [ isOpenNewCategory, setIsOpenNewCategory ] = useState(false);
+     const [ isSavingNewCategory, setIsSavingNewCategory ] = useState(false);
+
+  useEffect(() => {
+    if(!isHandleItemSlideRefresh) return;
+
+    if(!isOpen) return;
+    if(selectedItem){
+        init();
+        setDate(selectedItem.dateStr);
+        setAmount(parseFloat(selectedItem.amount));
+        setInput(selectedItem.amount);
+        setCategory(selectedItem.category);
+        setType(selectedItem.type)
+        setFixedExpense(selectedItem.fixedExpense)
+        setNote(selectedItem.note);
+    }else{
+        init();
+    }
+
+    reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(false));
+  }, [isHandleItemSlideRefresh]);
 
     useEffect(() => {
         if(!isOpen) return;
@@ -50,14 +78,14 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     }, [isOpen])
 
     useEffect(() => {
-        checkIsAbleToCreate({date, amount, category});
+        checkIsAbleToCreate({date, amount, category: category as Category});
     }, [amount])
 
     async function init() {
         try{
             // TODO: need to grab userId
-            const userId ='66a96a212be2b2f74ec10f5e'// local
-            // const userId = "66a96cac7eda1dc2f62a09c3" // dev
+            // const userId ='66a96a212be2b2f74ec10f5e'// local
+            const userId = "66a96cac7eda1dc2f62a09c3" // dev
             const categoriesRes = await categoryService.getByUserId(userId); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
@@ -77,8 +105,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setIsSaving(true);
             const addTransactionPayload:AddTransactionPayload = {
                 // TODO: need to grab userId
-                userId: "66a96a212be2b2f74ec10f5e", // local
-                // userId: "66a96cac7eda1dc2f62a09c3", // dev
+                // userId: "66a96a212be2b2f74ec10f5e", // local
+                userId: "66a96cac7eda1dc2f62a09c3", // dev
                 date,
                 amount,
                 category: category?.name || "",
@@ -171,7 +199,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                         value={date}
                         onChange={(e) => {
                             setDate(e.target.value);
-                            checkIsAbleToCreate({date:e.target.value, amount, category});
+                            checkIsAbleToCreate({date:e.target.value, amount, category: category as Category});
                         }}
                         className="text-left w-2/3 px-2 py-1"
                     />
@@ -185,23 +213,70 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.category')}</span>
                     {
-                        (categories && category) &&
+                        (categories && category) &&<>
                         <Dropdown 
+                            lng={lng}
                             className="new-item-dropdown" 
                             defaultValue={category.name}
                             items={dropdownList}
+                            isAddNewItem={true}
+                            newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
                             onChange={({value, label}:{value:string, label: string}) => {
                                 const selectedCategory = categories.find((category) => category.name === value);
                                 selectedCategory && setCategory(selectedCategory);
-                                checkIsAbleToCreate({date, amount, category: selectedCategory});
+                                checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
                             }}
-                        />
+                        />                        
+                            <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
+                            header={<>
+                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                                        {`${t('general.new')} ${t(`new_input.body.category`)}`}
+                                    </div>
+                                    {   
+                                        isSavingNewCategory
+                                        ?                    
+                                        <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                                            <LoadingSpinner />
+                                        </div>
+                                        :
+                                        <div onClick={async () => {
+                                            try{
+                                                setIsSavingNewCategory(true);
+                                                // TODO: need to grab real user ID
+                                                // const userId ='66a96a212be2b2f74ec10f5e'// local
+                                                const userId = "66a96cac7eda1dc2f62a09c3" // dev
+                                                await categoryService.create(userId, newCategory)
+
+                                                reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));
+                                                setIsOpenNewCategory(false);
+                                            }catch(err){
+
+                                            }finally{
+                                                setIsSavingNewCategory(false);
+                                            }
+                                        }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
+                                            {t('general.save')}
+                                        </div>
+                                    }
+                                </>}
+                            ><>
+                             <FormNewCategory lng={lng} onChange={({value, type}) => {
+                                if(type === 'name'){
+                                    setNewCategory({...newCategory, name: value})
+                                }else{
+                                    setNewCategory({...newCategory, type: value})
+                                }
+                                }} />
+                            </>
+                            </SlideMenu>
+                        </>
                     }
                 </div>
                 {
                     <div className="flex justify-between items-center border-b py-3">
                         <span>{t('new_input.body.fixedExpense.name')}</span> 
                         <Dropdown 
+                            lng={lng}
                             className="new-item-dropdown" 
                             defaultValue={t(`new_input.body.fixedExpense.options.${fixedExpense}`)}
                             items={[
