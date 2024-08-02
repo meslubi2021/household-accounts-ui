@@ -39,6 +39,9 @@
                 }
             },
             "add_a_note": "Add a note"
+        },
+        "category": {
+            "placeholder": "Enter category name"
         }
     },
     "asset": {
@@ -55,6 +58,16 @@
     },
     "slide-menu": {
         "save": "Save"
+    },
+    "general": {
+        "name": "Name",
+        "new": "New",
+        "add": "Add",
+        "save": "Save",
+        "item": "Item",
+        "type": "Type",
+        "expense": "Expense",
+        "income": "Income"
     },
     "months": {
         "jan": "Jan",

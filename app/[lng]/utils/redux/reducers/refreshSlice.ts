@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface RefreshState {
     isCalenderPageRefresh: boolean;
+    isHandleItemSlideRefresh: boolean;
     isAnalysisPageRefresh: boolean;
     isAssetPageRefresh: boolean;
     isSettingPageRefresh: boolean;
@@ -9,6 +10,7 @@ interface RefreshState {
 
 const initialState: RefreshState = {
     isCalenderPageRefresh: false,
+    isHandleItemSlideRefresh: false,
     isAnalysisPageRefresh: false,
     isAssetPageRefresh: false,
     isSettingPageRefresh: false
@@ -20,6 +22,9 @@ const refreshSlice = createSlice({
   reducers: {
     setIsCalenderPageRefresh: (state, action: PayloadAction<boolean>) => {
       state.isCalenderPageRefresh = action.payload
+    },
+    setIsHandleItemSlideRefresh: (state, action: PayloadAction<boolean>) => {
+      state.isHandleItemSlideRefresh = action.payload
     },
     setIsAnalysisPageRefresh: (state, action: PayloadAction<boolean>) => {
       state.isAnalysisPageRefresh = action.payload
