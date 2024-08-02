@@ -109,7 +109,6 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             if(selectedItem){
                 setIsSaving(true);
                 const res = await transactionService.deleteTransaction(selectedItem.id);
-                console.log(res);
             }
             close();
             setTimeout(() => {                
@@ -177,7 +176,6 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                             items={dropdownList}
                             onChange={(value:string) => {
                                 const selectedCategory = categories.find((category) => category.name === value);
-                                // console.log(selectedCategory);
                                 selectedCategory && setCategory(selectedCategory);
                                 checkIsAbleToCreate({date, amount, category: selectedCategory});
                             }}
