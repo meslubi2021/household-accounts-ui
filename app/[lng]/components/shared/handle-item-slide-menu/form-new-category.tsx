@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { Dropdown } from '../dropdown/dropdown';
 
@@ -9,7 +9,7 @@ interface FormNewCategoryType {
     onChange?: ({type,value}:{type:string, value:string}) => void
 }
 
-export const FormNewCategory:React.FC<FormNewCategoryType> = memo(({ lng, onChange }) => {
+export const FormNewCategory:React.FC<FormNewCategoryType> = ({ lng, onChange }) => {
     const { t } = useTranslation(lng, 'main');
     const [ value, setValue ] = useState("")
     return(<>
@@ -47,4 +47,4 @@ export const FormNewCategory:React.FC<FormNewCategoryType> = memo(({ lng, onChan
         </span>
     </div>
     </>)
-})
+}
