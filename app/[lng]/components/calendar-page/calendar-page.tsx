@@ -9,7 +9,7 @@ import { budgetService, transactionService } from '../../api-services';
 import { Budget, Transaction, CalendarEvent } from '../../models';
 import { formatCurrency } from '../../utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { calendarActions } from '../../utils/redux';
+import { calendarActions, refreshActions } from '../../utils/redux';
 import { format } from 'date-fns'
 import { HandleItemSlideMenu, SwipeableCard } from '../shared';
 
@@ -20,6 +20,7 @@ type RefType = {
 export const CalendarPage = ({ lng }: { lng: string }) => {
   const dispatch = useDispatch();
   const { selectedDateStr } = useSelector((state:any) => state.calendar);
+  const { isCalenderPageRefresh } = useSelector((state:any) => state.refresh);
   const expenseListsRef = useRef<RefType>({}) as MutableRefObject<RefType>;
   const { t } = useTranslation(lng, 'main');
   const [ budget, setBudget ] = useState<Budget>();
@@ -28,6 +29,13 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
   const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ selectedItem, setSelectedItem ] = useState();
+
+  useEffect(() => {
+    if(!isCalenderPageRefresh) return;
+    if(selectedDateStr === "") return;
+    init(selectedDateStr);
+    dispatch(refreshActions.setIsCalenderPageRefresh(false));
+  }, [isCalenderPageRefresh]);
 
   useEffect(() => {
     if(selectedDateStr === "") return;
@@ -45,8 +53,8 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       setBudget(undefined);
       const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
       // TODO: need to grab real user ID
-      // const userId ='66a96a212be2b2f74ec10f5e'// local
-      const userId = "66a96cac7eda1dc2f62a09c3" // dev
+      const userId ='66a96a212be2b2f74ec10f5e'// local
+      // const userId = "66a96cac7eda1dc2f62a09c3" // dev
       const budgetRes = await budgetService.getByUserId(userId, year, month);
       const transactionRes = await transactionService.getExpenseByUserId(userId, year, month);
       if(transactionRes == null) return;
@@ -104,8 +112,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
 
   function updateItem(e:any) {
     const dataset = e.currentTarget.dataset;
-    setSelectedItem({...dataset});
-
+    setSelectedItem({...dataset, category: {name: dataset.category}});
     // Open HandleItem Slidemenu
     setIsOpen(true);
   }
@@ -161,12 +168,12 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                   </div>
                   <div className="bg-white shadow-md rounded-b-md">
                       {expense.transactions.map((transaction, index) => (
-                      <SwipeableCard key={`${transaction._id}-${index}`} transaction={transaction} editOnClick={updateItem} />
+                      <SwipeableCard key={`${transaction._id}-${index}`} transaction={transaction} editOnClick={updateItem} triggerRefresh={() => dispatch(refreshActions.setIsCalenderPageRefresh(true))} />
                       ))}
                   </div>
               </div>
           ))}
-          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem}/>
+          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem} triggerRefresh={() => dispatch(refreshActions.setIsCalenderPageRefresh(true))} />
           </div>      
   </div>)
 }

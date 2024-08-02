@@ -20,13 +20,24 @@
         "title": "New Input",
         "header": {
             "title": "New Input",
-            "expense": "Expense"
+            "expense": "Expense",
+            "income": "Income"
         },
         "body": {
             "date": "Date",
             "today": "today",
             "amount": "Amount",
             "category": "Category",
+            "fixedExpense": {
+                "name": "Fixed Expense",
+                "options": {
+                    "does_not_repeat": "Does not repeat",
+                    "every_day": "Every day",
+                    "every_week": "Every week",
+                    "every_month": "Every month",
+                    "every_year": "Every year"
+                }
+            },
             "add_a_note": "Add a note"
         }
     },

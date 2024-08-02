@@ -1,6 +1,7 @@
 import { useReducer } from "react";
 import { HandleItemAction } from "./action";
 import { format } from "date-fns";
+import { TransactionType, FixedExpenseType } from "../../../../models";
 
 interface Category{
     _id: string
@@ -14,6 +15,8 @@ interface HandleItemType {
     amount: number,
     categories: Category[] | [],
     category: Category | undefined,
+    type: TransactionType,
+    fixedExpense: FixedExpenseType,
     note: string,
     isSaving: boolean,
     isAbleToSave: boolean
@@ -26,6 +29,8 @@ interface HandleItemActionType {
         amount?: number,
         categories?: Category[],
         category?: Category,
+        type?: TransactionType,
+        fixedExpense?: FixedExpenseType,
         note?: string,
         isSaving?: boolean,
         isAbleToSave?: boolean
@@ -37,6 +42,8 @@ const handleitemInit = {
     amount: 0.00,
     categories: [],
     category: undefined,
+    type: "expense" as TransactionType,
+    fixedExpense: "does_not_repeat" as FixedExpenseType,
     note: "",
     isSaving: false,
     isAbleToSave: false
@@ -66,6 +73,18 @@ function HandleItemReducer(state: HandleItemType, action:HandleItemActionType): 
             return {
                 ...state, 
                 category: action.payload!.category!
+            }
+        }
+        case HandleItemAction.TYPE:{
+            return {
+                ...state, 
+                type: action.payload!.type!
+            }
+        }
+        case HandleItemAction.FIXED_EXPENSE:{
+            return {
+                ...state, 
+                fixedExpense: action.payload!.fixedExpense!
             }
         }
         case HandleItemAction.NOTE:{
@@ -122,6 +141,18 @@ export function useHandleItem() {
             payload: { category }
         })
     }
+    function setType(type: TransactionType) {
+        dispatch({
+            type: HandleItemAction.TYPE,
+            payload: { type }
+        })
+    }
+    function setFixedExpense(fixedExpense: FixedExpenseType) {
+        dispatch({
+            type: HandleItemAction.FIXED_EXPENSE,
+            payload: { fixedExpense }
+        })
+    }
     function setNote(note: string) {
         dispatch({
             type: HandleItemAction.NOTE,
@@ -145,7 +176,7 @@ export function useHandleItem() {
     }
     return {
         ...state,
-        setDate, setAmount, setCategories, setCategory, setNote,
+        setDate, setAmount, setCategories, setCategory, setType, setNote, setFixedExpense,
         setIsSaving, setIsAbleToSave,
         reset
     }

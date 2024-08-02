@@ -1,4 +1,5 @@
 export type TransactionType = 'income' | 'expense'
+export type FixedExpenseType = "does_not_repeat" | "every_day" | "every_week" | "every_month" | "every_year"
 
 export type Transaction = {
   _id: string; // 2024-07-07
@@ -11,6 +12,7 @@ export type Transaction = {
     amount: number;
     category: string;
     note?: string;
+    fixedExpense: FixedExpenseType;
     paymentMethod: string;
   }[];
 }
@@ -21,7 +23,7 @@ export type AddTransactionPayload = {
   amount: number;
   category: string;
   note?: string;
-  fixedExpense?: string; // none, dailly weekly, annually
+  fixedExpense?: FixedExpenseType;
   type: TransactionType;
   paymentMethod?: string;
 }
@@ -31,6 +33,6 @@ export type PatchTransactionPayload = {
   note?: string;
   amount?: number;
   type?: TransactionType;
-  fixedExpense?: string; // none, dailly weekly, annually
+  fixedExpense?: FixedExpenseType;
   paymentMethod?: string;
 }

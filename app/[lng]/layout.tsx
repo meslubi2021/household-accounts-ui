@@ -10,15 +10,15 @@ export const metadata: Metadata = {
   generator: "Next.js",
   manifest: "/manifest.json",
   keywords: ["nextjs", "next14", "pwa", "next-pwa"],
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#fff" }],
+  // themeColor: [{ media: "(prefers-color-scheme: light)", color: "#fff" }],
   authors: [
     {
       name: "Jehyun Jung",
       url: "https://www.linkedin.com/in/jehyun-jung-bb247813b/",
     },
   ],
-  viewport:
-    "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
+  // viewport:
+    // "minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover",
   icons: [
     { rel: "apple-touch-icon", url: "assets/icons/icon-128x128.png" },
     { rel: "icon", url: "assets/icons/icon-128x128.png" },

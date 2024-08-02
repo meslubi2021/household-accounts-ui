@@ -20,13 +20,24 @@
         "title": "새 아이템",
         "header": {
             "title": "새 아이템",
-            "expense": "지출"
+            "expense": "지출",
+            "income": "수입"
         },
         "body": {
             "date": "날짜",
             "today": "오늘",
             "amount": "금액",
             "category": "카테고리",
+            "fixedExpense": {
+                "name": "고정지출",
+                "options": {
+                    "does_not_repeat": "한번만",
+                    "every_day": "매일",
+                    "every_week": "매주",
+                    "every_month": "매달",
+                    "every_year": "매년"
+                }
+            },
             "add_a_note": "노트 기입해주세요"
         }
     },
