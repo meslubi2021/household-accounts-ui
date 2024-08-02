@@ -45,8 +45,10 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       setBudget(undefined);
       const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
       // TODO: need to grab real user ID
-      const budgetRes = await budgetService.getByUserId('66a96a212be2b2f74ec10f5e', year, month);
-      const transactionRes = await transactionService.getExpenseByUserId('66a96a212be2b2f74ec10f5e', year, month);
+      // const userId ='66a96a212be2b2f74ec10f5e'// local
+      const userId = "66a96cac7eda1dc2f62a09c3" // dev
+      const budgetRes = await budgetService.getByUserId(userId, year, month);
+      const transactionRes = await transactionService.getExpenseByUserId(userId, year, month);
       if(transactionRes == null) return;
 
       setBudget(budgetRes);
