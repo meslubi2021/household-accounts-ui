@@ -8,19 +8,17 @@ export const transactionService = {
    * @param expenseMonth string 2024-07
    * @returns 
    */
-    getExpenseByUserIdMonth: async (userId: string, expenseMonth: string):Promise<Transaction[] | undefined> => {
+    getExpenseByUserId: async (userId: string, year: string, month: string):Promise<Transaction[] | undefined> => {
         try{
-            // const { data } = await axios.get(`localhost.../${userId}/${expenseMonth}`);
-            // return data;
-            
-            return mockData[expenseMonth];
+            const { data } = await axios.get(`http://localhost:3001/transaction/${userId}?type=expense&year=${year}&month=${month}`);
+            return data;
         }catch(err){
           throw err;
         }
     },
     createExpense: async (userId: string, payload: AddExpensePayload) => {
       try{
-        // const { data } = await axios.post(`localhost.../${userId}`, payload);
+        // const { data } = await axios.post(`http://localhost:3001/${userId}`, payload);
         // return data;
       }catch(err){
         throw err;
@@ -28,7 +26,7 @@ export const transactionService = {
     },
     updateExpense: async (expenseId: string, payload: PatchExpensePayload) => {
       try{
-        // const { data } = await axios.patch(`localhost.../${expenseId}`, payload);
+        // const { data } = await axios.patch(`http://localhost:3001/${expenseId}`, payload);
         // return data;
       }catch(err){
         throw err;
@@ -36,7 +34,7 @@ export const transactionService = {
     },
     deleteExpense: async (expenseId: string) => {
       try{
-        // const { data } = await axios.delete(`localhost.../${expenseId}`);
+        // const { data } = await axios.delete(`http://localhost:3001/${expenseId}`);
         // return data;
       }catch(err){
         throw err;

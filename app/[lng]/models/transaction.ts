@@ -1,16 +1,16 @@
 export type TransactionType = 'income' | 'expense'
 
 export type Transaction = {
-  _id: string;
-  date: string;
-  dateStr: string;
-  items: {
+  _id: string; // 2024-07-07
+  totalAmount: number
+  transactions: {
     _id: string;
-    dateStr: string;
+    userId: string;
+    date: string;
+    type: TransactionType;
+    amount: number;
     category: string;
     note?: string;
-    amount: number;
-    type: TransactionType;
     paymentMethod: string;
   }[];
 }

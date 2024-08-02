@@ -1,9 +1,10 @@
 export type Budget = {
-    userId: string;
-    budgetMonth: string;
+    _id: string;    
     totalAmount: number;
-    items: {
-        source: string;
+    budgets: {
+        _id: string;
         amount: number;
+        category: string;
+        date: string;
     }[];
 }
