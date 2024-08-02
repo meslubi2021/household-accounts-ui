@@ -19,6 +19,7 @@ type RefType = {
 
 export const CalendarPage = ({ lng }: { lng: string }) => {
   const dispatch = useDispatch();
+  const [ refresh, setIsRefresh ] = useState(false);
   const { selectedDateStr } = useSelector((state:any) => state.calendar);
   const expenseListsRef = useRef<RefType>({}) as MutableRefObject<RefType>;
   const { t } = useTranslation(lng, 'main');
@@ -28,6 +29,13 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
   const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ selectedItem, setSelectedItem ] = useState();
+
+  useEffect(() => {
+    if(!refresh) return;
+    if(selectedDateStr === "") return;
+    init(selectedDateStr);
+    setIsRefresh(false);
+  }, [refresh]);
 
   useEffect(() => {
     if(selectedDateStr === "") return;
@@ -160,12 +168,12 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                   </div>
                   <div className="bg-white shadow-md rounded-b-md">
                       {expense.transactions.map((transaction, index) => (
-                      <SwipeableCard key={`${transaction._id}-${index}`} transaction={transaction} editOnClick={updateItem} />
+                      <SwipeableCard key={`${transaction._id}-${index}`} transaction={transaction} editOnClick={updateItem} setIsRefresh={setIsRefresh} />
                       ))}
                   </div>
               </div>
           ))}
-          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem}/>
+          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem} setIsRefresh={setIsRefresh} />
           </div>      
   </div>)
 }
