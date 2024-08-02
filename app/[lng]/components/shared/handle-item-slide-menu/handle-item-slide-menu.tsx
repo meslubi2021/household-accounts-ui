@@ -84,8 +84,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     async function init() {
         try{
             // TODO: need to grab userId
-            // const userId ='66a96a212be2b2f74ec10f5e'// local
-            const userId = "66a96cac7eda1dc2f62a09c3" // dev
+            const userId ='66a96a212be2b2f74ec10f5e'// local
+            // const userId = "66a96cac7eda1dc2f62a09c3" // dev
             const categoriesRes = await categoryService.getByUserId(userId); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
@@ -105,8 +105,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setIsSaving(true);
             const addTransactionPayload:AddTransactionPayload = {
                 // TODO: need to grab userId
-                // userId: "66a96a212be2b2f74ec10f5e", // local
-                userId: "66a96cac7eda1dc2f62a09c3", // dev
+                userId: "66a96a212be2b2f74ec10f5e", // local
+                // userId: "66a96cac7eda1dc2f62a09c3", // dev
                 date,
                 amount,
                 category: category?.name || "",
@@ -213,20 +213,21 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.category')}</span>
                     {
-                        (categories && category) &&<>
-                        <Dropdown 
-                            lng={lng}
-                            className="new-item-dropdown" 
-                            defaultValue={category.name}
-                            items={dropdownList}
-                            isAddNewItem={true}
-                            newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
-                            onChange={({value, label}:{value:string, label: string}) => {
-                                const selectedCategory = categories.find((category) => category.name === value);
-                                selectedCategory && setCategory(selectedCategory);
-                                checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
-                            }}
-                        />                        
+                        (categories && category) ?
+                        <>
+                            <Dropdown 
+                                lng={lng}
+                                className="new-item-dropdown" 
+                                defaultValue={category.name}
+                                items={dropdownList}
+                                isAddNewItem={true}
+                                newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
+                                onChange={({value, label}:{value:string, label: string}) => {
+                                    const selectedCategory = categories.find((category) => category.name === value);
+                                    selectedCategory && setCategory(selectedCategory);
+                                    checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
+                                }}
+                            />                        
                             <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
                             header={<>
                                     <div className={`px-4 py-2 text-white flex-1 text-center`}>
@@ -243,8 +244,66 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                             try{
                                                 setIsSavingNewCategory(true);
                                                 // TODO: need to grab real user ID
-                                                // const userId ='66a96a212be2b2f74ec10f5e'// local
-                                                const userId = "66a96cac7eda1dc2f62a09c3" // dev
+                                                const userId ='66a96a212be2b2f74ec10f5e'// local
+                                                // const userId = "66a96cac7eda1dc2f62a09c3" // dev
+                                                await categoryService.create(userId, newCategory)
+
+                                                reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));
+                                                setIsOpenNewCategory(false);
+                                            }catch(err){
+
+                                            }finally{
+                                                setIsSavingNewCategory(false);
+                                            }
+                                        }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
+                                            {t('general.save')}
+                                        </div>
+                                    }
+                                </>}
+                            ><>
+                             <FormNewCategory lng={lng} onChange={({value, type}) => {
+                                if(type === 'name'){
+                                    setNewCategory({...newCategory, name: value})
+                                }else{
+                                    setNewCategory({...newCategory, type: value})
+                                }
+                                }} />
+                            </>
+                            </SlideMenu>
+                        </>
+                        : 
+                        <>
+                            <Dropdown 
+                                lng={lng}
+                                className="new-item-dropdown" 
+                                defaultValue={""}
+                                items={dropdownList}
+                                isAddNewItem={true}
+                                newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
+                                onChange={({value, label}:{value:string, label: string}) => {
+                                    const selectedCategory = categories.find((category) => category.name === value);
+                                    selectedCategory && setCategory(selectedCategory);
+                                    checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
+                                }}
+                            />                        
+                            <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
+                            header={<>
+                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                                        {`${t('general.new')} ${t(`new_input.body.category`)}`}
+                                    </div>
+                                    {   
+                                        isSavingNewCategory
+                                        ?                    
+                                        <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                                            <LoadingSpinner />
+                                        </div>
+                                        :
+                                        <div onClick={async () => {
+                                            try{
+                                                setIsSavingNewCategory(true);
+                                                // TODO: need to grab real user ID
+                                                const userId ='66a96a212be2b2f74ec10f5e'// local
+                                                // const userId = "66a96cac7eda1dc2f62a09c3" // dev
                                                 await categoryService.create(userId, newCategory)
 
                                                 reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));

@@ -52,7 +52,8 @@ export const Dropdown:React.FC<Dropdown> = ( {lng, className, defaultValue, item
           {
             isAddNewItem &&   
             <MenuItem>
-              <div className="block px-4 py-2 pt-3 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer border-t-2"
+              <div className={`block px-4 py-2 pt-3 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer 
+                ${items.length > 0 ? "border-t-2" : ""}`}
                 onClick={() => {newAddItemOnClick && newAddItemOnClick()}}
                 >
                 +{" "}{t('general.add')}
