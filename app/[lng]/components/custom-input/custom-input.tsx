@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EyeIcon, EyeSlashIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
+import "./style.scss";
 
 interface CustomInputType {
     type?: "email" | "password" | "text"
@@ -14,7 +15,13 @@ export const CustomInput:React.FC<CustomInputType> = ({type = 'text', placeholde
     const [value, setValue] = useState('');
     const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-  
+    
+    useEffect(() => {
+        if(value){
+            setFocused(true);
+        }
+    }, [])
+    
     const handleFocus = () => setFocused(true);
     const handleBlur = () => setFocused(value.length > 0);
     const handleChange = (e:any) => {
@@ -38,7 +45,7 @@ export const CustomInput:React.FC<CustomInputType> = ({type = 'text', placeholde
             onBlur={handleBlur}
             onChange={handleChange}  
             onFocus={handleFocus}
-            className="relative block w-[100%] h-[22] focus-visible:outline-none hover:cursor-pointer"
+            className="relative block w-[100%] h-[22] focus-visible:outline-none hover:cursor-pointer -internal-autofill-selected:none"
           />
           <label
             className={`absolute left-3 transition-all duration-300 text-gray-400 text-[16px] ${
@@ -54,7 +61,7 @@ export const CustomInput:React.FC<CustomInputType> = ({type = 'text', placeholde
                 className={classNames("absolute right-10 top-2/4 transform -translate-y-2/4 text-gray-400 hover:text-gray-700", 
                     {"right-3": type !== 'password'}
                 )}>
-                    {showPassword ? <EyeSlashIcon width="18px" /> : <EyeIcon width="18px" />}
+                    {showPassword ? <EyeIcon width="18px" /> : <EyeSlashIcon width="18px" />}
                 </button>)
             }
             {value && (

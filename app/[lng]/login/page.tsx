@@ -1,21 +1,34 @@
 "use client"
 
 import { useTranslation } from '../../i18n/client';
-import React, { useState, useEffect } from 'react';
-// import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton } from '../components/buttons';
 import img from '/public/assets/icons/icon-128x128.png';
 import Image from 'next/image';
 import { CustomInput } from '../components';
+import { userService } from '../api-services';
+import { useCookies } from 'react-cookie'
 
 export default function Index({ params: { lng }} : any) {
     const { t } = useTranslation(lng, 'main');
+    const router = useRouter()
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [_, setCookie] = useCookies(["userInfo"])
     
     const handleSubmit = async (e:any) => {
+      try{
         e.preventDefault();
-        console.log({email, password})
+        const response = await userService.login({email, password});
+        setCookie("userInfo", response, { path: '/' });
+        sessionStorage.setItem('userInfo', JSON.stringify(response.userInfo));
+        setTimeout(() => {
+          router.push(`/${lng}/calendar`);
+        }, 500)
+      }catch(err){
+        console.log(err);
+      }
     };
 
     function onChange(value:string, type: string) {
