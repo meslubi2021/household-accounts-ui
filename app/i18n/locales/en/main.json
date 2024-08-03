@@ -67,7 +67,12 @@
         "item": "Item",
         "type": "Type",
         "expense": "Expense",
-        "income": "Income"
+        "income": "Income",
+        "email": "Email",
+        "password": "Password"
+    },
+    "auth": {
+        "login": "Login"        
     },
     "months": {
         "jan": "Jan",
