@@ -4,7 +4,7 @@ interface RefreshState {
     isCalenderPageRefresh: boolean;
     isHandleItemSlideRefresh: boolean;
     isAnalysisPageRefresh: boolean;
-    isAssetPageRefresh: boolean;
+    isBudgetPageRefresh: boolean;
     isSettingPageRefresh: boolean;
 }
 
@@ -12,7 +12,7 @@ const initialState: RefreshState = {
     isCalenderPageRefresh: false,
     isHandleItemSlideRefresh: false,
     isAnalysisPageRefresh: false,
-    isAssetPageRefresh: false,
+    isBudgetPageRefresh: false,
     isSettingPageRefresh: false
 };
 
@@ -29,8 +29,8 @@ const refreshSlice = createSlice({
     setIsAnalysisPageRefresh: (state, action: PayloadAction<boolean>) => {
       state.isAnalysisPageRefresh = action.payload
     },
-    setIsAssetPageRefresh: (state, action: PayloadAction<boolean>) => {
-      state.isAssetPageRefresh = action.payload
+    setIsBudgetPageRefresh: (state, action: PayloadAction<boolean>) => {
+      state.isBudgetPageRefresh = action.payload
     },
     setIsSettingPageRefresh: (state, action: PayloadAction<boolean>) => {
       state.isSettingPageRefresh = action.payload
