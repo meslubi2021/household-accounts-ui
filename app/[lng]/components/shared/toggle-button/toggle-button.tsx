@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface ToggleButtonType {
     initial: boolean
@@ -8,7 +8,11 @@ interface ToggleButtonType {
 }
 
 export const ToggleButton:React.FC<ToggleButtonType> = ({ initial = false, onToggle }) => {
-  const [enabled, setEnabled] = useState(initial);
+  const [enabled, setEnabled] = useState(() => initial);
+
+  useEffect(() => {
+    setEnabled(initial)
+  }, [initial])
 
   const handleToggle = () => {
     setEnabled(!enabled);
@@ -16,7 +20,6 @@ export const ToggleButton:React.FC<ToggleButtonType> = ({ initial = false, onTog
       onToggle(!enabled);
     }
   };
-
   return (
     <button
       type="button"

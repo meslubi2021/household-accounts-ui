@@ -338,7 +338,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 {
                     <div className="flex justify-between items-center border-b py-3">
                         <span>{t('new_input.body.fixedExpense.name')}</span> 
-                        <ToggleButton initial={false} onToggle={(v) => setFixedExpenseMonthly(v)} />
+                        <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
                     </div>
                 }
                 <div className="border-b w-100 py-3">
