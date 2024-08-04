@@ -16,6 +16,14 @@ export const transactionService = {
           throw err;
         }
     },
+    getIncomeByUserId: async (userId: string, year: string, month: string):Promise<Transaction[] | undefined> => {
+        try{
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=income&year=${year}&month=${month}`);
+            return data;
+        }catch(err){
+          throw err;
+        }
+    },
     createTransaction: async (payload: AddTransactionPayload) => {
       try{
         const { data } = await axios.post(`${coreServiceUrl}/transaction`, payload);

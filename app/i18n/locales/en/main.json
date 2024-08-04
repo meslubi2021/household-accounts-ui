@@ -44,10 +44,10 @@
             "placeholder": "Enter category name"
         }
     },
-    "asset": {
-        "title": "Asset",
+    "budget": {
+        "title": "Budget",
         "header": {
-            "title": "Asset"
+            "title": "Budget"
         }
     },
     "settings": {
@@ -69,7 +69,8 @@
         "expense": "Expense",
         "income": "Income",
         "email": "Email",
-        "password": "Password"
+        "password": "Password",
+        "monthly": "Monthly"
     },
     "auth": {
         "login": "Login"        

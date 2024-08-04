@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton } from '../components/buttons';
 import img from '/public/assets/icons/icon-128x128.png';
 import Image from 'next/image';
-import { CustomInput } from '../components';
+import { CustomInput } from '../components/shared';
 import { userService } from '../api-services';
 import { useCookies } from 'react-cookie'
 
@@ -20,7 +20,7 @@ export default function Index({ params: { lng }} : any) {
       try{
         e.preventDefault();
         const response = await userService.login({email, password});
-        setCookie("userInfo", response, { path: '/' });
+        setCookie("userInfo", response, { path: '/', maxAge: 3600 }); // maxAge - seconds
         sessionStorage.setItem('userInfo', JSON.stringify(response.userInfo));
         setTimeout(() => {
           router.push(`/${lng}/calendar`);

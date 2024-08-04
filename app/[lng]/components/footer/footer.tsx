@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslation } from '../../../i18n/client'
 import Link from 'next/link'
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { refreshActions } from '../../utils/redux';
 import { usePathname } from 'next/navigation'; 
 import { CalendarDaysIcon, ChartPieIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
@@ -31,9 +31,9 @@ export const Footer = ({ lng }: { lng: string }) => {
           <PlusCircleIcon />
           <span>{t(`new_input.title`)}</span>
         </Link>
-        <Link href={`/${lng}/asset`} className={`flex flex-col items-center ${pathname === `/${lng}/asset` ? 'text-red-300' : 'text-gray-500'}`}>
+        <Link href={`/${lng}/budget`} className={`flex flex-col items-center ${pathname === `/${lng}/budget` ? 'text-red-300' : 'text-gray-500'}`}>
           <CurrencyDollarIcon />
-          <span>{t(`asset.title`)}</span>
+          <span>{t(`budget.title`)}</span>
         </Link>
         <Link href={`/${lng}/settings`} className={`flex flex-col items-center ${pathname === `/${lng}/settings` ? 'text-red-300' : 'text-gray-500'}`}>
           <Cog6ToothIcon />

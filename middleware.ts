@@ -10,7 +10,7 @@ export const config = {
 }
 
 
-export function middleware(req: any) {
+export async function middleware(req: any) {
     const jwtSecret = process.env.JWT_SECRET;
     let lng
     if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName).value)
@@ -31,11 +31,16 @@ export function middleware(req: any) {
       !req.nextUrl.pathname.startsWith('/_next')
     ) {
       try {
-        const result = jwtVerify(userInfoParsed.accessToken, new TextEncoder().encode(jwtSecret || ""));
+        await jwtVerify(userInfoParsed.accessToken, new TextEncoder().encode(jwtSecret || ""));
         return NextResponse.redirect(new URL(`/${lng}${req.nextUrl.pathname}`, req.url))
-      } catch (err) {
-        console.log(err);
-        return NextResponse.redirect(new URL(`/${lng}/login`, req.url));
+      } catch (err:any) {
+        if(err.code === "ERR_JWT_EXPIRED"){
+          const response = NextResponse.redirect(new URL(`/${lng}/login`, req.url));
+          response.cookies.delete("userInfo");
+          return response;
+        }else{
+          return NextResponse.next()
+        }
       }
     }
   
@@ -46,6 +51,18 @@ export function middleware(req: any) {
       if (lngInReferer) response.cookies.set(cookieName, lngInReferer)
       return response
     }
-  
-    return NextResponse.next()
+
+    try{
+      await jwtVerify(userInfoParsed.accessToken, new TextEncoder().encode(jwtSecret || ""));
+      const response = NextResponse.next();
+      return response;
+    }catch(err:any){
+      if(err.code === "ERR_JWT_EXPIRED"){
+        const response = NextResponse.redirect(new URL(`/${lng}/login`, req.url));
+        response.cookies.delete("userInfo");
+        return response;
+      }else{
+        return NextResponse.next()
+      }
+    }
   }
