@@ -1,7 +1,7 @@
 import { useReducer } from "react";
 import { HandleItemAction } from "./action";
 import { format } from "date-fns";
-import { TransactionType, FixedExpenseType } from "../../../../models";
+import { TransactionType } from "../../../../models";
 
 interface Category{
     _id: string
@@ -16,7 +16,7 @@ interface HandleItemType {
     categories: Category[] | [],
     category: Category | undefined,
     type: TransactionType,
-    fixedExpense: FixedExpenseType,
+    fixedExpenseMonthly: boolean,
     note: string,
     isSaving: boolean,
     isAbleToSave: boolean
@@ -30,7 +30,7 @@ interface HandleItemActionType {
         categories?: Category[],
         category?: Category,
         type?: TransactionType,
-        fixedExpense?: FixedExpenseType,
+        fixedExpenseMonthly?: boolean,
         note?: string,
         isSaving?: boolean,
         isAbleToSave?: boolean
@@ -43,7 +43,7 @@ const handleitemInit = {
     categories: [],
     category: undefined,
     type: "expense" as TransactionType,
-    fixedExpense: "does_not_repeat" as FixedExpenseType,
+    fixedExpenseMonthly: false,
     note: "",
     isSaving: false,
     isAbleToSave: false
@@ -84,7 +84,7 @@ function HandleItemReducer(state: HandleItemType, action:HandleItemActionType): 
         case HandleItemAction.FIXED_EXPENSE:{
             return {
                 ...state, 
-                fixedExpense: action.payload!.fixedExpense!
+                fixedExpenseMonthly: action.payload!.fixedExpenseMonthly!
             }
         }
         case HandleItemAction.NOTE:{
@@ -147,10 +147,10 @@ export function useHandleItem() {
             payload: { type }
         })
     }
-    function setFixedExpense(fixedExpense: FixedExpenseType) {
+    function setFixedExpenseMonthly(fixedExpenseMonthly: boolean) {
         dispatch({
             type: HandleItemAction.FIXED_EXPENSE,
-            payload: { fixedExpense }
+            payload: { fixedExpenseMonthly }
         })
     }
     function setNote(note: string) {
@@ -176,7 +176,7 @@ export function useHandleItem() {
     }
     return {
         ...state,
-        setDate, setAmount, setCategories, setCategory, setType, setNote, setFixedExpense,
+        setDate, setAmount, setCategories, setCategory, setType, setNote, setFixedExpenseMonthly,
         setIsSaving, setIsAbleToSave,
         reset
     }

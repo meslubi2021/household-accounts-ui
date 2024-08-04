@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton } from '../components/buttons';
 import img from '/public/assets/icons/icon-128x128.png';
 import Image from 'next/image';
-import { CustomInput } from '../components';
+import { CustomInput } from '../components/shared';
 import { userService } from '../api-services';
 import { useCookies } from 'react-cookie'
 

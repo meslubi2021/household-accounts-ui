@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '..';
-import { AddTransactionPayload, Category, TransactionType, FixedExpenseType } from '../../../models';
+import { AddTransactionPayload, Category, TransactionType } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
@@ -23,7 +23,7 @@ interface HandleItemSlideMenuType {
         dateStr: string,
         category: Category,
         type: TransactionType,
-        fixedExpense: FixedExpenseType,
+        fixedExpenseMonthly: boolean,
         note: string
     },
     triggerRefresh: () => void
@@ -34,8 +34,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     const { isHandleItemSlideRefresh } = useSelector((state:any) => state.refresh);
     const reduxDispatch = useDispatch();
     const { 
-        date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpense, 
-        setDate, setAmount, setCategories, setCategory, setType, setFixedExpense, setNote, setIsSaving, setIsAbleToSave, reset
+        date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, 
+        setDate, setAmount, setCategories, setCategory, setType, setFixedExpenseMonthly, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
@@ -55,7 +55,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setInput(selectedItem.amount);
         setCategory(selectedItem.category);
         setType(selectedItem.type)
-        setFixedExpense(selectedItem.fixedExpense)
+        setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
         setNote(selectedItem.note);
     }else{
         init();
@@ -73,7 +73,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setInput(selectedItem.amount);
             setCategory(selectedItem.category);
             setType(selectedItem.type)
-            setFixedExpense(selectedItem.fixedExpense)
+            setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
             setNote(selectedItem.note);
         }else{
             init();
@@ -114,7 +114,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 date,
                 amount,
                 category: category?.name || "",
-                fixedExpense,
+                fixedExpenseMonthly,
                 note,
                 type,
                 paymentMethod: "Credit Card"  // Hardcode for now.                
@@ -338,7 +338,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 {
                     <div className="flex justify-between items-center border-b py-3">
                         <span>{t('new_input.body.fixedExpense.name')}</span> 
-                        <Dropdown 
+                        {/* <Dropdown 
                             lng={lng}
                             className="new-item-dropdown" 
                             defaultValue={t(`new_input.body.fixedExpense.options.${fixedExpense}`)}
@@ -349,10 +349,10 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                 {value:"every_month" ,label: t('new_input.body.fixedExpense.options.every_month')}, 
                                 {value:"every_year" ,label: t('new_input.body.fixedExpense.options.every_year')}, 
                             ]}
-                            onChange={({value, label}:{value:FixedExpenseType, label: string}) => {
-                                setFixedExpense(value);
+                            onChange={({value, label}:{value:, label: string}) => {
+                                setFixedExpenseMonthly(value);
                             }}
-                        />
+                        /> */}
                     </div>
                 }
                 <div className="border-b w-100 py-3">
