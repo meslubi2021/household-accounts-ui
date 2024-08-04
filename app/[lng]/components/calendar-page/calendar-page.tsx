@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions, refreshActions } from '../../utils/redux';
 import { format } from 'date-fns'
 import { HandleItemSlideMenu, SwipeableCard } from '../shared';
+import { useSessionStorageState } from '../../utils/custom-hook';
 
 type RefType = {
     [key: string]: HTMLElement | null;
@@ -29,6 +30,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
   const [ calendarEvent, setCalendarEvent ] = useState<CalendarEvent[]>([]);
   const [ isOpen, setIsOpen ] = useState(false);
   const [ selectedItem, setSelectedItem ] = useState();
+  const [ userInfo, _ ] = useSessionStorageState("userInfo", "");
 
   useEffect(() => {
     if(!isCalenderPageRefresh) return;
@@ -52,11 +54,12 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
       setExpenses([]);
       setBudget(undefined);
       const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
-      // TODO: need to grab real user ID
-      const userId ='66a96a212be2b2f74ec10f5e'// local
-      // const userId = "66a96cac7eda1dc2f62a09c3" // dev
-      const budgetRes = await budgetService.getByUserId(userId, year, month);
-      const transactionRes = await transactionService.getExpenseByUserId(userId, year, month);
+
+      if(userInfo === ""){
+        throw new Error("Userinfo is not correct.")
+      }
+      const budgetRes = await budgetService.getByUserId(userInfo._id, year, month);
+      const transactionRes = await transactionService.getExpenseByUserId(userInfo._id, year, month);
       if(transactionRes == null) return;
 
       setBudget(budgetRes);
