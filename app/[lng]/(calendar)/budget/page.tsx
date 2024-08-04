@@ -9,9 +9,10 @@ import { calendarActions, refreshActions } from '../../utils/redux';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
-import {  Tabs, Tab  } from '../../components/shared';
+import { Tabs, Tab, Table } from '../../components/shared';
 import { formatCurrency } from '../../utils';
-import { Budget, Category } from '../../models';
+import { Budget, BudgetItem, Category, Transaction } from '../../models';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 export default function Index({ params: { lng }} : any) {
     const { t } = useTranslation(lng, 'main');
@@ -23,6 +24,7 @@ export default function Index({ params: { lng }} : any) {
     const [ budget, setBudget ] = useState<Budget>();
     const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
+    const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
 
     useEffect(() => {
         if(!isBudgetPageRefresh) return;
@@ -51,10 +53,43 @@ export default function Index({ params: { lng }} : any) {
             let totalAmount = 0;
             transactionRes?.forEach(transaction => totalAmount += transaction.totalAmount);
             setTotalIncome(totalAmount);
+
+            const expenses = await transactionService.getExpenseByUserId(userInfo._id, year, month, "category");
+            if(categories && budget && expenses){
+                buildTableData(categories, budget.budgets, expenses);
+            }
         }catch(err){
             console.log(err);
         }
     }
+
+    async function buildTableData(categories:Category[], budgets:BudgetItem[], transactions: Transaction[]){
+        const data:any[] = []
+        categories.forEach((category:Category) => {
+            const budgetTemp = budgets.find((budget) => budget.category === category.name);
+            const transactionTemp = transactions.find((transaction) => transaction._id === category.name);            
+            data.push({
+                [`${t('general.category')}`]: category.name,
+                [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} onClick={(e) => {
+                    const budgetId = e.currentTarget.dataset.budgetId;
+                    const category = e.currentTarget.dataset.category;
+                    if(budgetId){
+                        // Update the budget.
+                        console.log('update');
+                    }else{
+                        // Create new budget
+                        console.log('create');
+                        console.log({category, selectedDateStr});
+                    }
+
+                }}>${formatCurrency(budgetTemp?.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>),
+                [`${t('general.expense')}`]: `$${formatCurrency(transactionTemp?.totalAmount || 0)}`,
+                [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
+            })
+        }) 
+        setTableData(data);
+    }
+
     const handleDatesSet = (arg: any) => {      
       const calendarApi = arg.view.calendar;
       const currentDate = calendarApi.getDate();
@@ -67,7 +102,7 @@ export default function Index({ params: { lng }} : any) {
       if(income - budget < 0){
         return <span className="text-red-500">-${formatCurrency(income - budget).split("-")[1]}</span>
       }else{
-        return `$${formatCurrency(income - budget)}`
+        return <span className="text-blue-500 ">{`$${formatCurrency(income - budget)}`}</span>
       }
     }
 
@@ -100,15 +135,7 @@ export default function Index({ params: { lng }} : any) {
         </div>
             <Tabs activeTab={activeTab} setActiveTab={setActiveTab}>
                 <Tab label={t("general.expense")}>
-                {
-                    expenseCategories && expenseCategories.length > 0
-                    ?
-                        expenseCategories.map(category => {
-                            return (<div>{category.name}</div>)
-                        })
-                    : 
-                        <div>Add new category</div>
-                }
+                    <Table columns={[`${t('general.category')}`, `${t('general.budget')}`, `${t('general.expense')}`, `${t('general.difference')}`]} data={tableData} />
                 </Tab>
                 <Tab label={t("general.investment")}>
                     <div>Coming soon</div>

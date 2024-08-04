@@ -66,6 +66,8 @@
         "save": "저장",
         "item": "아이템",
         "type": "타입",
+        "category": "카테고리",
+        "difference": "차이",
         "budget": "예산",
         "investment": "투자",
         "expense": "지출",

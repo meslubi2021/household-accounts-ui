@@ -66,6 +66,8 @@
         "save": "Save",
         "item": "Item",
         "type": "Type",
+        "category": "Category",
+        "difference": "Difference",
         "budget": "Budget",
         "expense": "Expense",
         "investment": "Investment",

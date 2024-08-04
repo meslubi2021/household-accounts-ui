@@ -7,5 +7,6 @@ import { SwipeableCard } from './swipeable-card/swepeable-card';
 import { CustomInput } from './custom-input/custom-input';
 import { ToggleButton } from './toggle-button/toggle-button'
 import { Tabs, Tab } from './tab-menu/tab-menu';
+import { Table } from './table/table';
 
-export { Dropdown, LoadingSpinner, AmountInput, SlideMenu, HandleItemSlideMenu, SwipeableCard, CustomInput, ToggleButton, Tabs, Tab }
+export { Dropdown, LoadingSpinner, AmountInput, SlideMenu, HandleItemSlideMenu, SwipeableCard, CustomInput, ToggleButton, Tabs, Tab, Table }
