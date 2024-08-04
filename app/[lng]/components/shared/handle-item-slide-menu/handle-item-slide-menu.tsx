@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
-import { SlideMenu, Dropdown, LoadingSpinner, AmountInput } from '..';
+import { SlideMenu, Dropdown, LoadingSpinner, AmountInput, ToggleButton } from '..';
 import { AddTransactionPayload, Category, TransactionType } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
@@ -338,21 +338,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 {
                     <div className="flex justify-between items-center border-b py-3">
                         <span>{t('new_input.body.fixedExpense.name')}</span> 
-                        {/* <Dropdown 
-                            lng={lng}
-                            className="new-item-dropdown" 
-                            defaultValue={t(`new_input.body.fixedExpense.options.${fixedExpense}`)}
-                            items={[
-                                {value:"does_not_repeat" ,label: t('new_input.body.fixedExpense.options.does_not_repeat')}, 
-                                {value:"every_day" ,label: t('new_input.body.fixedExpense.options.every_day')}, 
-                                {value:"every_week" ,label: t('new_input.body.fixedExpense.options.every_week')}, 
-                                {value:"every_month" ,label: t('new_input.body.fixedExpense.options.every_month')}, 
-                                {value:"every_year" ,label: t('new_input.body.fixedExpense.options.every_year')}, 
-                            ]}
-                            onChange={({value, label}:{value:, label: string}) => {
-                                setFixedExpenseMonthly(value);
-                            }}
-                        /> */}
+                        <ToggleButton initial={false} onToggle={(v) => setFixedExpenseMonthly(v)} />
                     </div>
                 }
                 <div className="border-b w-100 py-3">

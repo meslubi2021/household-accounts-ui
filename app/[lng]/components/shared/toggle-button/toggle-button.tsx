@@ -22,13 +22,13 @@ export const ToggleButton:React.FC<ToggleButtonType> = ({ initial = false, onTog
       type="button"
       aria-pressed={enabled}
       className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none ${
-        enabled ? 'bg-green-500' : 'bg-gray-300'
+        enabled ? 'bg-red-300' : 'bg-gray-300'
       }`}
       onClick={handleToggle}
     >
       <span
         className={`transform transition-transform inline-block w-4 h-4 bg-white rounded-full ${
-          enabled ? 'translate-x-5' : 'translate-x-1'
+          enabled ? 'translate-x-6' : 'translate-x-1'
         }`}
       />
     </button>
