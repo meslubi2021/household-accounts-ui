@@ -66,11 +66,17 @@
         "save": "Save",
         "item": "Item",
         "type": "Type",
+        "category": "Category",
+        "difference": "Difference",
+        "budget": "Budget",
         "expense": "Expense",
+        "investment": "Investment",
         "income": "Income",
+        "balance": "Balance",
         "email": "Email",
         "password": "Password",
-        "monthly": "Monthly"
+        "monthly": "Monthly",
+        "last_month": "Last month"
     },
     "auth": {
         "login": "Login"        

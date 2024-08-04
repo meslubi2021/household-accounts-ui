@@ -8,9 +8,9 @@ export const transactionService = {
    * @param expenseMonth string 2024-07
    * @returns 
    */
-    getExpenseByUserId: async (userId: string, year: string, month: string):Promise<Transaction[] | undefined> => {
+    getExpenseByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | undefined> => {
         try{
-            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=expense&year=${year}&month=${month}`);
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=expense&year=${year}&month=${month}&groupBy=${groupBy}`);
             return data;
         }catch(err){
           throw err;

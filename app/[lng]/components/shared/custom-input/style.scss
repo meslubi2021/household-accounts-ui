@@ -3,4 +3,16 @@ input:-webkit-autofill {
     box-shadow: 0 0 0px 1000px white inset;
     -webkit-text-fill-color: #000;
     transition: background-color 5000s ease-in-out 0s;
-  }
+}
+
+  /* Hide arrows in input[type="number"] for WebKit browsers */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide arrows in input[type="number"] for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
