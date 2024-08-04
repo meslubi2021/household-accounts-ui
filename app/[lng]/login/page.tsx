@@ -20,7 +20,7 @@ export default function Index({ params: { lng }} : any) {
       try{
         e.preventDefault();
         const response = await userService.login({email, password});
-        setCookie("userInfo", response, { path: '/' });
+        setCookie("userInfo", response, { path: '/', maxAge: 3600 }); // maxAge - seconds
         sessionStorage.setItem('userInfo', JSON.stringify(response.userInfo));
         setTimeout(() => {
           router.push(`/${lng}/calendar`);
