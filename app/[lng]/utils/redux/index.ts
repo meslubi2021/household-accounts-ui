@@ -1,5 +1,5 @@
 // Export Reducers
 
-import { calendarActions, refreshActions } from "./reducers";
+import { calendarActions, refreshActions, userActions } from "./reducers";
 
-export { calendarActions, refreshActions }; 
+export { calendarActions, refreshActions, userActions }; 

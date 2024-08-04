@@ -16,7 +16,6 @@ export default function Index({ params: { lng }} : any) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [_, setCookie] = useCookies(["userInfo"])
-    
     const handleSubmit = async (e:any) => {
       try{
         e.preventDefault();
@@ -25,7 +24,7 @@ export default function Index({ params: { lng }} : any) {
         sessionStorage.setItem('userInfo', JSON.stringify(response.userInfo));
         setTimeout(() => {
           router.push(`/${lng}/calendar`);
-        }, 500)
+        }, 300)
       }catch(err){
         console.log(err);
       }
