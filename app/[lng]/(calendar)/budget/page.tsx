@@ -9,7 +9,7 @@ import { calendarActions, refreshActions } from '../../utils/redux';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
-import { Tabs, Tab, Table } from '../../components/shared';
+import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '../../components/shared';
 import { formatCurrency } from '../../utils';
 import { Budget, BudgetItem, Category, Transaction } from '../../models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -25,6 +25,11 @@ export default function Index({ params: { lng }} : any) {
     const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
     const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
+    const [ isOpen, setIsOpen ] = useState(false);
+    const [ selectedBudget, setSelectedBudget ] = useState<Record<string, any>>();
+    const [ input, setInput ] = useState<string>('');
+    const [ amount, setAmount ] = useState<number>(0);
+    const [ isSaving, setIsSaving ] = useState(false);
 
     useEffect(() => {
         if(!isBudgetPageRefresh) return;
@@ -70,18 +75,14 @@ export default function Index({ params: { lng }} : any) {
             const transactionTemp = transactions.find((transaction) => transaction._id === category.name);            
             data.push({
                 [`${t('general.category')}`]: category.name,
-                [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} onClick={(e) => {
+                [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} onClick={(e) => {
                     const budgetId = e.currentTarget.dataset.budgetId;
                     const category = e.currentTarget.dataset.category;
-                    if(budgetId){
-                        // Update the budget.
-                        console.log('update');
-                    }else{
-                        // Create new budget
-                        console.log('create');
-                        console.log({category, selectedDateStr});
-                    }
-
+                    const amountTemp = e.currentTarget.dataset.amount;
+                    setSelectedBudget({budgetId, category, amountTemp})
+                    setInput(amountTemp || '0');
+                    setAmount(parseFloat(amountTemp || '0'));
+                    setIsOpen(true);
                 }}>${formatCurrency(budgetTemp?.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>),
                 [`${t('general.expense')}`]: `$${formatCurrency(transactionTemp?.totalAmount || 0)}`,
                 [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
@@ -142,6 +143,74 @@ export default function Index({ params: { lng }} : any) {
                 </Tab>
             </Tabs>
     </div>
+    <SlideMenu isOpen={isOpen} close={() => setIsOpen(false)} position='bottom'
+        header={<>
+            <div className={`px-4 py-2 text-white flex-2 text-center`}>
+                {selectedBudget?.category}{" "}{t('general.budget')}
+            </div>
+            {   
+                isSaving
+                ?                    
+                <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                    <LoadingSpinner />
+                </div>
+                :
+                <div onClick={async () => {                    
+                    if(!selectedBudget) return;
+                    try{
+                        setIsSaving(true);
+                        if(selectedBudget.budgetId){
+                            // Update the budget.
+                            await budgetService.updateBudget(selectedBudget.budgetId, amount)
+    
+                        }else{
+                            // Create new budget
+                            const budgetPayload = {
+                                userId:userInfo._id, 
+                                date:selectedDateStr, 
+                                amount,
+                                category: selectedBudget.category
+                            }
+                            await budgetService.createBudget(budgetPayload);
+                        }
+                        dispatch(refreshActions.setIsBudgetPageRefresh(true));
+                        setIsOpen(false);
+                    }catch(err){
+                        console.log(err)
+                    }finally{
+                        setIsSaving(false);    
+                    }
+                }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
+                    {t('slide-menu.save')}
+                </div>
+            }
+        </>}
+    >
+        
+        <div className="p-4 bg-white">  
+                <div className="flex justify-between items-center border-b py-3">
+                    <span className="flex items-center">
+                        <span className="mr-2">{t('new_input.body.date')}</span>
+                    </span>
+                    <input
+                        type="date"
+                        value={selectedDateStr}
+                        readOnly
+                        className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
+                    />
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>{t('general.budget')}</span>
+                    <span className="text-left w-2/3 px-2 py-1 flex items-center">
+                        {isOpen && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
+                    </span>
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>{t('new_input.body.category')}</span>
+                    <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedBudget?.category}</span>
+                </div>
+            </div>            
+    </SlideMenu>
     </>
     );
 }

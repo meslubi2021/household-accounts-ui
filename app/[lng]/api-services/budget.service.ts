@@ -10,5 +10,21 @@ export const budgetService = {
         }catch(err){
             console.log(err);
         }
+    },
+    createBudget: async (payload: {userId:string, date:string, amount: number, category:string}):Promise<Budget | undefined> => {
+        try{
+            const { data } = await axios.post(`${coreServiceUrl}/budget`, payload);            
+            return data;            
+        }catch(err){
+            console.log(err);
+        }
+    },
+    updateBudget: async (budgetId:string, amount: number):Promise<Budget | undefined> => {
+        try{
+            const { data } = await axios.patch(`${coreServiceUrl}/budget/${budgetId}`, {amount});            
+            return data;            
+        }catch(err){
+            console.log(err);
+        }
     }
 }

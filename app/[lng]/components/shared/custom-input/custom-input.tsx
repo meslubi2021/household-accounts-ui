@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import "./style.scss";
 
 interface CustomInputType {
-    type?: "email" | "password" | "text"
+    type?: "email" | "password" | "text" | 'number'
     placeholder?: string
     onChange: (value: string, type: string) => void
 }
