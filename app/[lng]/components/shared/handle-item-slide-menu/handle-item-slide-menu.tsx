@@ -11,6 +11,7 @@ import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/[lng]/utils/redux';
 import { useSessionStorageState } from '../../../utils/custom-hook';
+import classNames from 'classnames';
 
 
 interface HandleItemSlideMenuType {
@@ -84,12 +85,18 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         checkIsAbleToCreate({date, amount, category: category as Category});
     }, [amount])
 
+    useEffect(() => {
+        if(isOpen){
+            init();
+        }
+    }, [type]);
+
     async function init() {
         try{
             if(userInfo === ""){
                 throw new Error("Userinfo Not Found")
             }
-            const categoriesRes = await categoryService.getByUserId(userInfo._id); 
+            const categoriesRes = await categoryService.getByUserId(userInfo._id, type); 
             if(categoriesRes) {
                 setCategories(categoriesRes)
                 // If there is selectedItem, then we don't need to set category again.
@@ -171,11 +178,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
                 <div className={`px-4 py-2 text-white flex-1 text-center`}>
-                    {
-                        type === "expense"
-                        ? t('new_input.header.expense')
-                        : t('new_input.header.income')
-                    }
+                    <span className={classNames("pt-2 px-4 hover:cursor-pointer border-b-4 border-white", {'opacity-50 hover:opacity-100 border-b-0': type==="income"})} onClick={() => setType('expense')}>{t('new_input.header.expense')}</span>
+                    <span className={classNames("pt-2 px-4 hover:cursor-pointer border-b-4 border-white", {'opacity-50 hover:opacity-100 border-b-0': type==="expense"})} onClick={() => setType('income')}>{t('new_input.header.income')}</span>
                 </div>
                 {   
                     isSaving
@@ -336,10 +340,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     }
                 </div>
                 {
-                    <div className="flex justify-between items-center border-b py-3">
-                        <span>{t('new_input.body.fixedExpense.name')}</span> 
-                        <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
-                    </div>
+                    type === "expense" && (
+                        <div className="flex justify-between items-center border-b py-3">
+                            <span>{t('new_input.body.fixedExpense.name')}({t('general.monthly')})</span> 
+                            <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
+                        </div>)
                 }
                 <div className="border-b w-100 py-3">
                     <textarea
