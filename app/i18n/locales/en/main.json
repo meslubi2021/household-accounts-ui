@@ -66,11 +66,14 @@
         "save": "Save",
         "item": "Item",
         "type": "Type",
+        "budget": "Budget",
         "expense": "Expense",
         "income": "Income",
+        "balance": "Balance",
         "email": "Email",
         "password": "Password",
-        "monthly": "Monthly"
+        "monthly": "Monthly",
+        "last_month": "Last month"
     },
     "auth": {
         "login": "Login"        
