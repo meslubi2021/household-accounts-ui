@@ -122,7 +122,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 amount,
                 category: category?.name || "",
                 fixedExpenseMonthly,
-                note,
+                note: !note || note === ""  ? undefined : note,
                 type,
                 paymentMethod: "Credit Card"  // Hardcode for now.                
             }
