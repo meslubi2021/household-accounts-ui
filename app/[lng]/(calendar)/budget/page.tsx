@@ -22,7 +22,7 @@ export default function Index({ params: { lng }} : any) {
         if(!isBudgetPageRefresh) return;
         if(selectedDateStr === "") return;
         init(selectedDateStr);
-        dispatch(refreshActions.setIsCalenderPageRefresh(false));
+        dispatch(refreshActions.setIsBudgetPageRefresh(false));
       }, [isBudgetPageRefresh]);
 
     useEffect(() => {
@@ -36,7 +36,8 @@ export default function Index({ params: { lng }} : any) {
               throw new Error("Userinfo is not correct.")
             }
             const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
-            const transactionRes = await transactionService.getIncomeByUserId(userInfo._id, year, month);
+            const prevMonth = parseInt(month) - 1;
+            const transactionRes = await transactionService.getIncomeByUserId(userInfo._id, year, prevMonth.toString());
             let totalAmount = 0;
             transactionRes?.forEach(transaction => totalAmount += transaction.totalAmount);
             setTotalIncome(totalAmount);

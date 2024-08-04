@@ -39,6 +39,9 @@ export const Footer = ({ lng }: { lng: string }) => {
           <Cog6ToothIcon />
           <span>{t(`settings.title`)}</span>
         </Link>
-        <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} triggerRefresh={() => reduxDispatch(refreshActions.setIsCalenderPageRefresh(true))} />
+        <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} triggerRefresh={() => {
+          reduxDispatch(refreshActions.setIsCalenderPageRefresh(true))
+          reduxDispatch(refreshActions.setIsBudgetPageRefresh(true));
+          }} />
     </footer>)
 }

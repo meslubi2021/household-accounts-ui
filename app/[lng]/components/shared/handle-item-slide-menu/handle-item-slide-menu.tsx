@@ -177,9 +177,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     return (
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
-                <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                <div className={`px-4 py-2 text-white flex-2 text-center`}>
                     <span className={classNames("pt-2 px-4 hover:cursor-pointer border-b-4 border-white", {'opacity-50 hover:opacity-100 border-b-0': type==="income"})} onClick={() => setType('expense')}>{t('new_input.header.expense')}</span>
-                    <span className={classNames("pt-2 px-4 hover:cursor-pointer border-b-4 border-white", {'opacity-50 hover:opacity-100 border-b-0': type==="expense"})} onClick={() => setType('income')}>{t('new_input.header.income')}</span>
+                    {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer border-b-4 border-white", {'opacity-50 hover:opacity-100 border-b-0': type==="expense"})} onClick={() => setType('income')}>{t('new_input.header.income')}</span> }
                 </div>
                 {   
                     isSaving

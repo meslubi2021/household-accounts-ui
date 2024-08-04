@@ -176,7 +176,11 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                   </div>
               </div>
           ))}
-          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem} triggerRefresh={() => dispatch(refreshActions.setIsCalenderPageRefresh(true))} />
+          <HandleItemSlideMenu isOpen={isOpen} close={() => setIsOpen(false)} lng={lng} selectedItem={selectedItem} 
+            triggerRefresh={() => {
+              dispatch(refreshActions.setIsCalenderPageRefresh(true));
+              dispatch(refreshActions.setIsBudgetPageRefresh(true));
+            }} />
           </div>      
   </div>)
 }
