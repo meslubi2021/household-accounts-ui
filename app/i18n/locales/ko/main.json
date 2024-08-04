@@ -67,6 +67,7 @@
         "item": "아이템",
         "type": "타입",
         "budget": "예산",
+        "investment": "투자",
         "expense": "지출",
         "balance": "잔액",
         "income": "수입",

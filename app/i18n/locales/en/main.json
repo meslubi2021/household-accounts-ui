@@ -68,6 +68,7 @@
         "type": "Type",
         "budget": "Budget",
         "expense": "Expense",
+        "investment": "Investment",
         "income": "Income",
         "balance": "Balance",
         "email": "Email",
