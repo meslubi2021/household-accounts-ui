@@ -44,10 +44,10 @@
             "placeholder": "Enter category name"
         }
     },
-    "asset": {
-        "title": "Asset",
+    "budget": {
+        "title": "Budget",
         "header": {
-            "title": "Asset"
+            "title": "Budget"
         }
     },
     "settings": {

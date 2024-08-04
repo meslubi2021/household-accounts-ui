@@ -44,10 +44,10 @@
             "placeholder": "카테고리 이름을 기입해주세요"
         }
     },
-    "asset": {
-        "title": "자산",
+    "budget": {
+        "title": "예산",
         "header": {
-            "title": "자산"
+            "title": "예산"
         }
     },
     "settings": {
