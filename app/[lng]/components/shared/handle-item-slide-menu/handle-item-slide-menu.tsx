@@ -40,6 +40,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
+     const [subcategoryDropdownList, setSubcategoryDropdownList] = useState<{value:string, label:string}[]>([]);
      const [newCategory, setNewCategory] = useState<{name: string, type: string}>({name: "", type: "expense"});
      const [ isOpenNewCategory, setIsOpenNewCategory ] = useState(false);
      const [ isSavingNewCategory, setIsSavingNewCategory ] = useState(false);
@@ -91,6 +92,14 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         }
     }, [type]);
 
+    useEffect(() => {
+        if(isOpen && category){
+            const subTempCategories:{value:string, label:string}[] = [];
+            category.subcategories?.forEach(category => subTempCategories.push({value: category.name, label: category.name}));                                    
+            setSubcategoryDropdownList(subTempCategories);
+        }
+    }, [category])
+
     async function init() {
         try{
             if(userInfo === ""){
@@ -104,6 +113,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 const tempCategories:{value:string, label:string}[] = [];
                 categoriesRes.forEach(category => tempCategories.push({value: category.name, label: category.name}));
                 setDropdownList(tempCategories)
+            }
+            if(category){
+                const subTempCategories:{value:string, label:string}[] = [];
+                category.subcategories.forEach(category => subTempCategories.push({value: category.name, label: category.name}));                                    
+                setSubcategoryDropdownList(subTempCategories);
             }
         }catch(err){
             console.log(err);
@@ -340,6 +354,73 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                         </>
                     }
                 </div>
+                {
+                    category
+                    && (<>
+                        <div className="flex justify-between items-center border-b py-3">
+                            <span>{t('new_input.body.subcategory')}</span>
+                            <Dropdown 
+                                lng={lng}
+                                className="new-item-dropdown" 
+                                defaultValue={""}
+                                items={subcategoryDropdownList}
+                                isAddNewItem={true}
+                                newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
+                                onChange={({value, label}:{value:string, label: string}) => {
+                                    const selectedSubcategory = category.subcategories.find((category) => category.name === value);
+                                    console.log(selectedSubcategory);
+                                    // const selectedCategory = categories.find((category) => category.name === value);
+                                    // selectedCategory && setCategory(selectedCategory);
+                                    // checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
+                                }}
+                            />
+                            <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
+                            header={<>
+                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                                        {`${t('general.new')} ${t(`new_input.body.category`)}`}
+                                    </div>
+                                    {   
+                                        isSavingNewCategory
+                                        ?                    
+                                        <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                                            <LoadingSpinner />
+                                        </div>
+                                        :
+                                        <div onClick={async () => {
+                                            try{
+                                                setIsSavingNewCategory(true);
+                                                if(userInfo === ""){
+                                                    throw new Error("Userinfo Not Found")
+                                                }
+                                                await categoryService.create(userInfo._id, newCategory)
+
+                                                reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));
+                                                setIsOpenNewCategory(false);
+                                            }catch(err){
+                                                console.log(err);
+                                            }finally{
+                                                setIsSavingNewCategory(false);
+                                            }
+                                        }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
+                                            {t('general.save')}
+                                        </div>
+                                    }
+                                </>}
+                            ><>
+                             <FormNewCategory lng={lng} onChange={({value, type}) => {
+                                if(type === 'name'){
+                                    setNewCategory({...newCategory, name: value})
+                                }else{
+                                    setNewCategory({...newCategory, type: value})
+                                }
+                                }} />
+                            </>
+                            </SlideMenu>
+                        </div>
+
+                    </>)
+                }
+                
                 {
                     type === "expense" && (
                         <div className="flex justify-between items-center border-b py-3">

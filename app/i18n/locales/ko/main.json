@@ -28,6 +28,7 @@
             "today": "오늘",
             "amount": "금액",
             "category": "카테고리",
+            "subcategory": "하위 카테고리",
             "fixedExpense": {
                 "name": "고정지출",
                 "options": {

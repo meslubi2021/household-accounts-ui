@@ -1,14 +1,7 @@
 import { useReducer } from "react";
 import { HandleItemAction } from "./action";
 import { format } from "date-fns";
-import { TransactionType } from "../../../../models";
-
-interface Category{
-    _id: string
-    name: string
-    icon: string
-    color: string
-}
+import { TransactionType, Category } from "../../../../models";
 
 interface HandleItemType {
     date: string,
