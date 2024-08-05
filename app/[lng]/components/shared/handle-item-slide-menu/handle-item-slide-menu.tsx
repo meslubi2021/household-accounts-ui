@@ -257,6 +257,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                                 await categoryService.create(userInfo._id, newCategory)
 
                                                 reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));
+                                                reduxDispatch(refreshActions.setIsBudgetPageRefresh(true));
                                                 setIsOpenNewCategory(false);
                                             }catch(err){
                                                 console.log(err)
