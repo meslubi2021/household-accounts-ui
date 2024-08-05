@@ -61,7 +61,7 @@ export default function Index({ params: { lng }} : any) {
 
             const expenses = await transactionService.getExpenseByUserId(userInfo._id, year, month, "category");
             if(categories && budget && expenses){
-                buildTableData(categories, budget.budgets, expenses);
+                buildTableData(categories, budget.budgets || [], expenses);
             }
         }catch(err){
             console.log(err);
@@ -88,6 +88,7 @@ export default function Index({ params: { lng }} : any) {
                 [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
             })
         }) 
+        console.log(data);
         setTableData(data);
     }
 
