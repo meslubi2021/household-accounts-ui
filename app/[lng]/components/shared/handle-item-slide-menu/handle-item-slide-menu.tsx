@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '../../../../i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput, ToggleButton } from '..';
-import { AddTransactionPayload, Category, TransactionType } from '../../../models';
+import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '../../../models';
 import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
@@ -23,6 +23,7 @@ interface HandleItemSlideMenuType {
         amount: string,
         dateStr: string,
         category: Category,
+        subcategory: BaseCategory,
         type: TransactionType,
         fixedExpenseMonthly: boolean,
         note: string
@@ -35,8 +36,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     const { isHandleItemSlideRefresh } = useSelector((state:any) => state.refresh);
     const reduxDispatch = useDispatch();
     const { 
-        date, amount, categories, category, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, 
-        setDate, setAmount, setCategories, setCategory, setType, setFixedExpenseMonthly, setNote, setIsSaving, setIsAbleToSave, reset
+        date, amount, categories, category, subcategory, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, 
+        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setFixedExpenseMonthly, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
@@ -56,6 +57,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setAmount(parseFloat(selectedItem.amount));
         setInput(selectedItem.amount);
         setCategory(selectedItem.category);
+        setSubcategory(selectedItem.subcategory);
         setType(selectedItem.type)
         setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
         setNote(selectedItem.note);
@@ -74,6 +76,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setAmount(parseFloat(selectedItem.amount));
             setInput(selectedItem.amount);
             setCategory(selectedItem.category);
+            setSubcategory(selectedItem.subcategory);
             setType(selectedItem.type)
             setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
             setNote(selectedItem.note);
@@ -113,10 +116,13 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 const tempCategories:{value:string, label:string}[] = [];
                 categoriesRes.forEach(category => tempCategories.push({value: category.name, label: category.name}));
                 setDropdownList(tempCategories)
-            }
-            if(category){
+
+                // check subcategory
+                const selectedCategory = selectedItem 
+                    ? categoriesRes.find(categoryRes => categoryRes.name === selectedItem.category.name)
+                    : categoriesRes.find(categoryRes => categoryRes.name === categoriesRes[0].name);
                 const subTempCategories:{value:string, label:string}[] = [];
-                category.subcategories.forEach(category => subTempCategories.push({value: category.name, label: category.name}));                                    
+                selectedCategory && selectedCategory.subcategories.forEach(category => subTempCategories.push({value: category.name, label: category.name}));
                 setSubcategoryDropdownList(subTempCategories);
             }
         }catch(err){
@@ -135,6 +141,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 date,
                 amount,
                 category: category?.name || "",
+                subcategory: subcategory?.name || "",
                 fixedExpenseMonthly,
                 note: !note || note === ""  ? undefined : note,
                 type,
@@ -362,16 +369,14 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                             <Dropdown 
                                 lng={lng}
                                 className="new-item-dropdown" 
-                                defaultValue={""}
+                                defaultValue={subcategory?.name || ""}
                                 items={subcategoryDropdownList}
                                 isAddNewItem={true}
                                 newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
-                                onChange={({value, label}:{value:string, label: string}) => {
-                                    const selectedSubcategory = category.subcategories.find((category) => category.name === value);
-                                    console.log(selectedSubcategory);
-                                    // const selectedCategory = categories.find((category) => category.name === value);
-                                    // selectedCategory && setCategory(selectedCategory);
-                                    // checkIsAbleToCreate({date, amount, category: selectedCategory as Category});
+                                onChange={({value, label}:{value:string, label: string}) => {                                    
+                                    const selectedCategory = categories.find((categoryFind) => categoryFind.name === category.name);                                    
+                                    const selectedSubcategory = selectedCategory && selectedCategory.subcategories.find((category) => category.name === value);
+                                    selectedSubcategory && setSubcategory(selectedSubcategory);
                                 }}
                             />
                             <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}

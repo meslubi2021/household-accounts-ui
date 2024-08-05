@@ -105,8 +105,8 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
                     !transaction.subcategory
                     ? <div>{transaction.category}</div> 
                     : <div className="leading-4 me-2">
-                        <div>{transaction.subcategory}</div>
-                        <div className="text-gray-500">({transaction.category})</div>
+                        <div>{transaction.category}</div>
+                        <div className="text-gray-500">({transaction.subcategory})</div>
                     </div>
                 }
                 <div className="ml-2  text-gray-500">{transaction.note}</div>

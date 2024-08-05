@@ -1,13 +1,14 @@
 import { useReducer } from "react";
 import { HandleItemAction } from "./action";
 import { format } from "date-fns";
-import { TransactionType, Category } from "../../../../models";
+import { TransactionType, Category, BaseCategory } from "../../../../models";
 
 interface HandleItemType {
     date: string,
     amount: number,
     categories: Category[] | [],
     category: Category | undefined,
+    subcategory: BaseCategory | undefined,
     type: TransactionType,
     fixedExpenseMonthly: boolean,
     note: string,
@@ -22,6 +23,7 @@ interface HandleItemActionType {
         amount?: number,
         categories?: Category[],
         category?: Category,
+        subcategory?: BaseCategory,
         type?: TransactionType,
         fixedExpenseMonthly?: boolean,
         note?: string,
@@ -35,6 +37,7 @@ const handleitemInit = {
     amount: 0.00,
     categories: [],
     category: undefined,
+    subcategory: undefined,
     type: "expense" as TransactionType,
     fixedExpenseMonthly: false,
     note: "",
@@ -66,6 +69,12 @@ function HandleItemReducer(state: HandleItemType, action:HandleItemActionType): 
             return {
                 ...state, 
                 category: action.payload!.category!
+            }
+        }
+        case HandleItemAction.SUBCATEGORY:{
+            return {
+                ...state, 
+                subcategory: action.payload!.subcategory!
             }
         }
         case HandleItemAction.TYPE:{
@@ -134,6 +143,12 @@ export function useHandleItem() {
             payload: { category }
         })
     }
+    function setSubcategory(subcategory: BaseCategory) {
+        dispatch({
+            type: HandleItemAction.SUBCATEGORY,
+            payload: { subcategory }
+        })
+    }
     function setType(type: TransactionType) {
         dispatch({
             type: HandleItemAction.TYPE,
@@ -169,7 +184,7 @@ export function useHandleItem() {
     }
     return {
         ...state,
-        setDate, setAmount, setCategories, setCategory, setType, setNote, setFixedExpenseMonthly,
+        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setNote, setFixedExpenseMonthly,
         setIsSaving, setIsAbleToSave,
         reset
     }
