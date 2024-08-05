@@ -13,6 +13,7 @@ interface SwipeableCardType{
         _id: string;
         date: string;
         category: string;
+        subcategory?: string;
         note?: string;
         amount: number;
         type: TransactionType;
@@ -70,6 +71,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
         data-date-str={transaction.date.split("T")[0]}
         data-amount={transaction.amount}
         data-category={transaction.category}
+        data-subcategory={transaction.subcategory}
         data-fixed-expense-monthly={transaction.fixedExpenseMonthly}
         data-type={transaction.type}
         data-note={transaction.note}
@@ -98,8 +100,15 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
                 }
             }}
         >
-            <div className="flex items-center">
-                <div>{transaction.category}</div>
+            <div className="flex items-center">                
+                {
+                    !transaction.subcategory
+                    ? <div>{transaction.category}</div> 
+                    : <div className="leading-5 me-2">
+                        <div>{transaction.category}</div>
+                        <div className="text-gray-500">({transaction.subcategory})</div>
+                    </div>
+                }
                 <div className="ml-2  text-gray-500">{transaction.note}</div>
             </div>
             <div className={'text-red-500  font-bold'}>
@@ -112,6 +121,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
                 data-date-str={transaction.date.split("T")[0]}
                 data-amount={transaction.amount}
                 data-category={transaction.category}
+                data-subcategory={transaction.subcategory}
                 data-note={transaction.note}
                 onClick={editOnClick}
             >

@@ -3,6 +3,7 @@ export enum HandleItemAction {
     AMOUNT = 'AMOUNT',
     CATEGORIES = 'CATEGORIES',
     CATEGORY = 'CATEGORY',
+    SUBCATEGORY = "SUBCATEGORY",
     TYPE = 'TYPE',
     FIXED_EXPENSE = 'FIXED_EXPENSE',
     NOTE = 'NOTE',

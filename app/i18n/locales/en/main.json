@@ -28,6 +28,7 @@
             "today": "today",
             "amount": "Amount",
             "category": "Category",
+            "subcategory": "Subcategory",
             "fixedExpense": {
                 "name": "Fixed Expense",
                 "options": {
@@ -42,6 +43,9 @@
         },
         "category": {
             "placeholder": "Enter category name"
+        },
+        "subcategory": {
+            "placeholder": "Enter subcategory name"
         }
     },
     "budget": {

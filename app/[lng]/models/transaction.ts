@@ -7,6 +7,7 @@ export type TransactionItems = {
   type: TransactionType;
   amount: number;
   category: string;
+  subcategory: string;
   note?: string;
   fixedExpenseMonthly: boolean;
   paymentMethod: string;
@@ -23,6 +24,7 @@ export type AddTransactionPayload = {
   date: string;
   amount: number;
   category: string;
+  subcategory?: string;
   note?: string;
   fixedExpenseMonthly?: boolean;
   type: TransactionType;
@@ -31,6 +33,7 @@ export type AddTransactionPayload = {
 
 export type PatchTransactionPayload = {
   category?: string;
+  subcategory?: string;
   note?: string;
   amount?: number;
   type?: TransactionType;
