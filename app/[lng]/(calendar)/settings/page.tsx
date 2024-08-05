@@ -7,7 +7,6 @@ export default async function Index({ params: { lng }} : any) {
     const { t } = await useTranslation(lng, 'main')    
 
     return (<div className="p-3">
-       settings
        <ul>
         <li>
             <Trans i18nKey="languageSwitcher" t={t}>
@@ -23,12 +22,6 @@ export default async function Index({ params: { lng }} : any) {
                 </u>
                 )
             })}
-        </li>
-        <li>
-            Manage Categories
-        </li>
-        <li>
-            Manage Fixed Expenses
         </li>
        </ul>        
     </div>

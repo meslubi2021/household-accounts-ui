@@ -6,7 +6,7 @@ export const budgetService = {
     getByUserId: async (userId: string, year: string, month: string):Promise<Budget | undefined> => {
         try{
             const { data } = await axios.get(`${coreServiceUrl}/budget/${userId}?year=${year}&month=${month}`);            
-            return data[0];            
+            return data[0] || [];            
         }catch(err){
             console.log(err);
         }
