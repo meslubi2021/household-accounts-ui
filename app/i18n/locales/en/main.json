@@ -43,6 +43,9 @@
         },
         "category": {
             "placeholder": "Enter category name"
+        },
+        "subcategory": {
+            "placeholder": "Enter subcategory name"
         }
     },
     "budget": {

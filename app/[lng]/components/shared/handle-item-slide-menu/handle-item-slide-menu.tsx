@@ -45,6 +45,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
      const [newCategory, setNewCategory] = useState<{name: string, type: string}>({name: "", type: "expense"});
      const [ isOpenNewCategory, setIsOpenNewCategory ] = useState(false);
      const [ isSavingNewCategory, setIsSavingNewCategory ] = useState(false);
+     const [ newSubcategory, setNewSubcategory] = useState<{name: string}>({name: ""});
+     const [ isOpenNewSubcategory, setIsOpenNewSubcategory ] = useState(false);
+     const [ isSavingNewSubcategory, setIsSavingNewSubcategory ] = useState(false);
      const [ userInfo, _ ] = useSessionStorageState("userInfo", "");
 
   useEffect(() => {
@@ -141,7 +144,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 date,
                 amount,
                 category: category?.name || "",
-                subcategory: subcategory?.name || "",
+                subcategory: subcategory?.name || undefined,
                 fixedExpenseMonthly,
                 note: !note || note === ""  ? undefined : note,
                 type,
@@ -259,7 +262,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                             />                        
                             <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
                             header={<>
-                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                                    <div className={`px-4 py-2 text-white flex-2 text-center`}>
                                         {`${t('general.new')} ${t(`new_input.body.category`)}`}
                                     </div>
                                     {   
@@ -318,7 +321,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                             />                        
                             <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
                             header={<>
-                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
+                                    <div className={`px-4 py-2 text-white flex-2 text-center`}>
                                         {`${t('general.new')} ${t(`new_input.body.category`)}`}
                                     </div>
                                     {   
@@ -372,20 +375,23 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                 defaultValue={subcategory?.name || ""}
                                 items={subcategoryDropdownList}
                                 isAddNewItem={true}
-                                newAddItemOnClick={() => setIsOpenNewCategory(true)}                         
+                                newAddItemOnClick={() => setIsOpenNewSubcategory(true)}                         
                                 onChange={({value, label}:{value:string, label: string}) => {                                    
                                     const selectedCategory = categories.find((categoryFind) => categoryFind.name === category.name);                                    
-                                    const selectedSubcategory = selectedCategory && selectedCategory.subcategories.find((category) => category.name === value);
-                                    selectedSubcategory && setSubcategory(selectedSubcategory);
+                                    if(selectedCategory) {
+                                        setCategory(selectedCategory);
+                                        const selectedSubcategory = selectedCategory.subcategories.find((category) => category.name === value);
+                                        selectedSubcategory && setSubcategory(selectedSubcategory);
+                                    }
                                 }}
                             />
-                            <SlideMenu isOpen={isOpenNewCategory} close={() => setIsOpenNewCategory(false)} position={'bottom'} width={100} height={100}
+                            <SlideMenu isOpen={isOpenNewSubcategory} close={() => setIsOpenNewSubcategory(false)} position={'bottom'} width={100} height={100}
                             header={<>
-                                    <div className={`px-4 py-2 text-white flex-1 text-center`}>
-                                        {`${t('general.new')} ${t(`new_input.body.category`)}`}
+                                    <div className={`px-4 py-2 text-white flex-2 text-center`}>
+                                        {`${t('general.new')} ${t(`new_input.body.subcategory`)}`}
                                     </div>
                                     {   
-                                        isSavingNewCategory
+                                        isSavingNewSubcategory
                                         ?                    
                                         <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
                                             <LoadingSpinner />
@@ -393,18 +399,18 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                         :
                                         <div onClick={async () => {
                                             try{
-                                                setIsSavingNewCategory(true);
+                                                setIsSavingNewSubcategory(true);
                                                 if(userInfo === ""){
                                                     throw new Error("Userinfo Not Found")
                                                 }
-                                                await categoryService.create(userInfo._id, newCategory)
+                                                await categoryService.createSubCategory(category._id, newSubcategory)
 
                                                 reduxDispatch(refreshActions.setIsHandleItemSlideRefresh(true));
-                                                setIsOpenNewCategory(false);
+                                                setIsOpenNewSubcategory(false);
                                             }catch(err){
                                                 console.log(err);
                                             }finally{
-                                                setIsSavingNewCategory(false);
+                                                setIsSavingNewSubcategory(false);
                                             }
                                         }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
                                             {t('general.save')}
@@ -412,12 +418,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                     }
                                 </>}
                             ><>
-                             <FormNewCategory lng={lng} onChange={({value, type}) => {
-                                if(type === 'name'){
-                                    setNewCategory({...newCategory, name: value})
-                                }else{
-                                    setNewCategory({...newCategory, type: value})
-                                }
+                             <FormNewCategory lng={lng} isSubCate={true} onChange={({value, type}) => {
+                                 setNewSubcategory({name: value})
                                 }} />
                             </>
                             </SlideMenu>

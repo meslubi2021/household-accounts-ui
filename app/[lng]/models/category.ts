@@ -14,3 +14,9 @@ export type CategoryPayload = {
     color?: string,
     type?: string 
 }
+
+export type SubcategoryPayload ={
+    name?: string,
+    icon?: string,
+    color?: string,
+}

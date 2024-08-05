@@ -43,6 +43,9 @@
         },
         "category": {
             "placeholder": "카테고리 이름을 기입해주세요"
+        },
+        "subcategory": {
+            "placeholder": "하위 카테고리 이름을 기입해주세요"
         }
     },
     "budget": {
