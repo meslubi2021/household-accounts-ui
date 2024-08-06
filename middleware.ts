@@ -39,7 +39,10 @@ export async function middleware(req: any) {
           response.cookies.delete("userInfo");
           return response;
         }else{
-          return NextResponse.next()
+          // Unknown error, need to remove cookies and redirect login again.
+          const response = NextResponse.redirect(new URL(`/${lng}/login`, req.url));
+          response.cookies.delete("userInfo");
+          return response;
         }
       }
     }

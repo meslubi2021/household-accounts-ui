@@ -4,6 +4,7 @@ import { useTranslation } from '../../i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton } from '../components/buttons';
+import { LoadingSpinner } from '../components/shared'
 import img from '/public/assets/icons/icon-128x128.png';
 import Image from 'next/image';
 import { CustomInput } from '../components/shared';
@@ -16,9 +17,11 @@ export default function Index({ params: { lng }} : any) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [_, setCookie] = useCookies(["userInfo"])
+    const [ isLoggingin, setIsLoggingin ] = useState(false);
     const handleSubmit = async (e:any) => {
       try{
         e.preventDefault();
+        setIsLoggingin(true);
         const response = await userService.login({email, password});
         setCookie("userInfo", response, { path: '/', maxAge: 3600 }); // maxAge - seconds
         sessionStorage.setItem('userInfo', JSON.stringify(response.userInfo));
@@ -27,6 +30,10 @@ export default function Index({ params: { lng }} : any) {
         }, 300)
       }catch(err){
         console.log(err);
+      }finally{
+        setTimeout(() => {
+          setIsLoggingin(false);
+        }, 500)
       }
     };
 
@@ -48,9 +55,9 @@ export default function Index({ params: { lng }} : any) {
         <CustomInput type={"password"} placeholder={t("general.password")} onChange={onChange} />
         <button
               onClick={handleSubmit}
-              className="block w-full px-4 py-2 text-sm font-medium text-white bg-red-300 rounded-md hover:bg-red-400 focus:outline-none"
+              className="flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-white bg-red-300 rounded-md hover:bg-red-400 focus:outline-none"
             >
-              {t('auth.login')}
+               { !isLoggingin ? t('auth.login') : <span><LoadingSpinner /></span>}
         </button>
         <div className="flex items-center justify-between mt-4">
           <hr className="w-full border-gray-300" />

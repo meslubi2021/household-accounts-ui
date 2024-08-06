@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "../sass/index.scss";
-import { dongle } from "../utils";
 
 export const metadata: Metadata = {
   title: "Household Account",
@@ -34,7 +33,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body data-bs-theme="light">
+        {children}
+      </body>
     </html>
   )
 }
