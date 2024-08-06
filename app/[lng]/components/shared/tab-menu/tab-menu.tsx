@@ -9,7 +9,7 @@ interface TabsType {
 }
 export const Tabs:React.FC<TabsType> = ({children, activeTab = 0, setActiveTab}) => {
   return (
-    <div className="w-full max-w-md mx-auto mt-1">
+    <div className="w-full mx-auto mt-1">
         <div className="relative border-b border-gray-300">
             <div className="flex">
                 {React.Children.map(children, (child, index) => {
