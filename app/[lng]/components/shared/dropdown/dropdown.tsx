@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useTranslation } from '../../../../i18n/client'
@@ -23,7 +23,7 @@ export const Dropdown:React.FC<Dropdown> = ( {lng, className, defaultValue, item
 
   return (
     <Menu as="div" className={`relative inline-block text-left${className ? ` ${className}` : ""}`}>
-      <MenuButton className="trigger-btn inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+      <MenuButton className="trigger-btn inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-2xl font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
           {selectedValue}
         <ChevronDownIcon aria-hidden="true" className="-mr-1 h-5 w-5 text-gray-400" />
       </MenuButton>
@@ -36,7 +36,7 @@ export const Dropdown:React.FC<Dropdown> = ( {lng, className, defaultValue, item
           {
             items.map((item:{value:string, label:string}, index:number) => 
               <MenuItem key={`${item.value}-${index}`}>
-                <div className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer"
+                <div className="block px-4 py-2 text-2xl text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer"
                   onClick={(e) => {
                     if(e.currentTarget.textContent != null){
                       const selectedItem = items.find((item) => item.label === e.currentTarget.textContent);
@@ -52,7 +52,7 @@ export const Dropdown:React.FC<Dropdown> = ( {lng, className, defaultValue, item
           {
             isAddNewItem &&   
             <MenuItem>
-              <div className={`block px-4 py-2 pt-3 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer 
+              <div className={`block px-4 py-2 pt-3 text-2xl text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 hover:cursor-pointer 
                 ${items.length > 0 ? "border-t-2" : ""}`}
                 onClick={() => {newAddItemOnClick && newAddItemOnClick()}}
                 >

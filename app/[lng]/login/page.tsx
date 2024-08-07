@@ -3,7 +3,7 @@
 import { useTranslation } from '../../i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import { MSLoginButton, GoogleLoginButton } from '../components/buttons';
+import { MSLoginButton, GoogleLoginButton, GuestLoginButton } from '../components/buttons';
 import { LoadingSpinner } from '../components/shared'
 import img from '/public/assets/icons/icon-128x128.png';
 import Image from 'next/image';
@@ -67,6 +67,7 @@ export default function Index({ params: { lng }} : any) {
         <div className="space-y-4">
             <MSLoginButton /> 
             <GoogleLoginButton />
+            <GuestLoginButton lng={lng} />
         </div>
       </div>
     </div>
