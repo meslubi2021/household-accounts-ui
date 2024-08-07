@@ -58,7 +58,10 @@
         "title": "Settings",
         "header": {
             "title": "Settings"
-        }
+        },
+        "language": "Language",
+        "en": "English",
+        "ko": "Korean"
     },
     "slide-menu": {
         "save": "Save"
