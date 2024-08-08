@@ -86,7 +86,8 @@
         "last_month": "지난 달"
     },
     "auth": {
-        "login": "로그인"
+        "login": "로그인",
+        "logout": "로그아웃"
     },
     "months": {
         "jan": "1월",

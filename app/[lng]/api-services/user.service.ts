@@ -9,5 +9,21 @@ export const userService = {
         }catch(err){
           throw err;
         }
+    },
+    msLogin: async () => {
+        try{
+            const { data } = await axios.get(`${userServiceUrl}/auth/login/ms`);
+            return data;
+        }catch(err){
+            throw err;
+        }
+    },
+    googleLogin: async () => {
+        try{
+            const { data } = await axios.get(`${userServiceUrl}/auth/login/google`);
+            return data;
+        }catch(err){
+            throw err;
+        }
     }
 }
