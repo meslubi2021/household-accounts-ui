@@ -1,12 +1,12 @@
 "use client"
 
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoadingSpinner } from '../[lng]/components/shared'
 import { useCookies } from 'react-cookie'
 import '../[lng]/sass/index.scss';
 
-export default function Index() {
+function LoginProcess() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [_, setCookie] = useCookies(["userInfo"]);
@@ -33,4 +33,12 @@ export default function Index() {
     </div>
     </>
     );
+}
+
+export default function Index() {
+  return(
+    <Suspense fallback={<></>}>
+      <LoginProcess />
+    </Suspense>
+  )
 }
