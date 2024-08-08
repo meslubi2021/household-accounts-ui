@@ -1,8 +1,22 @@
+'use client';
+
+import { useRouter } from 'next/navigation'
+import { userService } from "../../api-services";
+
 export const GoogleLoginButton = () => {
+  const router = useRouter()
+
+  const onClick = async () => {
+    // Open Google Login page. and it will redirect to /login-process page
+    const res = await userService.googleLogin();
+    router.push(res.authorizeUrl);
+  }
+
     return(<>
   <button
     aria-label='Continue with Google'
     className='w-full justify-center flex items-center bg-white border border-button-border-light rounded-md p-0.5 pr-3'
+    onClick={onClick}
   >
     <div className='flex items-center justify-center bg-white w-9 h-9 rounded-l'>
       <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' className='w-5 h-5'>

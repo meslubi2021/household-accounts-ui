@@ -11,6 +11,9 @@ export const config = {
 
 
 export async function middleware(req: any) {
+    if(req.url.includes("login-process")){
+      return NextResponse.next() 
+    }
     const jwtSecret = process.env.JWT_SECRET;
     let lng
     if (req.cookies.has(cookieName)) lng = acceptLanguage.get(req.cookies.get(cookieName).value)
