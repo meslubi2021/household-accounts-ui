@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton, GuestLoginButton } from '../components/buttons';
 import { LoadingSpinner } from '../components/shared'
-import img from '/public/assets/icons/icon-128x128.png';
+import img from '/public/assets/icons/icon-72x72.png';
 import Image from 'next/image';
 import { CustomInput } from '../components/shared';
 import { userService } from '../api-services';
