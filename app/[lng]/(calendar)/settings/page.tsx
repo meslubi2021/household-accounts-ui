@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { languages } from '@/app/lib/i18n/settings'
 import { useTranslation } from '@/app/lib/i18n/client';
-import { Dropdown, LoadingSpinner } from '@/app/ui/components/shared';
+import { Dropdown, LoadingSpinner } from '@/app/ui/shared-components';
 import { useCookies } from 'react-cookie';
 
 export default function Index({ params: { lng }} : any) {

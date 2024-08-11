@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { LoadingSpinner } from '@/app/ui/components/shared'
+import { LoadingSpinner } from '@/app/ui/shared-components'
 import { useCookies } from 'react-cookie'
 import '@/app/ui/sass/index.scss';
 

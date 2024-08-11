@@ -9,7 +9,7 @@ import { calendarActions, refreshActions } from '@/app/lib/redux';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
-import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/components/shared';
+import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/shared-components';
 import { formatCurrency } from '@/app/lib/utils';
 import { Budget, BudgetItem, Category, Transaction } from '@/app/lib/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import App from '../app'
-import { Header, Footer } from "@/app/ui/components";
+import { Header } from "@/app/ui/header";
+import { Footer } from "@/app/ui/footer";
 import { dongle } from "@/app/lib/utils";
 
 export const metadata: Metadata = {

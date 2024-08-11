@@ -3,7 +3,7 @@
 import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import { MSLoginButton, GoogleLoginButton, GuestLoginButton, LoadingSpinner, CustomInput } from '@/app/ui/components/shared';
+import { MSLoginButton, GoogleLoginButton, GuestLoginButton, LoadingSpinner, CustomInput } from '@/app/ui/shared-components';
 import img from '/public/assets/icons/icon-72x72.png';
 import Image from 'next/image';
 import { userService } from '@/app/lib/api-services';

@@ -11,7 +11,7 @@ import { formatCurrency } from '@/app/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions, refreshActions } from '@/app/lib/redux';
 import { format } from 'date-fns'
-import { HandleItemSlideMenu, SwipeableCard } from '../shared';
+import { HandleItemSlideMenu, SwipeableCard } from '@/app/ui/shared-components';
 import { useSessionStorageState } from '@/app/lib/custom-hook';
 
 type RefType = {

@@ -10,7 +10,7 @@ import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/lib/redux';
-import { Modal } from '@/app/ui/components/shared';
+import { Modal } from '@/app/ui/shared-components';
 import { useSessionStorageState } from '@/app/lib/custom-hook';
 import classNames from 'classnames';
 
