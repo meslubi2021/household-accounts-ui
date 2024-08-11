@@ -9,9 +9,9 @@ import { categoryService, transactionService } from '../../../api-services';
 import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
-import { refreshActions } from '@/app/[lng]/utils/redux';
+import { refreshActions } from '@/app/lib/redux';
 import { Modal } from '@/app/ui/components';
-import { useSessionStorageState } from '../../../utils/custom-hook';
+import { useSessionStorageState } from '@/app/lib/custom-hook';
 import classNames from 'classnames';
 
 

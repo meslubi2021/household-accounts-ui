@@ -1,7 +1,7 @@
 'use client'
 
 import { Provider } from 'react-redux';
-import { store } from "./utils/redux/store";
+import { store } from "@/app/lib/redux/store";
 import '@/app/ui/sass/index.scss';
 
 export default function App({

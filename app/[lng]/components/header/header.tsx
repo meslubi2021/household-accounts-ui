@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTranslation } from '@/app/lib/i18n/client'
-import { useSessionStorageState } from '../../utils/custom-hook';
+import { useSessionStorageState } from '@/app/lib/custom-hook';
 import { useCookies } from 'react-cookie';
 
 export const Header = ({ lng }: { lng: string }) => {

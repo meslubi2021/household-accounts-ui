@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from '@/app/lib/i18n/client'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux';
-import { refreshActions } from '../../utils/redux';
+import { refreshActions } from '@/app/lib/redux';
 import { usePathname } from 'next/navigation'; 
 import { CalendarDaysIcon, ChartPieIcon, CurrencyDollarIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { PlusCircleIcon } from '@heroicons/react/24/solid';
