@@ -1,17 +1,17 @@
 "use client"
 
-import { useTranslation } from '../../../i18n/client';
+import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { transactionService, budgetService, categoryService } from '../../api-services';
-import { useSessionStorageState } from '../../utils/custom-hook';
-import { calendarActions, refreshActions } from '../../utils/redux';
+import { transactionService, budgetService, categoryService } from '@/app/lib/api-services';
+import { useSessionStorageState } from '@/app/lib/custom-hook';
+import { calendarActions, refreshActions } from '@/app/lib/redux';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
-import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '../../components/shared';
-import { formatCurrency } from '../../utils';
-import { Budget, BudgetItem, Category, Transaction } from '../../models';
+import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/shared-components';
+import { formatCurrency } from '@/app/lib/utils';
+import { Budget, BudgetItem, Category, Transaction } from '@/app/lib/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 export default function Index({ params: { lng }} : any) {
