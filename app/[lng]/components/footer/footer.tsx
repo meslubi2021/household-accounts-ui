@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslation } from '../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 import Link from 'next/link'
 import { useDispatch } from 'react-redux';
 import { refreshActions } from '../../utils/redux';

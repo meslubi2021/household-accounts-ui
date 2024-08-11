@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from '../../i18n/client';
+import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { MSLoginButton, GoogleLoginButton, GuestLoginButton } from '../components/buttons';

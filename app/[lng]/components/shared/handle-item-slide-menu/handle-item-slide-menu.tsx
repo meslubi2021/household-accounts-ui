@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useTranslation } from '../../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput, ToggleButton } from '..';
 import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '../../../models';

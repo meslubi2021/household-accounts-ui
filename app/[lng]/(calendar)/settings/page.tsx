@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
-import { languages } from '../../../i18n/settings'
-import { useTranslation } from '../../../i18n/client';
+import { languages } from '@/app/lib/i18n/settings'
+import { useTranslation } from '@/app/lib/i18n/client';
 import { Dropdown } from '../../components/shared';
 import { useCookies } from 'react-cookie';
 import { LoadingSpinner } from '../../components/shared'

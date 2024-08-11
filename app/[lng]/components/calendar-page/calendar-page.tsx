@@ -4,7 +4,7 @@ import React, { useState, useRef, MutableRefObject, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { useTranslation } from '../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 import { budgetService, transactionService } from '../../api-services';
 import { Budget, Transaction, CalendarEvent } from '../../models';
 import { formatCurrency } from '../../utils';

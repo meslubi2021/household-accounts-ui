@@ -1,6 +1,6 @@
 "use client"
 
-import { useTranslation } from '../../../i18n/client';
+import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { transactionService, budgetService, categoryService } from '../../api-services';

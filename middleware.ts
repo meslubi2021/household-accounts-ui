@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import acceptLanguage from 'accept-language';
-import { fallbackLng, languages, cookieName } from "./app/i18n/settings";
+import { fallbackLng, languages, cookieName } from "@/app/lib/i18n/settings";
 import { jwtVerify } from 'jose';
 
 acceptLanguage.languages(languages);

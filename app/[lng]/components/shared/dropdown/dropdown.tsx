@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { useTranslation } from '../../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 
 interface Dropdown{
   lng: string,

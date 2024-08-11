@@ -4,7 +4,7 @@ import React, { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoadingSpinner } from '../[lng]/components/shared'
 import { useCookies } from 'react-cookie'
-import '../[lng]/sass/index.scss';
+import '@/app/ui/sass/index.scss';
 
 function LoginProcess() {
   const router = useRouter();

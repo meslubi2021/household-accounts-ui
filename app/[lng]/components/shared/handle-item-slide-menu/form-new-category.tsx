@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useTranslation } from '../../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 import { Dropdown } from '../dropdown/dropdown';
 
 interface FormNewCategoryType {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useTranslation } from '../../../i18n/client'
+import { useTranslation } from '@/app/lib/i18n/client'
 import { useSessionStorageState } from '../../utils/custom-hook';
 import { useCookies } from 'react-cookie';
 
