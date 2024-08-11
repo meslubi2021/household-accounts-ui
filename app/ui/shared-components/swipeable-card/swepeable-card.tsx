@@ -122,6 +122,8 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
                 data-amount={transaction.amount}
                 data-category={transaction.category}
                 data-subcategory={transaction.subcategory}
+                data-fixed-expense-monthly={transaction.fixedExpenseMonthly}
+                data-type={transaction.type}
                 data-note={transaction.note}
                 onClick={editOnClick}
             >

@@ -87,8 +87,7 @@ export default function Index({ params: { lng }} : any) {
                 [`${t('general.expense')}`]: `$${formatCurrency(transactionTemp?.totalAmount || 0)}`,
                 [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
             })
-        }) 
-        console.log(data);
+        })
         setTableData(data);
     }
 

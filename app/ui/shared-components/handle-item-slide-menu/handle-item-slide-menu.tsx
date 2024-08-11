@@ -61,7 +61,6 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setDate(selectedItem.dateStr);
         setAmount(parseFloat(selectedItem.amount));
         setInput(selectedItem.amount);
-        setCategory(selectedItem.category);
         setSubcategory(selectedItem.subcategory);
         setType(selectedItem.type)
         setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
@@ -126,6 +125,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 const selectedCategory = selectedItem 
                     ? categoriesRes.find(categoryRes => categoryRes.name === selectedItem.category.name)
                     : categoriesRes.find(categoryRes => categoryRes.name === categoriesRes[0].name);
+
+                selectedCategory ? setCategory(selectedCategory) : selectedItem && setCategory(selectedItem.category);
+
                 const subTempCategories:{value:string, label:string}[] = [];
                 selectedCategory && selectedCategory.subcategories.forEach((category: any) => subTempCategories.push({value: category.name, label: category.name}));
                 setSubcategoryDropdownList(subTempCategories);
