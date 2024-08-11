@@ -10,6 +10,7 @@ import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/[lng]/utils/redux';
+import { Modal } from '@/app/ui/components';
 import { useSessionStorageState } from '../../../utils/custom-hook';
 import classNames from 'classnames';
 
@@ -49,6 +50,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
      const [ isOpenNewSubcategory, setIsOpenNewSubcategory ] = useState(false);
      const [ isSavingNewSubcategory, setIsSavingNewSubcategory ] = useState(false);
      const [ userInfo, _ ] = useSessionStorageState("userInfo", "");
+     const [ alertDelete, setAlertDelete ] = useState(false);
 
   useEffect(() => {
     if(!isHandleItemSlideRefresh) return;
@@ -180,6 +182,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     }
     async function handleDelete(){
         try{
+            setAlertDelete(false);
             if(selectedItem){
                 setIsSaving(true);
                 const res = await transactionService.deleteTransaction(selectedItem.id);
@@ -445,15 +448,35 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 </div>
             </div>
             {
-                selectedItem &&
+                selectedItem &&<>
                 <div className="p-4 flex justify-end">
                     <button
-                        onClick={handleDelete}
+                        onClick={() => setAlertDelete(true)}
                         className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
                         >
-                        Delete
+                        {t('general.delete')}
                     </button>
                 </div>
+                <Modal isOpen={alertDelete} onClose={() => setAlertDelete(false)}>
+                    <div>
+                        {t('general.delete_alert')}
+                    </div>
+                    <div className="mt-3 flex items-center justify-end">
+                        <button
+                            onClick={handleDelete}
+                            className="mr-3 bg-red-300 text-white py-2 px-4 rounded hover:bg-red-400"
+                            >
+                            {t('general.confirm')}
+                        </button>
+                        <button                         
+                            onClick={() => setAlertDelete(false)}
+                            className="text-red-300 py-2 px-4 rounded border border-red-300 hover:bg-red-300 hover:text-white"
+                            >
+                            {t('general.cancel')}
+                        </button>
+                    </div>
+                </Modal>
+                </>
             }
         </SlideMenu>
     )
