@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Transaction, TransactionType, AddTransactionPayload, PatchTransactionPayload } from '../models';
+import { Transaction, TransactionType, AddTransactionPayload, PatchTransactionPayload } from '@/app/lib/models';
 const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 export const transactionService = {
   /**

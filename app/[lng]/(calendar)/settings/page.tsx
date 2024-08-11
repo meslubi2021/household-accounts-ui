@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { languages } from '@/app/lib/i18n/settings'
 import { useTranslation } from '@/app/lib/i18n/client';
-import { Dropdown } from '../../components/shared';
+import { Dropdown, LoadingSpinner } from '@/app/ui/components/shared';
 import { useCookies } from 'react-cookie';
-import { LoadingSpinner } from '../../components/shared'
 
 export default function Index({ params: { lng }} : any) {
     const { t } = useTranslation(lng, 'main')

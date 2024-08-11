@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/lib/i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, LoadingSpinner, AmountInput, ToggleButton } from '..';
-import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '../../../models';
-import { categoryService, transactionService } from '../../../api-services';
+import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '@/app/lib/models';
+import { categoryService, transactionService } from '@/app/lib/api-services';
 import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/lib/redux';
-import { Modal } from '@/app/ui/components';
+import { Modal } from '@/app/ui/components/shared';
 import { useSessionStorageState } from '@/app/lib/custom-hook';
 import classNames from 'classnames';
 
@@ -127,7 +127,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     ? categoriesRes.find(categoryRes => categoryRes.name === selectedItem.category.name)
                     : categoriesRes.find(categoryRes => categoryRes.name === categoriesRes[0].name);
                 const subTempCategories:{value:string, label:string}[] = [];
-                selectedCategory && selectedCategory.subcategories.forEach(category => subTempCategories.push({value: category.name, label: category.name}));
+                selectedCategory && selectedCategory.subcategories.forEach((category: any) => subTempCategories.push({value: category.name, label: category.name}));
                 setSubcategoryDropdownList(subTempCategories);
             }
         }catch(err){

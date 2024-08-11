@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import { userService } from "../../api-services";
-import { LoadingSpinner } from '../../components/shared'
+import { userService } from "@/app/lib/api-services";
+import { LoadingSpinner } from '..'
 
 export const GoogleLoginButton = () => {
   const [ isLoggingin, setIsLoggingin ] = useState(false);

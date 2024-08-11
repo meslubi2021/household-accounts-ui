@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Category, CategoryPayload, SubcategoryPayload } from '../models';
+import { Category, CategoryPayload, SubcategoryPayload } from '@/app/lib/models';
 const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 
 export const categoryService = {

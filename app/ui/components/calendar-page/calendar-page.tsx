@@ -5,8 +5,8 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import { useTranslation } from '@/app/lib/i18n/client'
-import { budgetService, transactionService } from '../../api-services';
-import { Budget, Transaction, CalendarEvent } from '../../models';
+import { budgetService, transactionService } from '@/app/lib/api-services';
+import { Budget, Transaction, CalendarEvent } from '@/app/lib/models';
 import { formatCurrency } from '@/app/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions, refreshActions } from '@/app/lib/redux';

@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie'
 import { useRouter } from 'next/navigation'
-import { userService } from '../../api-services';
-import { LoadingSpinner } from '../../components/shared'
+import { userService } from '@/app/lib/api-services';
+import { LoadingSpinner } from '..'
 
 export const GuestLoginButton = ({ lng }:any) => {
     const [ isLoggingin, setIsLoggingin ] = useState(false);

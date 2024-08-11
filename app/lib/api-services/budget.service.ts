@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Budget } from '../models';
+import { Budget } from '@/app/lib/models';
 const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 
 export const budgetService = {

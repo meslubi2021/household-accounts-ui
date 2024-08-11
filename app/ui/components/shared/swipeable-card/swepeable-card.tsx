@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { TransactionType } from '../../../models';
+import { TransactionType } from '@/app/lib/models';
 import { formatCurrency } from '@/app/lib/utils';
-import { transactionService } from '../../../api-services';
+import { transactionService } from '@/app/lib/api-services';
 import { LoadingSpinner } from '..';
 
 interface SwipeableCardType{

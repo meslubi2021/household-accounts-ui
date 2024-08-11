@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User } from '../models';
+import { User } from '@/app/lib/models';
 const userServiceUrl = process.env.NEXT_PUBLIC_USER_SERVICE_URL;
 export const userService = {
     login: async (payload: { email: string, password: string }):Promise<{userInfo: User, accessToken: string}> => {
