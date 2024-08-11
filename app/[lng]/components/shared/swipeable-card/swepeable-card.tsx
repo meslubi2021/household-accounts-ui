@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, useMotionValue, useTransform } from "framer-motion"
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { TransactionType } from '../../../models';
-import { formatCurrency } from '@/app/[lng]/utils';
+import { formatCurrency } from '@/app/lib/utils';
 import { transactionService } from '../../../api-services';
 import { LoadingSpinner } from '..';
 

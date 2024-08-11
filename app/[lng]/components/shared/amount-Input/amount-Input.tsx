@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { SlideMenu } from '..'
-import { formatCurrency, formatNumber } from '../../../utils';
+import { formatCurrency, formatNumber } from '@/app/lib/utils';
 
 interface AmountInputProps {
   setAmount:  (amount: number) => void,

@@ -10,7 +10,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
 import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '../../components/shared';
-import { formatCurrency } from '../../utils';
+import { formatCurrency } from '@/app/lib/utils';
 import { Budget, BudgetItem, Category, Transaction } from '../../models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 

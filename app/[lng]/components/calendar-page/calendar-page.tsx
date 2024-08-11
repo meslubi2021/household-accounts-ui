@@ -7,7 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { useTranslation } from '@/app/lib/i18n/client'
 import { budgetService, transactionService } from '../../api-services';
 import { Budget, Transaction, CalendarEvent } from '../../models';
-import { formatCurrency } from '../../utils';
+import { formatCurrency } from '@/app/lib/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { calendarActions, refreshActions } from '../../utils/redux';
 import { format } from 'date-fns'
