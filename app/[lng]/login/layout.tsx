@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import "../sass/index.scss";
+import '@/app/ui/sass/index.scss';
 
 export const metadata: Metadata = {
   title: "Household Account",
   description: "Mange household account.",
   generator: "Next.js",
   manifest: "/manifest.json",
-  keywords: ["nextjs", "next14", "pwa", "next-pwa"],
+  keywords: ["KYmoney"],
   // themeColor: [{ media: "(prefers-color-scheme: light)", color: "#fff" }],
   authors: [
     {

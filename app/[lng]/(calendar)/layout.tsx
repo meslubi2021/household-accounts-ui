@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import "../sass/index.scss";
 import App from '../app'
 import { Header, Footer } from "../components";
 import { dongle } from "../utils";
