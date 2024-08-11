@@ -1,6 +1,6 @@
 {
     "name": "KJmoney",
-    "short_name": "pwa-nextjs",
+    "short_name": "KJmoney",
     "theme_color": "#35155D",
     "background_color": "#ffffff",
     "display": "standalone",
