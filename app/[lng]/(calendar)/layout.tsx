@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import App from '../app'
 import { Header } from "@/app/ui/header";
 import { Footer } from "@/app/ui/footer";
@@ -48,6 +49,7 @@ export default async function RootLayout({
             </main>
             <Footer lng={lng} />
         </App>
+        <SpeedInsights />
       </body>
     </html>
   );
