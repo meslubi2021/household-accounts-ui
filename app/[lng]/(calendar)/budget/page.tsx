@@ -11,7 +11,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
 import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/shared-components';
 import { formatCurrency } from '@/app/lib/utils';
-import { Budget, BudgetItem, Category, Transaction } from '@/app/lib/models';
+import { Budget, BudgetItem, Category, Transaction, TransactionItems } from '@/app/lib/models';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 export default function Index({ params: { lng }} : any) {
@@ -25,8 +25,11 @@ export default function Index({ params: { lng }} : any) {
     const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
     const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
+    const [ previousIncomeTableData, setPreviousIncomeTableData ] = useState<Record<string, any>[] >([]);
     const [ isOpen, setIsOpen ] = useState(false);
+    const [ isOpenIncomeModifier, setIsOpenIncomeModifier ] = useState(false);
     const [ selectedBudget, setSelectedBudget ] = useState<Record<string, any>>();
+    const [ selectedIncome, setSelectedIncome ] = useState<Record<string, any>>();
     const [ input, setInput ] = useState<string>('');
     const [ amount, setAmount ] = useState<number>(0);
     const [ isSaving, setIsSaving ] = useState(false);
@@ -43,6 +46,14 @@ export default function Index({ params: { lng }} : any) {
         init(selectedDateStr);
     }, [selectedDateStr])
 
+    useEffect(() => {
+        if(activeTab === 2){
+            // Build Table data for previous month income
+            previousIncomeData();
+
+        }
+    }, [selectedDateStr, activeTab])
+
     async function init(selectedDateStr:string) {
         try{
             if(userInfo === ""){
@@ -50,13 +61,13 @@ export default function Index({ params: { lng }} : any) {
             }
             const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
             const prevMonth = parseInt(month) - 1;
-            const transactionRes = await transactionService.getIncomeByUserId(userInfo._id, year, prevMonth.toString());
+            const transactionRes = await transactionService.getIncomeByUserId(userInfo._id, year, prevMonth.toString(), "date");
             const budget = await budgetService.getByUserId(userInfo._id, year, month);
             const categories = await categoryService.getByUserId(userInfo._id, 'expense');
             setExpenseCategories(categories)
             setBudget(budget);
             let totalAmount = 0;
-            transactionRes?.forEach(transaction => totalAmount += transaction.totalAmount);
+            (transactionRes as Transaction[])?.forEach(transaction => totalAmount += transaction.totalAmount);
             setTotalIncome(totalAmount);
 
             const expenses = await transactionService.getExpenseByUserId(userInfo._id, year, month, "category");
@@ -66,6 +77,16 @@ export default function Index({ params: { lng }} : any) {
         }catch(err){
             console.log(err);
         }
+    }
+
+    async function previousIncomeData() {
+        if(userInfo === ""){
+          throw new Error("Userinfo is not correct.")
+        }
+        const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
+        const prevMonth = parseInt(month) - 1;
+        const income = await transactionService.getIncomeByUserId(userInfo._id, year, `${prevMonth}`);
+        if(income) buildPreviousIncomTableData(income as TransactionItems[]);
     }
 
     async function buildTableData(categories:Category[], budgets:BudgetItem[], transactions: Transaction[]){
@@ -89,6 +110,30 @@ export default function Index({ params: { lng }} : any) {
             })
         })
         setTableData(data);
+    }
+
+    async function buildPreviousIncomTableData(incomeTransactions: TransactionItems[]){      
+        const tempTableData:any[] = []
+        incomeTransactions.forEach(income=> {    
+            tempTableData.push({
+                [t('general.date')]: income.date.split('T')[0], 
+                [t('general.category')]: income.category,
+                [t('general.income')]: (row:any) => (
+                    <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount} 
+                    onClick={(e) => {
+                        const incomeId = e.currentTarget.dataset.incomeId;
+                        const category = e.currentTarget.dataset.category;
+                        const amountTemp = e.currentTarget.dataset.amount;
+                        console.log({incomeId, category, amountTemp})
+                        setSelectedIncome({incomeId, category, amountTemp})
+                        setInput(amountTemp || '0');
+                        setAmount(parseFloat(amountTemp || '0'));
+                        setIsOpenIncomeModifier(true);
+                    }
+                }>${formatCurrency(income.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
+            })
+        })
+        setPreviousIncomeTableData(tempTableData);
     }
 
     const handleDatesSet = (arg: any) => {      
@@ -140,6 +185,9 @@ export default function Index({ params: { lng }} : any) {
                 </Tab>
                 <Tab label={t("general.investment")}>
                     <div>Coming soon</div>
+                </Tab>
+                <Tab label={t("general.previous_month_income")}>
+                    <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={previousIncomeTableData} />
                 </Tab>
             </Tabs>
     </div>
@@ -208,6 +256,66 @@ export default function Index({ params: { lng }} : any) {
                 <div className="flex justify-between items-center border-b py-3">
                     <span>{t('new_input.body.category')}</span>
                     <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedBudget?.category}</span>
+                </div>
+            </div>            
+    </SlideMenu>
+    <SlideMenu isOpen={isOpenIncomeModifier} close={() => setIsOpenIncomeModifier(false)} position='bottom'
+        header={<>
+            <div className={`px-4 py-2 text-white flex-2 text-center`}>
+                {selectedBudget?.category}{" "}{t('general.budget')}
+            </div>
+            {   
+                isSaving
+                ?                    
+                <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
+                    <LoadingSpinner />
+                </div>
+                :
+                <div onClick={async () => {                    
+                    if(!selectedIncome) return;
+                    try{
+                        setIsSaving(true);
+                        if(selectedIncome.incomeId){
+                            // Update the income.
+                            console.log({selectedIncome})
+                            await transactionService.updateTransaction(selectedIncome.incomeId, {amount});
+                            await previousIncomeData();
+                        }
+                        dispatch(refreshActions.setIsBudgetPageRefresh(true));
+                        setIsOpenIncomeModifier(false);
+                    }catch(err){
+                        console.log(err)
+                    }finally{
+                        setIsSaving(false);    
+                    }
+                }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
+                    {t('slide-menu.save')}
+                </div>
+            }
+        </>}
+    >
+        
+        <div className="p-4 bg-white">  
+                <div className="flex justify-between items-center border-b py-3">
+                    <span className="flex items-center">
+                        <span className="mr-2">{t('new_input.body.date')}</span>
+                    </span>
+                    <input
+                        type="date"
+                        value={selectedDateStr}
+                        readOnly
+                        className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
+                    />
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>{t('general.income')}</span>
+                    <span className="text-left w-2/3 px-2 py-1 flex items-center">
+                        {isOpenIncomeModifier && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
+                    </span>
+                </div>
+                <div className="flex justify-between items-center border-b py-3">
+                    <span>{t('new_input.body.category')}</span>
+                    <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedIncome?.category}</span>
                 </div>
             </div>            
     </SlideMenu>

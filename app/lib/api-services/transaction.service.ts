@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Transaction, TransactionType, AddTransactionPayload, PatchTransactionPayload } from '@/app/lib/models';
+import { Transaction, TransactionType, AddTransactionPayload, PatchTransactionPayload, TransactionItems } from '@/app/lib/models';
 const coreServiceUrl = process.env.NEXT_PUBLIC_CORE_SERVICE_URL;
 export const transactionService = {
   /**
@@ -16,9 +16,9 @@ export const transactionService = {
           throw err;
         }
     },
-    getIncomeByUserId: async (userId: string, year: string, month: string):Promise<Transaction[] | undefined> => {
+    getIncomeByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | TransactionItems[] | undefined> => {
         try{
-            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=income&year=${year}&month=${month}`);
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=income&year=${year}&month=${month}&groupBy=${groupBy}`);
             return data;
         }catch(err){
           throw err;

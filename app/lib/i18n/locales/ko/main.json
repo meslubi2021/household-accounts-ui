@@ -81,11 +81,13 @@
         "difference": "차이",
         "budget": "예산",
         "investment": "투자",
+        "previous_month_income": "지난달 수익",
         "expense": "지출",
         "balance": "잔액",
         "income": "수입",
         "email": "이메일",
         "password": "비밀번호",
+        "date": "날짜",
         "monthly": "매달",
         "last_month": "지난 달"
     },

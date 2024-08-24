@@ -82,10 +82,12 @@
         "budget": "Budget",
         "expense": "Expense",
         "investment": "Investment",
+        "previous_month_income": "Previous Income",
         "income": "Income",
         "balance": "Balance",
         "email": "Email",
         "password": "Password",
+        "date": "Date",
         "monthly": "Monthly",
         "last_month": "Last month"
     },
