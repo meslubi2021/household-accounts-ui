@@ -124,7 +124,6 @@ export default function Index({ params: { lng }} : any) {
                         const incomeId = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
-                        console.log({incomeId, category, amountTemp})
                         setSelectedIncome({incomeId, category, amountTemp})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
@@ -262,7 +261,7 @@ export default function Index({ params: { lng }} : any) {
     <SlideMenu isOpen={isOpenIncomeModifier} close={() => setIsOpenIncomeModifier(false)} position='bottom'
         header={<>
             <div className={`px-4 py-2 text-white flex-2 text-center`}>
-                {selectedBudget?.category}{" "}{t('general.budget')}
+                {selectedIncome?.category}{" "}{t('general.income')}
             </div>
             {   
                 isSaving
