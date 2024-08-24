@@ -262,7 +262,7 @@ export default function Index({ params: { lng }} : any) {
     <SlideMenu isOpen={isOpenIncomeModifier} close={() => setIsOpenIncomeModifier(false)} position='bottom'
         header={<>
             <div className={`px-4 py-2 text-white flex-2 text-center`}>
-                {selectedBudget?.category}{" "}{t('general.budget')}
+                {selectedIncome?.category}{" "}{t('general.income')}
             </div>
             {   
                 isSaving
