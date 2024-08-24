@@ -124,7 +124,6 @@ export default function Index({ params: { lng }} : any) {
                         const incomeId = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
-                        console.log({incomeId, category, amountTemp})
                         setSelectedIncome({incomeId, category, amountTemp})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
