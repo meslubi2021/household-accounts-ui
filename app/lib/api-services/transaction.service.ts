@@ -10,7 +10,7 @@ export const transactionService = {
    */
     getExpenseByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | undefined> => {
         try{
-            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=expense&year=${year}&month=${month}&groupBy=${groupBy}`);
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}/user?type=expense&year=${year}&month=${month}&groupBy=${groupBy}`);
             return data;
         }catch(err){
           throw err;
@@ -18,7 +18,7 @@ export const transactionService = {
     },
     getIncomeByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | TransactionItems[] | undefined> => {
         try{
-            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}?type=income&year=${year}&month=${month}&groupBy=${groupBy}`);
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}/user?type=income&year=${year}&month=${month}&groupBy=${groupBy}`);
             return data;
         }catch(err){
           throw err;
