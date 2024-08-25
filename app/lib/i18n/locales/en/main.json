@@ -21,7 +21,8 @@
         "header": {
             "title": "New Input",
             "expense": "Expense",
-            "income": "Income"
+            "income": "Income",
+            "investment": "Investment"
         },
         "body": {
             "date": "Date",

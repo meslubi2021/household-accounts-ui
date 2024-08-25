@@ -41,7 +41,7 @@ export const FormNewCategory:React.FC<FormNewCategoryType> = ({ lng, onChange, i
                         lng={lng}
                         className="new-item-dropdown" 
                         defaultValue={t("general.expense")}
-                        items={[{value:"expense", label: t('general.expense')},{value:"income", label: t('general.income')}]}                            
+                        items={[{value:"expense", label: t('general.expense')},{value:"income", label: t('general.income')},{value:"investment", label: t('general.investment')}]}                            
                         onChange={({value, label}:{value:string, label: string}) => {
                             onChange && onChange({type: "type", value})
                         }}
