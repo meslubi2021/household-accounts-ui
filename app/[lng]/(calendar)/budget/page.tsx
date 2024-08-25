@@ -21,10 +21,13 @@ export default function Index({ params: { lng }} : any) {
     const { isBudgetPageRefresh } = useSelector((state:any) => state.refresh);
     const [ userInfo, _ ] = useSessionStorageState("userInfo", "");
     const [ totalIncome, setTotalIncome ] = useState(0);
+    const [ totalInvestments, setTotalInvestments ] = useState(0);
     const [ budget, setBudget ] = useState<Budget>();
     const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
     const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
+    const [ tableTotalData, setTableTotalData ] = useState<Record<string, any>>();
+    const [ investmentsData, setInvestmentsData ] = useState<Record<string, any>[] >([]);
     const [ previousIncomeTableData, setPreviousIncomeTableData ] = useState<Record<string, any>[] >([]);
     const [ isOpen, setIsOpen ] = useState(false);
     const [ isOpenIncomeModifier, setIsOpenIncomeModifier ] = useState(false);
@@ -47,6 +50,10 @@ export default function Index({ params: { lng }} : any) {
     }, [selectedDateStr])
 
     useEffect(() => {
+        if(activeTab === 1){
+            // Build Table data for investment tab
+            getInvestmentsData();
+        }
         if(activeTab === 2){
             // Build Table data for previous month income
             previousIncomeData();
@@ -62,13 +69,19 @@ export default function Index({ params: { lng }} : any) {
             const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
             const prevMonth = parseInt(month) - 1;
             const transactionRes = await transactionService.getIncomeByUserId(userInfo._id, year, prevMonth.toString(), "date");
+            const investmentRes = await transactionService.getInvestmentsByUserId(userInfo._id, year, month, "date");
             const budget = await budgetService.getByUserId(userInfo._id, year, month);
             const categories = await categoryService.getByUserId(userInfo._id, 'expense');
             setExpenseCategories(categories)
             setBudget(budget);
+
             let totalAmount = 0;
             (transactionRes as Transaction[])?.forEach(transaction => totalAmount += transaction.totalAmount);
             setTotalIncome(totalAmount);
+
+            let totalAmountOfInvest = 0;
+            (investmentRes as Transaction[])?.forEach(transaction => totalAmountOfInvest += transaction.totalAmount);
+            setTotalInvestments(totalAmountOfInvest);
 
             const expenses = await transactionService.getExpenseByUserId(userInfo._id, year, month, "category");
             if(categories && budget && expenses){
@@ -78,7 +91,14 @@ export default function Index({ params: { lng }} : any) {
             console.log(err);
         }
     }
-
+    async function getInvestmentsData() {
+        if(userInfo === ""){
+          throw new Error("Userinfo is not correct.")
+        }
+        const [year, month] = selectedDateStr.split('-'); // ["2024", "08"]
+        const income = await transactionService.getInvestmentsByUserId(userInfo._id, year, month);
+        if(income) buildInvestmentsTableData(income as TransactionItems[]);
+    }
     async function previousIncomeData() {
         if(userInfo === ""){
           throw new Error("Userinfo is not correct.")
@@ -91,9 +111,13 @@ export default function Index({ params: { lng }} : any) {
 
     async function buildTableData(categories:Category[], budgets:BudgetItem[], transactions: Transaction[]){
         const data:any[] = []
+        let budgetTotal = 0;
+        let expenseTotal = 0;
         categories.forEach((category:Category) => {
             const budgetTemp = budgets.find((budget) => budget.category === category.name);
-            const transactionTemp = transactions.find((transaction) => transaction._id === category.name);            
+            const transactionTemp = transactions.find((transaction) => transaction._id === category.name);
+            budgetTotal += budgetTemp?.amount || 0;
+            expenseTotal += transactionTemp?.totalAmount || 0;
             data.push({
                 [`${t('general.category')}`]: category.name,
                 [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} onClick={(e) => {
@@ -110,6 +134,37 @@ export default function Index({ params: { lng }} : any) {
             })
         })
         setTableData(data);
+        setTableTotalData(
+            {
+                [`${t('general.category')}`]: t('general.total'),
+                [`${t('general.budget')}`]: `$${formatCurrency(budgetTotal)}`,
+                [`${t('general.expense')}`]: `$${formatCurrency(expenseTotal)}`,
+                [`${t('general.difference')}`]:calBalance(budgetTotal, expenseTotal)
+            }
+        )
+    }
+
+    async function buildInvestmentsTableData(incomeTransactions: TransactionItems[]){      
+        const tempTableData:any[] = []
+        incomeTransactions.forEach(income=> {    
+            tempTableData.push({
+                [t('general.date')]: income.date.split('T')[0], 
+                [t('general.category')]: income.category,
+                [t('general.income')]: (row:any) => (
+                    <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount} 
+                    onClick={(e) => {
+                        const incomeId = e.currentTarget.dataset.incomeId;
+                        const category = e.currentTarget.dataset.category;
+                        const amountTemp = e.currentTarget.dataset.amount;
+                        setSelectedIncome({incomeId, category, amountTemp})
+                        setInput(amountTemp || '0');
+                        setAmount(parseFloat(amountTemp || '0'));
+                        setIsOpenIncomeModifier(true);
+                    }
+                }>${formatCurrency(income.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
+            })
+        })
+        setInvestmentsData(tempTableData);
     }
 
     async function buildPreviousIncomTableData(incomeTransactions: TransactionItems[]){      
@@ -163,7 +218,7 @@ export default function Index({ params: { lng }} : any) {
             }}
          />
     </div>
-    <div className="flex flex-col list-of-budgets p-4 h-[39vh]">
+    <div className="flex flex-col list-of-budgets p-4">
        <div className="flex justify-between mb-4">
             <div className="text-center">
                 <p>{`${t('general.income')} (${t('general.last_month')})`}</p>
@@ -175,20 +230,26 @@ export default function Index({ params: { lng }} : any) {
             </div>
             <div className="text-center">
                 <p>{t('general.balance')}</p>
-                <p className="text-blue-500 font-bold">{calBalance(totalIncome, budget?.totalAmount || 0)}</p>
+                <p className="text-blue-500 font-bold">{calBalance(totalIncome, (budget?.totalAmount || 0) + totalInvestments)}</p>
             </div>
         </div>
+        <div className='tabs-menu'>
             <Tabs activeTab={activeTab} setActiveTab={setActiveTab}>
                 <Tab label={t("general.expense")}>
-                    <Table columns={[`${t('general.category')}`, `${t('general.budget')}`, `${t('general.expense')}`, `${t('general.difference')}`]} data={tableData} />
+                    <Table 
+                        columns={[`${t('general.category')}`, `${t('general.budget')}`, `${t('general.expense')}`, `${t('general.difference')}`]} 
+                        data={tableData} 
+                        total={tableTotalData}
+                    />
                 </Tab>
                 <Tab label={t("general.investment")}>
-                    <div>Coming soon</div>
+                    <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={investmentsData} />
                 </Tab>
                 <Tab label={t("general.previous_month_income")}>
                     <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={previousIncomeTableData} />
                 </Tab>
             </Tabs>
+        </div>
     </div>
     <SlideMenu isOpen={isOpen} close={() => setIsOpen(false)} position='bottom'
         header={<>
@@ -261,7 +322,7 @@ export default function Index({ params: { lng }} : any) {
     <SlideMenu isOpen={isOpenIncomeModifier} close={() => setIsOpenIncomeModifier(false)} position='bottom'
         header={<>
             <div className={`px-4 py-2 text-white flex-2 text-center`}>
-                {selectedIncome?.category}{" "}{t('general.income')}
+                {selectedIncome?.category}{" "}{activeTab === 1 ? t('general.investment') : t('general.income')}
             </div>
             {   
                 isSaving
@@ -276,9 +337,9 @@ export default function Index({ params: { lng }} : any) {
                         setIsSaving(true);
                         if(selectedIncome.incomeId){
                             // Update the income.
-                            console.log({selectedIncome})
                             await transactionService.updateTransaction(selectedIncome.incomeId, {amount});
-                            await previousIncomeData();
+                            if(activeTab === 1) await getInvestmentsData();
+                            if(activeTab === 2) await previousIncomeData();                
                         }
                         dispatch(refreshActions.setIsBudgetPageRefresh(true));
                         setIsOpenIncomeModifier(false);
@@ -307,7 +368,7 @@ export default function Index({ params: { lng }} : any) {
                     />
                 </div>
                 <div className="flex justify-between items-center border-b py-3">
-                    <span>{t('general.income')}</span>
+                    <span>{activeTab === 1 ? t('general.investment'): t('general.income')}</span>
                     <span className="text-left w-2/3 px-2 py-1 flex items-center">
                         {isOpenIncomeModifier && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
                     </span>

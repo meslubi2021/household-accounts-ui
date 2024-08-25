@@ -47,3 +47,19 @@
         }
     }
 }
+.list-of-budgets {
+    height: calc(100vh - 133px);
+    .tabs-menu{
+        height: calc(100vh - 213px);
+        overflow-y: auto;
+        margin-right: -15px;
+        padding-right: 15px;
+        &::-webkit-scrollbar{
+            width: 9px;
+        }
+        &::-webkit-scrollbar-thumb{
+            background-color: var(--color-background-hover);
+            border-radius: 5px;
+        }
+    }
+}

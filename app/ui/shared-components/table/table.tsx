@@ -4,9 +4,10 @@ import React from 'react';
 
 interface TableType {
     columns: string[]
-    data: Record<string, any>[]
+    data: Record<string, any>[],
+    total?: Record<string, any>
 }
-export const Table:React.FC<TableType> = ({ columns, data }) => {
+export const Table:React.FC<TableType> = ({ columns, data, total }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-200">
@@ -30,6 +31,18 @@ export const Table:React.FC<TableType> = ({ columns, data }) => {
             </tr>
           ))}
         </tbody>
+        {
+          total && 
+          <tfoot className="bg-gray-200 text-black">
+            <tr>
+              {columns.map((column, index) => (
+                <td key={column} className="py-2 px-4 border-t border-gray-200 font-bold">                              
+                  {total[column]}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        }
       </table>
     </div>
   );

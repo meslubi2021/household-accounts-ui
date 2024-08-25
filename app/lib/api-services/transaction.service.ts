@@ -16,6 +16,14 @@ export const transactionService = {
           throw err;
         }
     },
+    getInvestmentsByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | TransactionItems[] | undefined> => {
+        try{
+            const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}/user?type=investment&year=${year}&month=${month}&groupBy=${groupBy}`);
+            return data;
+        }catch(err){
+          throw err;
+        }
+    },
     getIncomeByUserId: async (userId: string, year: string, month: string, groupBy?: string):Promise<Transaction[] | TransactionItems[] | undefined> => {
         try{
             const { data } = await axios.get(`${coreServiceUrl}/transaction/${userId}/user?type=income&year=${year}&month=${month}&groupBy=${groupBy}`);
