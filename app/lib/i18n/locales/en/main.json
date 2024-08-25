@@ -89,7 +89,8 @@
         "password": "Password",
         "date": "Date",
         "monthly": "Monthly",
-        "last_month": "Last month"
+        "last_month": "Last month",
+        "total": "Total"
     },
     "auth": {
         "login": "Login",

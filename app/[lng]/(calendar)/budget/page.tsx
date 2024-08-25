@@ -25,6 +25,7 @@ export default function Index({ params: { lng }} : any) {
     const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
     const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
+    const [ tableTotalData, setTableTotalData ] = useState<Record<string, any>>();
     const [ previousIncomeTableData, setPreviousIncomeTableData ] = useState<Record<string, any>[] >([]);
     const [ isOpen, setIsOpen ] = useState(false);
     const [ isOpenIncomeModifier, setIsOpenIncomeModifier ] = useState(false);
@@ -91,9 +92,13 @@ export default function Index({ params: { lng }} : any) {
 
     async function buildTableData(categories:Category[], budgets:BudgetItem[], transactions: Transaction[]){
         const data:any[] = []
+        let budgetTotal = 0;
+        let expenseTotal = 0;
         categories.forEach((category:Category) => {
             const budgetTemp = budgets.find((budget) => budget.category === category.name);
-            const transactionTemp = transactions.find((transaction) => transaction._id === category.name);            
+            const transactionTemp = transactions.find((transaction) => transaction._id === category.name);
+            budgetTotal += budgetTemp?.amount || 0;
+            expenseTotal += transactionTemp?.totalAmount || 0;
             data.push({
                 [`${t('general.category')}`]: category.name,
                 [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} onClick={(e) => {
@@ -110,6 +115,14 @@ export default function Index({ params: { lng }} : any) {
             })
         })
         setTableData(data);
+        setTableTotalData(
+            {
+                [`${t('general.category')}`]: t('general.total'),
+                [`${t('general.budget')}`]: `$${formatCurrency(budgetTotal)}`,
+                [`${t('general.expense')}`]: `$${formatCurrency(expenseTotal)}`,
+                [`${t('general.difference')}`]:calBalance(budgetTotal, expenseTotal)
+            }
+        )
     }
 
     async function buildPreviousIncomTableData(incomeTransactions: TransactionItems[]){      
@@ -163,7 +176,7 @@ export default function Index({ params: { lng }} : any) {
             }}
          />
     </div>
-    <div className="flex flex-col list-of-budgets p-4 h-[39vh]">
+    <div className="flex flex-col list-of-budgets p-4">
        <div className="flex justify-between mb-4">
             <div className="text-center">
                 <p>{`${t('general.income')} (${t('general.last_month')})`}</p>
@@ -178,17 +191,23 @@ export default function Index({ params: { lng }} : any) {
                 <p className="text-blue-500 font-bold">{calBalance(totalIncome, budget?.totalAmount || 0)}</p>
             </div>
         </div>
+        <div className='tabs-menu'>
             <Tabs activeTab={activeTab} setActiveTab={setActiveTab}>
                 <Tab label={t("general.expense")}>
-                    <Table columns={[`${t('general.category')}`, `${t('general.budget')}`, `${t('general.expense')}`, `${t('general.difference')}`]} data={tableData} />
+                    <Table 
+                        columns={[`${t('general.category')}`, `${t('general.budget')}`, `${t('general.expense')}`, `${t('general.difference')}`]} 
+                        data={tableData} 
+                        total={tableTotalData}
+                    />
                 </Tab>
                 <Tab label={t("general.investment")}>
-                    <div>Coming soon</div>
+                    <div className="h-full">Coming soon</div>
                 </Tab>
                 <Tab label={t("general.previous_month_income")}>
                     <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={previousIncomeTableData} />
                 </Tab>
             </Tabs>
+        </div>
     </div>
     <SlideMenu isOpen={isOpen} close={() => setIsOpen(false)} position='bottom'
         header={<>

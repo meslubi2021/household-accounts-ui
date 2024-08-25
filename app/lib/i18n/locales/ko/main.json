@@ -89,7 +89,8 @@
         "password": "비밀번호",
         "date": "날짜",
         "monthly": "매달",
-        "last_month": "지난 달"
+        "last_month": "지난 달",
+        "total": "합계"
     },
     "auth": {
         "login": "로그인",
