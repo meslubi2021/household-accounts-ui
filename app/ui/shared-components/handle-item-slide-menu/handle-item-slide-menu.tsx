@@ -208,15 +208,15 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             header={<>
                 <div className={`flex px-4 py-2 text-white flex-2 text-center`}>                    
                     <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
-                            {'opacity-100 sm:max-w-xs' : type === "expense", 'opacity-50 max-w-[85px]' : type !== "expense"})} 
+                            {'opacity-100 sm:max-w-xs' : type === "expense", 'opacity-50 max-w-[65px]' : type !== "expense"})} 
                         onClick={() => setType('expense')}
                     >{t('new_input.header.expense')}</span>
                     {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
-                    {'opacity-100 sm:max-w-xs': type==="income", 'opacity-50 max-w-[85px]' : type !== "income"})} 
+                    {'opacity-100 sm:max-w-xs': type==="income", 'opacity-50 max-w-[65px]' : type !== "income"})} 
                         onClick={() => setType('income')}
                         >{t('new_input.header.income')}</span> }
                     {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
-                    {'opacity-100 sm:max-w-xs': type==="investment", 'opacity-50 max-w-[85px]' : type !== "investment"})} 
+                    {'opacity-100 sm:max-w-xs': type==="investment", 'opacity-50 max-w-[65px]' : type !== "investment"})} 
                         onClick={() => setType('investment')}
                     >{t('new_input.header.investment')}</span> }
                 </div>
