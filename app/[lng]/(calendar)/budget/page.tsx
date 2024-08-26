@@ -120,11 +120,12 @@ export default function Index({ params: { lng }} : any) {
             expenseTotal += transactionTemp?.totalAmount || 0;
             data.push({
                 [`${t('general.category')}`]: category.name,
-                [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} onClick={(e) => {
+                [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} data-date={selectedDateStr} onClick={(e) => {
                     const budgetId = e.currentTarget.dataset.budgetId;
                     const category = e.currentTarget.dataset.category;
                     const amountTemp = e.currentTarget.dataset.amount;
-                    setSelectedBudget({budgetId, category, amountTemp})
+                    const date = e.currentTarget.dataset.date;
+                    setSelectedBudget({budgetId, category, amountTemp, date})
                     setInput(amountTemp || '0');
                     setAmount(parseFloat(amountTemp || '0'));
                     setIsOpen(true);
@@ -144,24 +145,25 @@ export default function Index({ params: { lng }} : any) {
         )
     }
 
-    async function buildInvestmentsTableData(incomeTransactions: TransactionItems[]){      
+    async function buildInvestmentsTableData(investmentTransactions: TransactionItems[]){      
         const tempTableData:any[] = []
-        incomeTransactions.forEach(income=> {    
+        investmentTransactions.forEach(investment=> {                
             tempTableData.push({
-                [t('general.date')]: income.date.split('T')[0], 
-                [t('general.category')]: income.category,
-                [t('general.income')]: (row:any) => (
-                    <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount} 
+                [t('general.date')]: investment.date.split('T')[0], 
+                [t('general.category')]: investment.category,
+                [t('general.investment')]: (row:any) => (
+                    <button className="flex" data-category={investment.category} data-income-id={investment._id} data-amount={investment.amount}  data-date={investment.date.split('T')[0]}
                     onClick={(e) => {
                         const incomeId = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
-                        setSelectedIncome({incomeId, category, amountTemp})
+                        const date = e.currentTarget.dataset.date;
+                        setSelectedIncome({incomeId, category, amountTemp, date})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
                         setIsOpenIncomeModifier(true);
                     }
-                }>${formatCurrency(income.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
+                }>${formatCurrency(investment.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
             })
         })
         setInvestmentsData(tempTableData);
@@ -174,12 +176,13 @@ export default function Index({ params: { lng }} : any) {
                 [t('general.date')]: income.date.split('T')[0], 
                 [t('general.category')]: income.category,
                 [t('general.income')]: (row:any) => (
-                    <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount} 
+                    <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount}  data-date={income.date.split('T')[0]}
                     onClick={(e) => {
                         const incomeId = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
-                        setSelectedIncome({incomeId, category, amountTemp})
+                        const date = e.currentTarget.dataset.date;
+                        setSelectedIncome({incomeId, category, amountTemp, date})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
                         setIsOpenIncomeModifier(true);
@@ -243,9 +246,9 @@ export default function Index({ params: { lng }} : any) {
                     />
                 </Tab>
                 <Tab label={t("general.investment")}>
-                    <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={investmentsData} />
+                    <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.investment')}`]} data={investmentsData} />
                 </Tab>
-                <Tab label={t("general.previous_month_income")}>
+                <Tab label={t("general.last_month_income")}>
                     <Table columns={[`${t('general.date')}`, `${t('general.category')}`,`${t('general.income')}`]} data={previousIncomeTableData} />
                 </Tab>
             </Tabs>
@@ -302,7 +305,7 @@ export default function Index({ params: { lng }} : any) {
                     </span>
                     <input
                         type="date"
-                        value={selectedDateStr}
+                        value={selectedBudget && selectedBudget.date}
                         readOnly
                         className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
                     />
@@ -362,7 +365,7 @@ export default function Index({ params: { lng }} : any) {
                     </span>
                     <input
                         type="date"
-                        value={selectedDateStr}
+                        value={selectedIncome && selectedIncome.date}
                         readOnly
                         className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
                     />

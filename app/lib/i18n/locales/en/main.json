@@ -83,7 +83,7 @@
         "budget": "Budget",
         "expense": "Expense",
         "investment": "Investment",
-        "previous_month_income": "Previous Income",
+        "last_month_income": "Last Month Income",
         "income": "Income",
         "balance": "Balance",
         "email": "Email",
