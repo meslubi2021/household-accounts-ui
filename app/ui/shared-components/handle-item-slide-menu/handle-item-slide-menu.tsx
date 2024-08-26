@@ -207,16 +207,16 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         <SlideMenu isOpen={isOpen} close={close} position={'bottom'} width={100} height={100}
             header={<>
                 <div className={`flex px-4 py-2 text-white flex-2 text-center`}>                    
-                    <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap max-w-[85px] sm:max-w-xs", 
-                            {'opacity-100' : type === "expense", 'opacity-50' : type !== "expense"})} 
+                    <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
+                            {'opacity-100 sm:max-w-xs' : type === "expense", 'opacity-50 max-w-[85px]' : type !== "expense"})} 
                         onClick={() => setType('expense')}
                     >{t('new_input.header.expense')}</span>
-                    {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap  max-w-[85px] sm:max-w-xs", 
-                    {'opacity-100': type==="income", 'opacity-50' : type !== "income"})} 
+                    {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
+                    {'opacity-100 sm:max-w-xs': type==="income", 'opacity-50 max-w-[85px]' : type !== "income"})} 
                         onClick={() => setType('income')}
                         >{t('new_input.header.income')}</span> }
-                    {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap max-w-[85px] sm:max-w-xs", 
-                    {'opacity-100': type==="investment", 'opacity-50' : type !== "investment"})} 
+                    {!selectedItem && <span className={classNames("pt-2 px-4 hover:cursor-pointer hover:opacity-100 border-b-4 border-white text-ellipsis overflow-hidden whitespace-nowrap", 
+                    {'opacity-100 sm:max-w-xs': type==="investment", 'opacity-50 max-w-[85px]' : type !== "investment"})} 
                         onClick={() => setType('investment')}
                     >{t('new_input.header.investment')}</span> }
                 </div>
