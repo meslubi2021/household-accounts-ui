@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/shared-components';
 import { formatCurrency } from '@/app/lib/utils';
 import { Budget, BudgetItem, Category, Transaction, TransactionItems } from '@/app/lib/models';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
 
 export default function Index({ params: { lng }} : any) {
     const { t } = useTranslation(lng, 'main');
@@ -23,19 +23,16 @@ export default function Index({ params: { lng }} : any) {
     const [ totalIncome, setTotalIncome ] = useState(0);
     const [ totalInvestments, setTotalInvestments ] = useState(0);
     const [ budget, setBudget ] = useState<Budget>();
-    const [ expenseCategories, setExpenseCategories ] = useState<Category[]>();
     const [ activeTab, setActiveTab ] = useState(0);
     const [ tableData, setTableData ] = useState<Record<string, any>[] >([]);
     const [ tableTotalData, setTableTotalData ] = useState<Record<string, any>>();
     const [ investmentsData, setInvestmentsData ] = useState<Record<string, any>[] >([]);
     const [ previousIncomeTableData, setPreviousIncomeTableData ] = useState<Record<string, any>[] >([]);
-    const [ isOpen, setIsOpen ] = useState(false);
-    const [ isOpenIncomeModifier, setIsOpenIncomeModifier ] = useState(false);
-    const [ selectedBudget, setSelectedBudget ] = useState<Record<string, any>>();
-    const [ selectedIncome, setSelectedIncome ] = useState<Record<string, any>>();
+    const [ isOpenSlide, setIsOpenSlide ] = useState(false);
+    const [ isSavingSlide, setIsSavingSlide ] = useState(false);
+    const [ selectedItem, setSelectedItem ] = useState<Record<string, any>>();
     const [ input, setInput ] = useState<string>('');
     const [ amount, setAmount ] = useState<number>(0);
-    const [ isSaving, setIsSaving ] = useState(false);
 
     useEffect(() => {
         if(!isBudgetPageRefresh) return;
@@ -72,7 +69,6 @@ export default function Index({ params: { lng }} : any) {
             const investmentRes = await transactionService.getInvestmentsByUserId(userInfo._id, year, month, "date");
             const budget = await budgetService.getByUserId(userInfo._id, year, month);
             const categories = await categoryService.getByUserId(userInfo._id, 'expense');
-            setExpenseCategories(categories)
             setBudget(budget);
 
             let totalAmount = 0;
@@ -121,14 +117,14 @@ export default function Index({ params: { lng }} : any) {
             data.push({
                 [`${t('general.category')}`]: category.name,
                 [`${t('general.budget')}`]: (row:any) => (<button className="flex" data-category={category.name} data-budget-id={budgetTemp?._id} data-amount={budgetTemp?.amount} data-date={selectedDateStr} onClick={(e) => {
-                    const budgetId = e.currentTarget.dataset.budgetId;
+                    const id = e.currentTarget.dataset.budgetId;
                     const category = e.currentTarget.dataset.category;
                     const amountTemp = e.currentTarget.dataset.amount;
                     const date = e.currentTarget.dataset.date;
-                    setSelectedBudget({budgetId, category, amountTemp, date})
+                    setSelectedItem({id, category, amountTemp, date})
                     setInput(amountTemp || '0');
                     setAmount(parseFloat(amountTemp || '0'));
-                    setIsOpen(true);
+                    setIsOpenSlide(true);
                 }}>${formatCurrency(budgetTemp?.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>),
                 [`${t('general.expense')}`]: `$${formatCurrency(transactionTemp?.totalAmount || 0)}`,
                 [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
@@ -154,14 +150,14 @@ export default function Index({ params: { lng }} : any) {
                 [t('general.investment')]: (row:any) => (
                     <button className="flex" data-category={investment.category} data-income-id={investment._id} data-amount={investment.amount}  data-date={investment.date.split('T')[0]}
                     onClick={(e) => {
-                        const incomeId = e.currentTarget.dataset.incomeId;
+                        const id = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
                         const date = e.currentTarget.dataset.date;
-                        setSelectedIncome({incomeId, category, amountTemp, date})
+                        setSelectedItem({id, category, amountTemp, date})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
-                        setIsOpenIncomeModifier(true);
+                        setIsOpenSlide(true);
                     }
                 }>${formatCurrency(investment.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
             })
@@ -178,14 +174,14 @@ export default function Index({ params: { lng }} : any) {
                 [t('general.income')]: (row:any) => (
                     <button className="flex" data-category={income.category} data-income-id={income._id} data-amount={income.amount}  data-date={income.date.split('T')[0]}
                     onClick={(e) => {
-                        const incomeId = e.currentTarget.dataset.incomeId;
+                        const id = e.currentTarget.dataset.incomeId;
                         const category = e.currentTarget.dataset.category;
                         const amountTemp = e.currentTarget.dataset.amount;
                         const date = e.currentTarget.dataset.date;
-                        setSelectedIncome({incomeId, category, amountTemp, date})
+                        setSelectedItem({id, category, amountTemp, date})
                         setInput(amountTemp || '0');
                         setAmount(parseFloat(amountTemp || '0'));
-                        setIsOpenIncomeModifier(true);
+                        setIsOpenSlide(true);
                     }
                 }>${formatCurrency(income.amount || 0)} <PencilSquareIcon className='inline ml-1' width={"12px"} /> </button>)
             })
@@ -254,42 +250,57 @@ export default function Index({ params: { lng }} : any) {
             </Tabs>
         </div>
     </div>
-    <SlideMenu isOpen={isOpen} close={() => setIsOpen(false)} position='bottom'
+    <SlideMenu isOpen={isOpenSlide} close={() => setIsOpenSlide(false)} position='bottom'
         header={<>
             <div className={`px-4 py-2 text-white flex-2 text-center`}>
-                {selectedBudget?.category}{" "}{t('general.budget')}
+                {selectedItem?.category}{" "}{
+                    activeTab === 0 
+                    ? t('general.budget')
+                    : activeTab === 1 
+                        ? t('general.investment') : t('general.income')                    
+                }
             </div>
             {   
-                isSaving
+                isSavingSlide
                 ?                    
                 <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
                     <LoadingSpinner />
                 </div>
                 :
                 <div onClick={async () => {                    
-                    if(!selectedBudget) return;
+                    if(!selectedItem) return;
                     try{
-                        setIsSaving(true);
-                        if(selectedBudget.budgetId){
-                            // Update the budget.
-                            await budgetService.updateBudget(selectedBudget.budgetId, amount)
-    
+                        setIsSavingSlide(true);
+                        // Update the selected item if it has id.
+                        if(selectedItem.id){
+                            // activeTab 0 = budget
+                            // activeTab 1 = investment
+                            // activeTab 2 = income
+                            if(activeTab === 0){
+                                await budgetService.updateBudget(selectedItem.id, amount)
+                            }else{
+                                await transactionService.updateTransaction(selectedItem.id, {amount});
+                                if(activeTab === 1) await getInvestmentsData();
+                                if(activeTab === 2) await previousIncomeData();  
+                            }
                         }else{
-                            // Create new budget
+                            // Create the selected item(Only Budget) if it didn't id.
+                            if(activeTab !== 0) return;
+                            
                             const budgetPayload = {
                                 userId:userInfo._id, 
                                 date:selectedDateStr, 
                                 amount,
-                                category: selectedBudget.category
+                                category: selectedItem.category
                             }
                             await budgetService.createBudget(budgetPayload);
                         }
                         dispatch(refreshActions.setIsBudgetPageRefresh(true));
-                        setIsOpen(false);
+                        setIsOpenSlide(false);
                     }catch(err){
                         console.log(err)
                     }finally{
-                        setIsSaving(false);    
+                        setIsSavingSlide(false);    
                     }
                 }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
                     {t('slide-menu.save')}
@@ -297,90 +308,35 @@ export default function Index({ params: { lng }} : any) {
             }
         </>}
     >
-        
         <div className="p-4 bg-white">  
-                <div className="flex justify-between items-center border-b py-3">
-                    <span className="flex items-center">
-                        <span className="mr-2">{t('new_input.body.date')}</span>
-                    </span>
-                    <input
-                        type="date"
-                        value={selectedBudget && selectedBudget.date}
-                        readOnly
-                        className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
-                    />
-                </div>
-                <div className="flex justify-between items-center border-b py-3">
-                    <span>{t('general.budget')}</span>
-                    <span className="text-left w-2/3 px-2 py-1 flex items-center">
-                        {isOpen && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
-                    </span>
-                </div>
-                <div className="flex justify-between items-center border-b py-3">
-                    <span>{t('new_input.body.category')}</span>
-                    <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedBudget?.category}</span>
-                </div>
-            </div>            
-    </SlideMenu>
-    <SlideMenu isOpen={isOpenIncomeModifier} close={() => setIsOpenIncomeModifier(false)} position='bottom'
-        header={<>
-            <div className={`px-4 py-2 text-white flex-2 text-center`}>
-                {selectedIncome?.category}{" "}{activeTab === 1 ? t('general.investment') : t('general.income')}
+            <div className="flex justify-between items-center border-b py-3">
+                <span className="flex items-center">
+                    <span className="mr-2">{t('new_input.body.date')}</span>
+                </span>
+                <input
+                    type="date"
+                    value={selectedItem && selectedItem.date}
+                    readOnly
+                    className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
+                />
             </div>
-            {   
-                isSaving
-                ?                    
-                <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                    <LoadingSpinner />
-                </div>
-                :
-                <div onClick={async () => {                    
-                    if(!selectedIncome) return;
-                    try{
-                        setIsSaving(true);
-                        if(selectedIncome.incomeId){
-                            // Update the income.
-                            await transactionService.updateTransaction(selectedIncome.incomeId, {amount});
-                            if(activeTab === 1) await getInvestmentsData();
-                            if(activeTab === 2) await previousIncomeData();                
-                        }
-                        dispatch(refreshActions.setIsBudgetPageRefresh(true));
-                        setIsOpenIncomeModifier(false);
-                    }catch(err){
-                        console.log(err)
-                    }finally{
-                        setIsSaving(false);    
-                    }
-                }} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right`}>
-                    {t('slide-menu.save')}
-                </div>
-            }
-        </>}
-    >
-        
-        <div className="p-4 bg-white">  
-                <div className="flex justify-between items-center border-b py-3">
-                    <span className="flex items-center">
-                        <span className="mr-2">{t('new_input.body.date')}</span>
-                    </span>
-                    <input
-                        type="date"
-                        value={selectedIncome && selectedIncome.date}
-                        readOnly
-                        className="text-left w-2/3 px-2 py-1 focus-visible:outline-none"
-                    />
-                </div>
-                <div className="flex justify-between items-center border-b py-3">
-                    <span>{activeTab === 1 ? t('general.investment'): t('general.income')}</span>
-                    <span className="text-left w-2/3 px-2 py-1 flex items-center">
-                        {isOpenIncomeModifier && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
-                    </span>
-                </div>
-                <div className="flex justify-between items-center border-b py-3">
-                    <span>{t('new_input.body.category')}</span>
-                    <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedIncome?.category}</span>
-                </div>
-            </div>            
+            <div className="flex justify-between items-center border-b py-3">
+                <span>{
+                    activeTab === 0 
+                    ? t('general.budget')
+                    : activeTab === 1
+                        ? t('general.investment')
+                        : t('general.income')
+                }</span>
+                <span className="text-left w-2/3 px-2 py-1 flex items-center">
+                    {isOpenSlide && <AmountInput setAmount={setAmount} input={input} setInput={setInput} />}
+                </span>
+            </div>
+            <div className="flex justify-between items-center border-b py-3">
+                <span>{t('new_input.body.category')}</span>
+                <span className="text-left w-2/3 px-2 py-1 flex items-center">{selectedItem?.category}</span>
+            </div>
+        </div>  
     </SlideMenu>
     </>
     );
