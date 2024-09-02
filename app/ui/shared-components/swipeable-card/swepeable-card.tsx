@@ -111,7 +111,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
                 }
                 <div className="ml-2  text-gray-500">{transaction.note}</div>
             </div>
-            <div className={'text-red-500  font-bold'}>
+            <div className={'text-red-500  font-bold whitespace-nowrap'}>
                 -${formatCurrency(transaction.amount)}
             </div>
         </motion.div>
