@@ -130,6 +130,24 @@ export default function Index({ params: { lng }} : any) {
                 [`${t('general.difference')}`]: calBalance((budgetTemp?.amount || 0), (transactionTemp?.totalAmount || 0))
             })
         })
+        data.sort((a, b) => {
+            const aIsKorean = isKorean(a.Category);
+            const bIsKorean = isKorean(b.Category);
+            // If both are Korean, sort alphabetically
+            if (aIsKorean && bIsKorean) {
+                return a.Category.localeCompare(b.Category);
+            }
+            // If a is Korean and b is not, a should come first
+            if (aIsKorean) {
+              return -1;
+            }
+            // If b is Korean and a is not, b should come first
+            if (bIsKorean) {
+              return 1;
+            }
+            // If neither is Korean, sort alphabetically
+            return a.Category.localeCompare(b.Category);
+        })
         setTableData(data);
         setTableTotalData(
             {
@@ -139,6 +157,11 @@ export default function Index({ params: { lng }} : any) {
                 [`${t('general.difference')}`]:calBalance(budgetTotal, expenseTotal)
             }
         )
+    }
+    function isKorean(char:string) {
+        const code = char.charCodeAt(0);
+        // Check if the character is within the Hangul syllable range
+        return code >= 0xAC00 && code <= 0xD7AF;
     }
 
     async function buildInvestmentsTableData(investmentTransactions: TransactionItems[]){      
