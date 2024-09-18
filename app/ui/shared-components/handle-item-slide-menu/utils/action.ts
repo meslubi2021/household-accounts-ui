@@ -6,6 +6,7 @@ export enum HandleItemAction {
     SUBCATEGORY = "SUBCATEGORY",
     TYPE = 'TYPE',
     FIXED_EXPENSE = 'FIXED_EXPENSE',
+    END_DATE = 'END_DATE',
     NOTE = 'NOTE',
     IS_SAVING = 'IS_SAVING',
     IS_ABLE_TO_SAVE = 'IS_ABLE_TO_SAVE',
