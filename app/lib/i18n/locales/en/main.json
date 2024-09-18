@@ -40,6 +40,7 @@
                     "every_year": "Every year"
                 }
             },
+            "ends": "Ends On",
             "add_a_note": "Add a note"
         },
         "category": {
