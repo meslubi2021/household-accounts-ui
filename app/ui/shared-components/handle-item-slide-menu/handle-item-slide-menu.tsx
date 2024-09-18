@@ -37,8 +37,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     const { isHandleItemSlideRefresh } = useSelector((state:any) => state.refresh);
     const reduxDispatch = useDispatch();
     const { 
-        date, amount, categories, category, subcategory, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, 
-        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setFixedExpenseMonthly, setNote, setIsSaving, setIsAbleToSave, reset
+        date, amount, categories, category, subcategory, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, endDate,
+        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setFixedExpenseMonthly, setEndDate, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
@@ -150,6 +150,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 category: category?.name || "",
                 subcategory: subcategory?.name || undefined,
                 fixedExpenseMonthly,
+                endDate,
                 note: !note || note === ""  ? undefined : note,
                 type,
                 paymentMethod: "Credit Card"  // Hardcode for now.                
@@ -449,6 +450,27 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                             <span>{t('new_input.body.fixedExpense.name')}({t('general.monthly')})</span> 
                             <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
                         </div>)
+                }
+                {
+                    fixedExpenseMonthly
+                    && <>
+                        <div className="flex justify-between items-center border-b py-3">
+                            <span className="flex items-center">
+                                <span className="mr-2">{t('new_input.body.fixedExpense.name')} {t('new_input.body.ends')}</span>
+                                {isToday(parseISO(endDate)) && (
+                                    <span className="ml-2 border text-blue text-sm px-2 rounded">{t('new_input.body.today')}</span>
+                                )}
+                            </span>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => {
+                                    setEndDate(e.target.value);
+                                }}
+                                className="text-left w-2/3 px-2 py-1"
+                            />
+                        </div>
+                    </>
                 }
                 <div className="border-b w-100 py-3">
                     <textarea
