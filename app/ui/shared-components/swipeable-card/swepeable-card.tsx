@@ -18,6 +18,8 @@ interface SwipeableCardType{
         amount: number;
         type: TransactionType;
         fixedExpenseMonthly: boolean;
+        fixedSeriesId?: string;
+        endDate?: string;
         paymentMethod: string;
     }
     editOnClick: (e:any) => void
@@ -73,6 +75,8 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({transaction, editOnCl
         data-category={transaction.category}
         data-subcategory={transaction.subcategory}
         data-fixed-expense-monthly={transaction.fixedExpenseMonthly}
+        data-fixed-series-id={transaction.fixedSeriesId}
+        data-end-date={transaction.endDate && transaction.endDate.split("T")[0]}
         data-type={transaction.type}
         data-note={transaction.note}
         onClick={(e) => handleOnClick(e, editOnClick)}

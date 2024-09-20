@@ -27,6 +27,8 @@ interface HandleItemSlideMenuType {
         subcategory: BaseCategory,
         type: TransactionType,
         fixedExpenseMonthly: boolean,
+        fixedSeriesId?: string,
+        endDate?: string,
         note: string
     },
     triggerRefresh: () => void
@@ -64,6 +66,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setSubcategory(selectedItem.subcategory);
         setType(selectedItem.type)
         setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
+        selectedItem.endDate && setEndDate(selectedItem.endDate)
         setNote(selectedItem.note);
     }else{
         init();
@@ -83,6 +86,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setSubcategory(selectedItem.subcategory);
             setType(selectedItem.type)
             setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
+            selectedItem.endDate && setEndDate(selectedItem.endDate)
             setNote(selectedItem.note);
         }else{
             init();
