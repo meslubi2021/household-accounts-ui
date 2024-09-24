@@ -10,7 +10,7 @@ import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/lib/redux';
-import { Modal } from '@/app/ui/shared-components';
+import { Modal, RadioButton } from '@/app/ui/shared-components';
 import { useSessionStorageState } from '@/app/lib/custom-hook';
 import classNames from 'classnames';
 
@@ -27,6 +27,8 @@ interface HandleItemSlideMenuType {
         subcategory: BaseCategory,
         type: TransactionType,
         fixedExpenseMonthly: boolean,
+        fixedSeriesId?: string,
+        endDate?: string,
         note: string
     },
     triggerRefresh: () => void
@@ -51,6 +53,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
      const [ isSavingNewSubcategory, setIsSavingNewSubcategory ] = useState(false);
      const [ userInfo, _ ] = useSessionStorageState("userInfo", "");
      const [ alertDelete, setAlertDelete ] = useState(false);
+     const [ deleteOption, setDeleteOption ] = useState("only_one");
 
   useEffect(() => {
     if(!isHandleItemSlideRefresh) return;
@@ -64,6 +67,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setSubcategory(selectedItem.subcategory);
         setType(selectedItem.type)
         setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
+        selectedItem.endDate && setEndDate(selectedItem.endDate)
         setNote(selectedItem.note);
     }else{
         init();
@@ -83,6 +87,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setSubcategory(selectedItem.subcategory);
             setType(selectedItem.type)
             setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
+            selectedItem.endDate && setEndDate(selectedItem.endDate)
             setNote(selectedItem.note);
         }else{
             init();
@@ -188,7 +193,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setAlertDelete(false);
             if(selectedItem){
                 setIsSaving(true);
-                const res = await transactionService.deleteTransaction(selectedItem.id);
+                if(selectedItem.fixedExpenseMonthly && selectedItem.fixedSeriesId){
+                    const res = await transactionService.deleteFixedExpense(selectedItem.id, selectedItem.fixedSeriesId, deleteOption);
+                }else{
+                    const res = await transactionService.deleteTransaction(selectedItem.id);
+                }
             }
             triggerRefresh();
             close();
@@ -493,7 +502,36 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 </div>
                 <Modal isOpen={alertDelete} onClose={() => setAlertDelete(false)}>
                     <div>
-                        {t('general.delete_alert')}
+                        {
+                            selectedItem.fixedExpenseMonthly
+                            ? <>
+                                <div className="mb-2">
+                                    {t('general.delete_repeat_alert')}
+                                </div>
+                                <RadioButton 
+                                    label={t('general.delete_repeat_option.this_expense')}
+                                    name="deleteOption"
+                                    value="only_one"
+                                    checked={deleteOption === 'only_one'}
+                                    onChange={(event: any) => setDeleteOption(event.target.value)}
+                                />
+                                <RadioButton 
+                                    label={t('general.delete_repeat_option.this_and_following')}
+                                    name="deleteOption"
+                                    value="following"
+                                    checked={deleteOption === 'following'}
+                                    onChange={(event: any) => setDeleteOption(event.target.value)}
+                                />
+                                <RadioButton 
+                                    label={t('general.delete_repeat_option.all_expenses')}
+                                    name="deleteOption"
+                                    value="all"
+                                    checked={deleteOption === 'all'}
+                                    onChange={(event: any) => setDeleteOption(event.target.value)}
+                                />
+                            </>
+                            : t('general.delete_alert')
+                        }
                     </div>
                     <div className="mt-3 flex items-center justify-end">
                         <button

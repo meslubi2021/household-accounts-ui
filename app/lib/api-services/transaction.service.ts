@@ -55,5 +55,13 @@ export const transactionService = {
       }catch(err){
         throw err;
       }
+    },
+    deleteFixedExpense: async (transactionId: string, fixedSeriesId: string, action = 'only_one') => {
+      try{
+        const { data } = await axios.delete(`${coreServiceUrl}/transaction/fixedExpense/${transactionId}/${fixedSeriesId}?action=${action}`);
+        return data;
+      }catch(err){
+        throw err;
+      }
     }
 }

@@ -11,6 +11,7 @@ export type TransactionItems = {
   note?: string;
   fixedExpenseMonthly: boolean;
   endDate?: string;
+  fixedSeriesId?: string;
   paymentMethod: string;
 }
 
@@ -40,5 +41,7 @@ export type PatchTransactionPayload = {
   amount?: number;
   type?: TransactionType;
   fixedExpenseMonthly?: boolean;
+  endDate?: string;
+  fixedSeriesId?: string;
   paymentMethod?: string;
 }
