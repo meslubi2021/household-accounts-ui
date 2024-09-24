@@ -77,6 +77,12 @@
         "confirm": "확인",
         "cancel": "취소",
         "delete_alert": "삭제하시겠습니까?",
+        "delete_repeat_alert": "반복 고정지출을 삭제하시겠습니까?",
+        "delete_repeat_option": {
+            "this_expense": "현재 지출",
+            "this_and_following": "현재 및 이후 지출",
+            "all_expenses": "모든 지출"
+        },
         "item": "아이템",
         "type": "타입",
         "category": "카테고리",
