@@ -9,4 +9,5 @@ export { ToggleButton } from './toggle-button/toggle-button'
 export { Tabs, Tab } from './tab-menu/tab-menu';
 export { Table } from './table/table';
 export { Modal } from './modal/modal';
+export { RadioButton } from './radio-button/radio-button';
 export { GoogleLoginButton, MSLoginButton, GuestLoginButton } from './buttons';
