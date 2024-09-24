@@ -193,7 +193,11 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setAlertDelete(false);
             if(selectedItem){
                 setIsSaving(true);
-                const res = await transactionService.deleteTransaction(selectedItem.id);
+                if(selectedItem.fixedExpenseMonthly && selectedItem.fixedSeriesId){
+                    const res = await transactionService.deleteFixedExpense(selectedItem.id, selectedItem.fixedSeriesId, deleteOption);
+                }else{
+                    const res = await transactionService.deleteTransaction(selectedItem.id);
+                }
             }
             triggerRefresh();
             close();
