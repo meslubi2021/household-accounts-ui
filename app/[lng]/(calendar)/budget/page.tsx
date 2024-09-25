@@ -131,11 +131,11 @@ export default function Index({ params: { lng }} : any) {
             })
         })
         data.sort((a, b) => {
-            const aIsKorean = isKorean(a.Category);
-            const bIsKorean = isKorean(b.Category);
+            const aIsKorean = isKorean(a[`${t('general.category')}`]);
+            const bIsKorean = isKorean(b[`${t('general.category')}`]);
             // If both are Korean, sort alphabetically
             if (aIsKorean && bIsKorean) {
-                return a.Category.localeCompare(b.Category);
+                return a[`${t('general.category')}`].localeCompare(b[`${t('general.category')}`]);
             }
             // If a is Korean and b is not, a should come first
             if (aIsKorean) {
@@ -146,7 +146,7 @@ export default function Index({ params: { lng }} : any) {
               return 1;
             }
             // If neither is Korean, sort alphabetically
-            return a.Category.localeCompare(b.Category);
+            return a[`${t('general.category')}`].localeCompare(b[`${t('general.category')}`]);
         })
         setTableData(data);
         setTableTotalData(
@@ -159,7 +159,7 @@ export default function Index({ params: { lng }} : any) {
         )
     }
     function isKorean(char:string) {
-        const code = char.charCodeAt(0);
+        const code = char?.charCodeAt(0);
         // Check if the character is within the Hangul syllable range
         return code >= 0xAC00 && code <= 0xD7AF;
     }
