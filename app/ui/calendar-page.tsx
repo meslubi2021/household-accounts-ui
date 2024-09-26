@@ -171,7 +171,7 @@ export const CalendarPage = ({ lng }: { lng: string }) => {
                   </div>
                   <div className="bg-white shadow-md rounded-b-md">
                       {expense.transactions.map((transaction, index) => (
-                      <SwipeableCard key={`${transaction._id}-${index}`} transaction={transaction} editOnClick={updateItem} triggerRefresh={() => dispatch(refreshActions.setIsCalenderPageRefresh(true))} />
+                      <SwipeableCard key={`${transaction._id}-${index}`}  lng={lng} transaction={transaction} editOnClick={updateItem} triggerRefresh={() => dispatch(refreshActions.setIsCalenderPageRefresh(true))} />
                       ))}
                   </div>
               </div>
