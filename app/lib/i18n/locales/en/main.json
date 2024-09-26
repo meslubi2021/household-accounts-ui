@@ -30,6 +30,7 @@
             "amount": "Amount",
             "category": "Category",
             "subcategory": "Subcategory",
+            "pending": "Pending",
             "fixedExpense": {
                 "name": "Fixed Expense",
                 "options": {

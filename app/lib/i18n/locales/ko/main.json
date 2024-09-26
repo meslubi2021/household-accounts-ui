@@ -30,6 +30,7 @@
             "amount": "금액",
             "category": "카테고리",
             "subcategory": "하위 카테고리",
+            "pending": "보류중",
             "fixedExpense": {
                 "name": "고정지출",
                 "options": {
