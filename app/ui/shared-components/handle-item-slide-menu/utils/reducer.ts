@@ -10,6 +10,7 @@ interface HandleItemType {
     category: Category | undefined,
     subcategory: BaseCategory | undefined,
     type: TransactionType,
+    pending: boolean,
     fixedExpenseMonthly: boolean,
     endDate: string,
     note: string,
@@ -26,6 +27,7 @@ interface HandleItemActionType {
         category?: Category,
         subcategory?: BaseCategory,
         type?: TransactionType,
+        pending?: boolean,
         fixedExpenseMonthly?: boolean,
         endDate?: string,
         note?: string,
@@ -41,6 +43,7 @@ const handleitemInit = {
     category: undefined,
     subcategory: undefined,
     type: "expense" as TransactionType,
+    pending: false,
     fixedExpenseMonthly: false,
     endDate: format(addYears(new Date(), 1), "yyyy-MM-dd"),
     note: "",
@@ -84,6 +87,12 @@ function HandleItemReducer(state: HandleItemType, action:HandleItemActionType): 
             return {
                 ...state, 
                 type: action.payload!.type!
+            }
+        }
+        case HandleItemAction.PENDING:{
+            return {
+                ...state, 
+                pending: action.payload!.pending!
             }
         }
         case HandleItemAction.FIXED_EXPENSE:{
@@ -164,6 +173,12 @@ export function useHandleItem() {
             payload: { type }
         })
     }
+    function setPending(pending: boolean) {
+        dispatch({
+            type: HandleItemAction.PENDING,
+            payload: { pending }
+        })
+    }
     function setFixedExpenseMonthly(fixedExpenseMonthly: boolean) {
         dispatch({
             type: HandleItemAction.FIXED_EXPENSE,
@@ -199,7 +214,7 @@ export function useHandleItem() {
     }
     return {
         ...state,
-        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setNote, setFixedExpenseMonthly, setEndDate,
+        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setNote, setPending, setFixedExpenseMonthly, setEndDate,
         setIsSaving, setIsAbleToSave,
         reset
     }

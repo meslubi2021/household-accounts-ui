@@ -5,6 +5,7 @@ export enum HandleItemAction {
     CATEGORY = 'CATEGORY',
     SUBCATEGORY = "SUBCATEGORY",
     TYPE = 'TYPE',
+    PENDING = 'PENDING',
     FIXED_EXPENSE = 'FIXED_EXPENSE',
     END_DATE = 'END_DATE',
     NOTE = 'NOTE',
