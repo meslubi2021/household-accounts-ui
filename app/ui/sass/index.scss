@@ -7,6 +7,7 @@
 @import "./mixins";
 @include export-to-css-vars($colors);
 @include export-to-css-vars-dark($colors-dark);
+@import "react-component-tailwindcss/dist/index.css";
 
 @import "./components/header";
 @import "./components/footer";
