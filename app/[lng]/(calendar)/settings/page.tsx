@@ -56,7 +56,7 @@ export default function Index({ params: { lng }} : any) {
             <span className="flex items-center px-3">
             </span>
             <div className="px-3">
-                <Button className="text-2xl" size="lg" variant='secondary' color='pink' loading={isLoading}>
+                <Button className="text-2xl" size="lg" variant='secondary' color='pink' loading={isLoading} onClick={logoutClick}>
                     {t('auth.logout')}
                 </Button>
             </div>
