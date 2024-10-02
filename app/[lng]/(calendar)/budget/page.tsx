@@ -9,7 +9,8 @@ import { calendarActions, refreshActions } from '@/app/lib/redux';
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { format } from 'date-fns'
-import { Tabs, Tab, Table, SlideMenu, LoadingSpinner, AmountInput } from '@/app/ui/shared-components';
+import { Tabs, Tab, Table, SlideMenu, AmountInput } from '@/app/ui/shared-components';
+import { Spinner } from 'react-component-tailwindcss';
 import { formatCurrency } from '@/app/lib/utils';
 import { Budget, BudgetItem, Category, Transaction, TransactionItems } from '@/app/lib/models';
 import { PencilSquareIcon } from '@heroicons/react/24/outline'
@@ -286,8 +287,8 @@ export default function Index({ params: { lng }} : any) {
             {   
                 isSavingSlide
                 ?                    
-                <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                    <LoadingSpinner />
+                <div className="text-white p-2 px-3 flex-1 flex justify-end">                   
+                    <Spinner color={"white"} />
                 </div>
                 :
                 <div onClick={async () => {                    

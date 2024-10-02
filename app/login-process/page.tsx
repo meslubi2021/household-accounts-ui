@@ -2,7 +2,7 @@
 
 import React, { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { LoadingSpinner } from '@/app/ui/shared-components'
+import { Spinner } from 'react-component-tailwindcss';
 import { useCookies } from 'react-cookie'
 import '@/app/ui/sass/index.scss';
 
@@ -27,7 +27,7 @@ function LoginProcess() {
     return (<>
     <div className="h-full w-full flex justify-center items-center">
       <div className="flex flex-col justify-center items-center">
-        <LoadingSpinner />
+        <Spinner color="pink" />
         <span className="mt-4">Authenticating...</span>
       </div>
     </div>

@@ -7,7 +7,7 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { TransactionType } from '@/app/lib/models';
 import { formatCurrency } from '@/app/lib/utils';
 import { transactionService } from '@/app/lib/api-services';
-import { LoadingSpinner } from '..';
+import { Button, Spinner } from 'react-component-tailwindcss';
 import { Modal, RadioButton } from '@/app/ui/shared-components';
 
 interface SwipeableCardType{
@@ -153,7 +153,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({lng, transaction, edi
                 setAlertDelete(true)                
             }}
                 className="px-2 flex flex-col items-center overflow-hidden text-red-500 hover:text-red-600" style={{ width: childWidth }}>                
-                {!isSaving ? <TrashIcon className="pb-0.5" width={"18px"}/> : <LoadingSpinner />}
+                {!isSaving ? <TrashIcon className="pb-0.5" width={"18px"}/> : <Spinner color='pink' size='h-4' />}
                 <span>{t('general.delete')}</span> 
             </motion.button>
         </motion.div>
@@ -192,22 +192,20 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({lng, transaction, edi
                 : t('general.delete_alert')
             }
         </div>
-        <div className="mt-3 flex items-center justify-end">
-            <button
-                onClick={handleDelete}
-                className="mr-3 bg-red-300 text-white py-2 px-4 rounded hover:bg-red-400"
+        <div className="mt-5 flex items-center justify-end">
+            <Button className="text-2xl" size='lg' color="pink" loading={isSaving}
                 data-transaction-id={transaction._id} 
                 data-fixed-expense-monthly={transaction.fixedExpenseMonthly} 
                 data-fixed-series-id={transaction.fixedSeriesId}
-                >
+                onClick={handleDelete}
+            >
                 {t('general.confirm')}
-            </button>
-            <button                         
-                onClick={() => setAlertDelete(false)}
-                className="text-red-300 py-2 px-4 rounded border border-red-300 hover:bg-red-300 hover:text-white"
-                >
+            </Button>
+            <Button className="ml-3 text-2xl" size='lg' color="pink" variant='secondary'
+             onClick={() => setAlertDelete(false)}
+            >
                 {t('general.cancel')}
-            </button>
+            </Button>
         </div>
     </Modal>
     </>
