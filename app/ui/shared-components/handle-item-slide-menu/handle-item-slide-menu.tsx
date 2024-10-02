@@ -26,6 +26,7 @@ interface HandleItemSlideMenuType {
         category: Category,
         subcategory: BaseCategory,
         type: TransactionType,
+        pending: boolean,
         fixedExpenseMonthly: boolean,
         fixedSeriesId?: string,
         endDate?: string,
@@ -39,8 +40,8 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
     const { isHandleItemSlideRefresh } = useSelector((state:any) => state.refresh);
     const reduxDispatch = useDispatch();
     const { 
-        date, amount, categories, category, subcategory, type, note, isSaving, isAbleToSave, fixedExpenseMonthly, endDate,
-        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setFixedExpenseMonthly, setEndDate, setNote, setIsSaving, setIsAbleToSave, reset
+        date, amount, categories, category, subcategory, type, note, isSaving, isAbleToSave, pending, fixedExpenseMonthly, endDate,
+        setDate, setAmount, setCategories, setCategory, setSubcategory, setType, setPending, setFixedExpenseMonthly, setEndDate, setNote, setIsSaving, setIsAbleToSave, reset
      } = useHandleItem();
      const [ input, setInput ] = useState<string>('');
      const [dropdownList, setDropdownList] = useState<{value:string, label:string}[]>([]);
@@ -66,6 +67,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
         setInput(selectedItem.amount);
         setSubcategory(selectedItem.subcategory);
         setType(selectedItem.type)
+        setPending(selectedItem.pending);
         setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
         selectedItem.endDate && setEndDate(selectedItem.endDate)
         setNote(selectedItem.note);
@@ -86,6 +88,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             setCategory(selectedItem.category);
             setSubcategory(selectedItem.subcategory);
             setType(selectedItem.type)
+            setPending(selectedItem.pending);
             setFixedExpenseMonthly(selectedItem.fixedExpenseMonthly)
             selectedItem.endDate && setEndDate(selectedItem.endDate)
             setNote(selectedItem.note);
@@ -154,7 +157,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 amount,
                 category: category?.name || "",
                 subcategory: subcategory?.name || undefined,
-                fixedExpenseMonthly,
+                pending,
+                // If it is pending, we're not interested in fixedExpense.
+                fixedExpenseMonthly: pending ? false : fixedExpenseMonthly,
                 endDate,
                 note: !note || note === ""  ? undefined : note,
                 type,
@@ -454,14 +459,23 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                 }
                 
                 {
-                    type === "expense" && (
+                    type === "expense" && (<>
                         <div className="flex justify-between items-center border-b py-3">
-                            <span>{t('new_input.body.fixedExpense.name')}({t('general.monthly')})</span> 
-                            <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
-                        </div>)
+                            <span>{t('new_input.body.pending')}</span> 
+                            <ToggleButton initial={pending} onToggle={(v) => setPending(v)} />
+                        </div>
+                        {
+                            // if this expense is pending, then we're not interested in fixedExpense.
+                            !pending &&
+                            <div className="flex justify-between items-center border-b py-3">
+                                <span>{t('new_input.body.fixedExpense.name')}({t('general.monthly')})</span> 
+                                <ToggleButton initial={fixedExpenseMonthly} onToggle={(v) => setFixedExpenseMonthly(v)} />
+                            </div>
+                        }
+                    </>)
                 }
                 {
-                    fixedExpenseMonthly
+                    type === "expense" && fixedExpenseMonthly && !pending
                     && <>
                         <div className="flex justify-between items-center border-b py-3">
                             <span className="flex items-center">

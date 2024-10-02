@@ -30,6 +30,7 @@
             "amount": "금액",
             "category": "카테고리",
             "subcategory": "하위 카테고리",
+            "pending": "보류중",
             "fixedExpense": {
                 "name": "고정지출",
                 "options": {
@@ -73,6 +74,7 @@
         "new": "새",
         "add": "추가",
         "save": "저장",
+        "edit": "수정",
         "delete": "삭제",
         "confirm": "확인",
         "cancel": "취소",

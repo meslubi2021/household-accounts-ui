@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { languages } from '@/app/lib/i18n/settings'
 import { useTranslation } from '@/app/lib/i18n/client';
-import { Dropdown, LoadingSpinner } from '@/app/ui/shared-components';
+import { Dropdown } from '@/app/ui/shared-components';
+import { Button } from 'react-component-tailwindcss';
 import { useCookies } from 'react-cookie';
 
 export default function Index({ params: { lng }} : any) {
@@ -55,12 +56,9 @@ export default function Index({ params: { lng }} : any) {
             <span className="flex items-center px-3">
             </span>
             <div className="px-3">
-                <button className="flex justify-between items-center border py-2 px-3 rounded hover:text-white hover:bg-red-300"
-                    onClick={logoutClick}
-                >
+                <Button className="text-2xl" size="lg" variant='secondary' color='pink' loading={isLoading}>
                     {t('auth.logout')}
-                    {isLoading && <span className="ml-2"><LoadingSpinner /></span>}
-                </button>
+                </Button>
             </div>
         </div>  
     </div>

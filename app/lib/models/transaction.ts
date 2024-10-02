@@ -9,6 +9,7 @@ export type TransactionItems = {
   category: string;
   subcategory: string;
   note?: string;
+  pending: boolean;
   fixedExpenseMonthly: boolean;
   endDate?: string;
   fixedSeriesId?: string;
@@ -28,6 +29,7 @@ export type AddTransactionPayload = {
   category: string;
   subcategory?: string;
   note?: string;
+  pending?: boolean;
   fixedExpenseMonthly?: boolean;
   endDate?: string;
   type: TransactionType;
@@ -40,6 +42,7 @@ export type PatchTransactionPayload = {
   note?: string;
   amount?: number;
   type?: TransactionType;
+  pending?: boolean;
   fixedExpenseMonthly?: boolean;
   endDate?: string;
   fixedSeriesId?: string;

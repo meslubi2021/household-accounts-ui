@@ -30,6 +30,7 @@
             "amount": "Amount",
             "category": "Category",
             "subcategory": "Subcategory",
+            "pending": "Pending",
             "fixedExpense": {
                 "name": "Fixed Expense",
                 "options": {
@@ -73,6 +74,7 @@
         "new": "New",
         "add": "Add",
         "save": "Save",
+        "edit": "Edit",
         "delete": "Delete",
         "confirm": "Confirm",
         "cancel": "Cancel",
