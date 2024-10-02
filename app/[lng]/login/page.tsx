@@ -3,7 +3,8 @@
 import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import { MSLoginButton, GoogleLoginButton, GuestLoginButton, LoadingSpinner, CustomInput } from '@/app/ui/shared-components';
+import { MSLoginButton, GoogleLoginButton, GuestLoginButton, CustomInput } from '@/app/ui/shared-components';
+import { Button } from 'react-component-tailwindcss';
 import img from '/public/assets/icons/icon-72x72.png';
 import Image from 'next/image';
 import { userService } from '@/app/lib/api-services';
@@ -31,7 +32,7 @@ export default function Index({ params: { lng }} : any) {
       }finally{
         setTimeout(() => {
           setIsLoggingin(false);
-        }, 500)
+        }, 1000)
       }
     };
 
@@ -51,12 +52,12 @@ export default function Index({ params: { lng }} : any) {
         </div>
         <CustomInput type={"email"} placeholder={t("general.email")} onChange={onChange} />
         <CustomInput type={"password"} placeholder={t("general.password")} onChange={onChange} />
-        <button
-              onClick={handleSubmit}
-              className="flex justify-center items-center w-full px-4 py-2 text-sm font-medium text-white bg-red-300 rounded-md hover:bg-red-400 focus:outline-none"
-            >
-               { !isLoggingin ? t('auth.login') : <span><LoadingSpinner /></span>}
-        </button>
+        <Button
+          onClick={handleSubmit}
+          loading={isLoggingin} color='pink'
+        >
+          {t('auth.login')}
+        </Button>
         <div className="flex items-center justify-between mt-4">
           <hr className="w-full border-gray-300" />
           <span className="px-2 text-sm text-gray-500">Or</span>

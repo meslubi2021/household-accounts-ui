@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/lib/i18n/client'
 import { isToday,  parseISO } from "date-fns"
-import { SlideMenu, Dropdown, LoadingSpinner, AmountInput, ToggleButton } from '..';
+import { SlideMenu, Dropdown, AmountInput, ToggleButton } from '..';
+import { Spinner } from 'react-component-tailwindcss';
 import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '@/app/lib/models';
 import { categoryService, transactionService } from '@/app/lib/api-services';
 import { useHandleItem } from './utils/reducer';
@@ -239,7 +240,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     isSaving
                     ?                    
                     <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                        <LoadingSpinner />
+                        <Spinner color="white" />
                     </div>
                     :
                     <div onClick={() => isAbleToSave && saveNewExpense()} className={`text-white p-2 px-3 cursor-pointer flex-1 text-right ${!isAbleToSave && 'opacity-50 cursor-not-allowed'}`}>
@@ -299,7 +300,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                         isSavingNewCategory
                                         ?                    
                                         <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                                            <LoadingSpinner />
+                                            <Spinner color="white" />
                                         </div>
                                         :
                                         <div onClick={async () => {
@@ -358,7 +359,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                         isSavingNewCategory
                                         ?                    
                                         <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                                            <LoadingSpinner />
+                                            <Spinner color="white" />
                                         </div>
                                         :
                                         <div onClick={async () => {
@@ -424,7 +425,7 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                                         isSavingNewSubcategory
                                         ?                    
                                         <div className="text-white p-2 px-3 flex-1 flex justify-end">                    
-                                            <LoadingSpinner />
+                                            <Spinner color="white" />
                                         </div>
                                         :
                                         <div onClick={async () => {

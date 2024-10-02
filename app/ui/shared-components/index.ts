@@ -1,5 +1,4 @@
 export { Dropdown } from "./dropdown/dropdown";
-export { LoadingSpinner } from "./loading-spinner/loading-spinner";
 export { SlideMenu } from "./slide-menu/slide-menu";
 export { AmountInput } from './amount-Input/amount-Input';
 export { HandleItemSlideMenu } from './handle-item-slide-menu/handle-item-slide-menu';
