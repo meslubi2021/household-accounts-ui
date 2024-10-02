@@ -146,7 +146,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({lng, transaction, edi
                 onClick={editOnClick}
             >
                 <PencilSquareIcon className="pb-0.5" width={"18px"} />
-                <span>Edit</span>
+                <span>{t('general.edit')}</span> 
             </motion.button>
             <motion.button onClick={(e) => {
                 e.stopPropagation();
@@ -154,7 +154,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({lng, transaction, edi
             }}
                 className="px-2 flex flex-col items-center overflow-hidden text-red-500 hover:text-red-600" style={{ width: childWidth }}>                
                 {!isSaving ? <TrashIcon className="pb-0.5" width={"18px"}/> : <LoadingSpinner />}
-                <span>Delete</span> 
+                <span>{t('general.delete')}</span> 
             </motion.button>
         </motion.div>
     </motion.div>
