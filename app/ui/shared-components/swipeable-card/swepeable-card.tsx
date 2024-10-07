@@ -7,8 +7,8 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { TransactionType } from '@/app/lib/models';
 import { formatCurrency } from '@/app/lib/utils';
 import { transactionService } from '@/app/lib/api-services';
-import { Button, Spinner } from 'react-component-tailwindcss';
-import { Modal, RadioButton } from '@/app/ui/shared-components';
+import { Button, Spinner, Modal } from 'react-component-tailwindcss';
+import { RadioButton } from '@/app/ui/shared-components';
 
 interface SwipeableCardType{
     lng: string,
@@ -159,7 +159,7 @@ export const SwipeableCard:React.FC<SwipeableCardType> = ({lng, transaction, edi
         </motion.div>
     </motion.div>
 
-    <Modal isOpen={alertDelete} onClose={() => setAlertDelete(false)}>
+    <Modal title={`${t('general.delete')} ($${formatCurrency(transaction.amount)})`} isOpen={alertDelete} close={() => setAlertDelete(false)}>
         <div>
             {
                 transaction.fixedExpenseMonthly
