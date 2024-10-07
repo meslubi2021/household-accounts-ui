@@ -36,6 +36,7 @@ export const GuestLoginButton = ({ lng }:any) => {
           onClick={onClick}
           loading={isLoggingin} 
           variant='secondary' color='pink'
+          className="w-full"
         >
             <div className="flex items-center justify-center">
                 <svg width="28px" height="24px" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">

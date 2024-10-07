@@ -4,16 +4,17 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from '@/app/lib/i18n/client'
 import { isToday,  parseISO } from "date-fns"
 import { SlideMenu, Dropdown, AmountInput, ToggleButton } from '..';
-import { Spinner } from 'react-component-tailwindcss';
+import { Spinner, Modal, Button } from 'react-component-tailwindcss';
 import { AddTransactionPayload, BaseCategory, Category, TransactionType } from '@/app/lib/models';
 import { categoryService, transactionService } from '@/app/lib/api-services';
 import { useHandleItem } from './utils/reducer';
 import { FormNewCategory } from './form-new-category';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshActions } from '@/app/lib/redux';
-import { Modal, RadioButton } from '@/app/ui/shared-components';
+import { RadioButton } from '@/app/ui/shared-components';
 import { useSessionStorageState } from '@/app/lib/custom-hook';
 import classNames from 'classnames';
+import { formatCurrency } from '@/app/lib/utils';
 
 
 interface HandleItemSlideMenuType {
@@ -205,9 +206,9 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                     const res = await transactionService.deleteTransaction(selectedItem.id);
                 }
             }
-            triggerRefresh();
-            close();
-            setTimeout(() => {                
+            setTimeout(() => {  
+                triggerRefresh();
+                close();              
                 reset();
                 setInput(''); // reset Amount intput -> '0'
                 init();
@@ -508,14 +509,16 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
             {
                 selectedItem &&<>
                 <div className="p-4 flex justify-end">
-                    <button
-                        onClick={() => setAlertDelete(true)}
-                        className="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-700"
+                    <Button
+                        className="text-2xl" size='lg' color="red"
+                        onClick={() => setAlertDelete(true)}                        
                         >
                         {t('general.delete')}
-                    </button>
+                    </Button>
                 </div>
-                <Modal isOpen={alertDelete} onClose={() => setAlertDelete(false)}>
+                <Modal isOpen={alertDelete} close={() => setAlertDelete(false)}
+                    title={`${t('general.delete')} ($${formatCurrency(selectedItem.amount)})`}
+                    >
                     <div>
                         {
                             selectedItem.fixedExpenseMonthly
@@ -549,18 +552,19 @@ export const HandleItemSlideMenu:React.FC<HandleItemSlideMenuType> = ({ isOpen, 
                         }
                     </div>
                     <div className="mt-3 flex items-center justify-end">
-                        <button
+                        <Button
+                            className="text-2xl" size='lg' color="pink" 
                             onClick={handleDelete}
-                            className="mr-3 bg-red-300 text-white py-2 px-4 rounded hover:bg-red-400"
+                            loading={isSaving}
                             >
                             {t('general.confirm')}
-                        </button>
-                        <button                         
-                            onClick={() => setAlertDelete(false)}
-                            className="text-red-300 py-2 px-4 rounded border border-red-300 hover:bg-red-300 hover:text-white"
+                        </Button>
+                        <Button               
+                            className="ml-3 text-2xl" size='lg' color="pink" variant='secondary'          
+                            onClick={() => setAlertDelete(false)}                            
                             >
                             {t('general.cancel')}
-                        </button>
+                        </Button>
                     </div>
                 </Modal>
                 </>

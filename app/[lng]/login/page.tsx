@@ -55,6 +55,7 @@ export default function Index({ params: { lng }} : any) {
         <Button
           onClick={handleSubmit}
           loading={isLoggingin} color='pink'
+          className="w-full"
         >
           {t('auth.login')}
         </Button>
