@@ -3,8 +3,8 @@
 import { useTranslation } from '@/app/lib/i18n/client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation'
-import { MSLoginButton, GoogleLoginButton, GuestLoginButton, CustomInput } from '@/app/ui/shared-components';
-import { Button } from 'react-component-tailwindcss';
+import { MSLoginButton, GoogleLoginButton, GuestLoginButton } from '@/app/ui/shared-components';
+import { Button, Input } from 'react-component-tailwindcss';
 import img from '/public/assets/icons/icon-72x72.png';
 import Image from 'next/image';
 import { userService } from '@/app/lib/api-services';
@@ -50,8 +50,8 @@ export default function Index({ params: { lng }} : any) {
         <div className="flex flex-col items-center justify-center">
           <Image alt="logo" src={img} width={"72"} />
         </div>
-        <CustomInput type={"email"} placeholder={t("general.email")} onChange={onChange} />
-        <CustomInput type={"password"} placeholder={t("general.password")} onChange={onChange} />
+        <Input type={"email"} placeholder={t("general.email")} onChange={onChange} inputSize='lg' color='pink' />
+        <Input type={"password"} placeholder={t("general.password")} onChange={onChange} inputSize='lg' color='pink' />
         <Button
           onClick={handleSubmit}
           loading={isLoggingin} color='pink'
